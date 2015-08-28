@@ -1,0 +1,233 @@
+﻿<RECIPES>
+  <RECIPE>
+    <NAME>Simcoe IPA</NAME>
+    <VERSION>1</VERSION>
+    <TYPE>Beer</TYPE>
+    <BREWER>Tom Herold</BREWER>
+    <BATCH_SIZE>14.9902306488</BATCH_SIZE>
+    <BOIL_TIME>30</BOIL_TIME>
+    <EFFICIENCY>76</EFFICIENCY>
+    <DATE>8/12/2015 4:43:15 PM</DATE>
+    <OG>1.0756</OG>
+    <FG>1.0106</FG>
+    <IBU>64</IBU>
+    <EST_COLOR>6</EST_COLOR>
+    <EST_ABV>8.4</EST_ABV>
+    <STYLE>
+      <CATEGORY_NUMBER>14</CATEGORY_NUMBER>
+      <STYLE_LETTER>B</STYLE_LETTER>
+      <NAME>American IPA</NAME>
+    </STYLE>
+    <NOTES />
+    <PROGRAM>
+      <NAME />
+      <MASH_TEMP>152</MASH_TEMP>
+      <MASH_TIME>90</MASH_TIME>
+      <BOIL_TEMP>207</BOIL_TEMP>
+      <BOIL_TIME>30</BOIL_TIME>
+      <STEP>
+        <NAME>Heat to Temp</NAME>
+        <TEMP>102</TEMP>
+        <TIME>0</TIME>
+        <LOCATION>0</LOCATION>
+        <DRAIN>0</DRAIN>
+      </STEP>
+      <STEP>
+        <NAME>Dough In</NAME>
+        <TEMP>102</TEMP>
+        <TIME>20</TIME>
+        <LOCATION>1</LOCATION>
+        <DRAIN>8</DRAIN>
+      </STEP>
+      <STEP>
+        <NAME>Heat to Mash</NAME>
+        <TEMP>152</TEMP>
+        <TIME>0</TIME>
+        <LOCATION>0</LOCATION>
+        <DRAIN>0</DRAIN>
+      </STEP>
+      <STEP>
+        <NAME>Mash 1</NAME>
+        <TEMP>152</TEMP>
+        <TIME>30</TIME>
+        <LOCATION>1</LOCATION>
+        <DRAIN>0</DRAIN>
+      </STEP>
+      <STEP>
+        <NAME>Mash 2</NAME>
+        <TEMP>154</TEMP>
+        <TIME>60</TIME>
+        <LOCATION>1</LOCATION>
+        <DRAIN>8</DRAIN>
+      </STEP>
+      <STEP>
+        <NAME>Heat to MO</NAME>
+        <TEMP>175</TEMP>
+        <TIME>0</TIME>
+        <LOCATION>0</LOCATION>
+        <DRAIN>0</DRAIN>
+      </STEP>
+      <STEP>
+        <NAME>Mash Out</NAME>
+        <TEMP>175</TEMP>
+        <TIME>10</TIME>
+        <LOCATION>1</LOCATION>
+        <DRAIN>6</DRAIN>
+      </STEP>
+      <STEP>
+        <NAME>Heat to Boil</NAME>
+        <TEMP>207</TEMP>
+        <TIME>0</TIME>
+        <LOCATION>0</LOCATION>
+        <DRAIN>0</DRAIN>
+      </STEP>
+      <STEP>
+        <NAME>Boil Adjunct 1</NAME>
+        <TEMP>207</TEMP>
+        <TIME>15</TIME>
+        <LOCATION>2</LOCATION>
+        <DRAIN>0</DRAIN>
+      </STEP>
+      <STEP>
+        <NAME>Boil Adjunct 2</NAME>
+        <TEMP>207</TEMP>
+        <TIME>5</TIME>
+        <LOCATION>3</LOCATION>
+        <DRAIN>0</DRAIN>
+      </STEP>
+      <STEP>
+        <NAME>Boil Adjunct 3</NAME>
+        <TEMP>207</TEMP>
+        <TIME>10</TIME>
+        <LOCATION>4</LOCATION>
+        <DRAIN>5</DRAIN>
+      </STEP>
+      <STEP>
+        <NAME>Connect Chiller</NAME>
+        <TEMP>0</TEMP>
+        <TIME>0</TIME>
+        <LOCATION>6</LOCATION>
+        <DRAIN>0</DRAIN>
+      </STEP>
+      <STEP>
+        <NAME>Chill</NAME>
+        <TEMP>65</TEMP>
+        <TIME>10</TIME>
+        <LOCATION>0</LOCATION>
+        <DRAIN>10</DRAIN>
+      </STEP>
+    </PROGRAM>
+    <MASH>
+      <MASH_STEPS>
+        <MASH_STEP>
+          <NAME>Dough In</NAME>
+          <VERSION>1</VERSION>
+          <TYPE>Infusion</TYPE>
+          <STEP_TEMP>102</STEP_TEMP>
+          <STEP_TIME>20</STEP_TIME>
+        </MASH_STEP>
+        <MASH_STEP>
+          <NAME>Mash 1</NAME>
+          <VERSION>1</VERSION>
+          <TYPE>Infusion</TYPE>
+          <STEP_TEMP>152</STEP_TEMP>
+          <STEP_TIME>30</STEP_TIME>
+        </MASH_STEP>
+        <MASH_STEP>
+          <NAME>Mash 2</NAME>
+          <VERSION>1</VERSION>
+          <TYPE>Infusion</TYPE>
+          <STEP_TEMP>154</STEP_TEMP>
+          <STEP_TIME>60</STEP_TIME>
+        </MASH_STEP>
+        <MASH_STEP>
+          <NAME>Mash Out</NAME>
+          <VERSION>1</VERSION>
+          <TYPE>Infusion</TYPE>
+          <STEP_TEMP>175</STEP_TEMP>
+          <STEP_TIME>10</STEP_TIME>
+        </MASH_STEP>
+      </MASH_STEPS>
+    </MASH>
+    <HOPS>
+      <HOP>
+        <NAME>Simcoe</NAME>
+        <VERSION>1</VERSION>
+        <ALPHA>13</ALPHA>
+        <AMOUNT>0.030050494486</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>30</TIME>
+      </HOP>
+      <HOP>
+        <NAME>Simcoe</NAME>
+        <VERSION>1</VERSION>
+        <ALPHA>13</ALPHA>
+        <AMOUNT>0.030050494486</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>15</TIME>
+      </HOP>
+      <HOP>
+        <NAME>Simcoe</NAME>
+        <VERSION>1</VERSION>
+        <ALPHA>13</ALPHA>
+        <AMOUNT>0.01417476155</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>10</TIME>
+      </HOP>
+    </HOPS>
+    <WATERS>
+      <WATER>
+        <NAME>Water</NAME>
+        <VERSION>1</VERSION>
+        <AMOUNT>18.8134965466</AMOUNT>
+      </WATER>
+    </WATERS>
+    <FERMENTABLES>
+      <FERMENTABLE>
+        <NAME>German Pilsener</NAME>
+        <VERSION>1</VERSION>
+        <AMOUNT>4.0006847034</AMOUNT>
+        <TYPE>Grain</TYPE>
+        <YIELD>37.675</YIELD>
+        <COLOR>1.65</COLOR>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>German Munich</NAME>
+        <VERSION>1</VERSION>
+        <AMOUNT>0.997903214</AMOUNT>
+        <TYPE>Grain</TYPE>
+        <YIELD>36.575</YIELD>
+        <COLOR>7.975</COLOR>
+      </FERMENTABLE>
+    </FERMENTABLES>
+    <YEASTS>
+      <YEAST>
+        <NAME>Safale</NAME>
+        <VERSION>1</VERSION>
+        <AMOUNT>0</AMOUNT>
+        <LABORATORY>Fermentis</LABORATORY>
+        <PRODUCT_ID>US-05</PRODUCT_ID>
+        <MIN_TEMPERATURE>59</MIN_TEMPERATURE>
+        <MAX_TEMPERATURE>71</MAX_TEMPERATURE>
+        <ATTENUATION>86</ATTENUATION>
+        <FLOCCULATION>medium</FLOCCULATION>
+      </YEAST>
+    </YEASTS>
+    <KEGSMART>
+      <STEPS>
+        <STEP>
+          <NUMBER>1</NUMBER>
+          <NAME>Fermentation</NAME>
+          <TIME>14400</TIME>
+          <TEMP>65</TEMP>
+        </STEP>
+        <STEP>
+          <NUMBER>2</NUMBER>
+          <NAME>Crash Chill</NAME>
+          <TIME>0</TIME>
+          <TEMP>44</TEMP>
+        </STEP>
+      </STEPS>
+    </KEGSMART>
+  </RECIPE>
+</RECIPES>
