@@ -1,11 +1,11 @@
 import pytest
-from beerxml.fermentable import Fermentable
+from pybeerxml.fermentable import Fermentable
 
 
 def test_add_after_boil():
 
     fermentable = Fermentable()
-    fermentable.add_after_boil(True)
+    fermentable.add_after_boil = True
 
     assert(fermentable.add_after_boil == True)
 

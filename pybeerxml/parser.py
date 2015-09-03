@@ -102,7 +102,7 @@ class Parser(object):
         value = None
         try:
             value = string.lower()
-        except NoneType:
+        except AttributeError:
             value = ""
         finally:
             return value

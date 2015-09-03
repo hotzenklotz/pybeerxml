@@ -1,5 +1,6 @@
 import pytest
-from beerxml.hop import Hop
+from pybeerxml.hop import Hop
+
 
 def test_utilization_factor():
 

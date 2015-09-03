@@ -1,6 +1,6 @@
 import pytest
 import os
-from beerxml import Parser, Recipe
+from pybeerxml import Parser, Recipe
 
 RECIPE_PATH = os.path.join(os.path.dirname(__file__), "Simcoe IPA.xml")
 
@@ -28,7 +28,7 @@ class TestParser:
 
         assert(recipe_parser.to_lower("") == "")
 
-        assert(recipe_parser.to_lower(10) == None)
+        assert(recipe_parser.to_lower(10) == "")
 
         assert(recipe_parser.to_lower(None) == "")
 

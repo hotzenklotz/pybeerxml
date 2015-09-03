@@ -19,6 +19,7 @@ class Fermentable(object):
 
     @add_after_boil.setter
     def add_after_boil(self, value):
+        print value
         self._add_after_boil = value
 
     @property
@@ -39,10 +40,12 @@ class Fermentable(object):
             [re.compile(".*"), "mash"]
         ]
 
-        for regex, substitue in regexes:
-            addition = re.sub(regex, substitue, self.name.lower())
-
-        return addition
+        for regex, addition in regexes:
+            try:
+                if re.search(regex, self.name.lower()):
+                    return addition
+            except AttributeError:
+                return "mash"
 
     # Get the gravity units for a specific liquid volume with 100% efficiency
     def gu(self, liters=1.0):
