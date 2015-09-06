@@ -3,7 +3,7 @@ class Recipe(object):
         self.name = None
         self.brewer = None
         self.batch_size = None
-        self.boil_size = None
+        self.boil_time = None
         self.efficiency = None
         self.primary_age = None
         self.primary_temp = None
