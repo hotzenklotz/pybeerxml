@@ -18,7 +18,7 @@ class PyTest(TestCommand):
 setup(
     name = 'pybeerxml',
     packages = ['pybeerxml'],
-    version = '0.1',
+    version = '1.0',
     description = 'A BeerXML Parser',
     author = 'Tom Herold',
     author_email = 'heroldtom@gmail.com',
