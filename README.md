@@ -38,13 +38,13 @@ for recipe in recipes:
     print recipe.abv
 
     # iterate over the ingredients
-    for hop in hops:
+    for hop in recipe.hops:
         print hop.name
 
-    for fermentable in fermentables:
+    for fermentable in recipe.fermentables:
         print fermentable.name
 
-    for yeast in yeasts:
+    for yeast in recipe.yeasts:
         print yeast.name
 ```
 
