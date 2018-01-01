@@ -28,24 +28,24 @@ recipes = parser.parse(path_to_beerxml_file)
 for recipe in recipes:
 
     # some general recipe properties
-    print recipe.name
-    print recipe.brewer
+    print(recipe.name)
+    print(recipe.brewer)
 
     # calculated properties
-    print recipe.og
-    print recipe.fg
-    print recipe.ibu
-    print recipe.abv
+    print(recipe.og)
+    print(recipe.fg)
+    print(recipe.ibu)
+    print(recipe.abv)
 
     # iterate over the ingredients
     for hop in recipe.hops:
-        print hop.name
+        print(hop.name)
 
     for fermentable in recipe.fermentables:
-        print fermentable.name
+        print(fermentable.name)
 
     for yeast in recipe.yeasts:
-        print yeast.name
+        print (yeast.name)
 ```
 
 ## Testing

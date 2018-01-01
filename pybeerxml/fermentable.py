@@ -19,7 +19,7 @@ class Fermentable(object):
 
     @add_after_boil.setter
     def add_after_boil(self, value):
-        print value
+        print(value)
         self._add_after_boil = value
 
     @property
