@@ -1,12 +1,11 @@
-from types import NoneType
 from xml.etree import ElementTree
-from recipe import *
-from hop import Hop
-from mash import Mash
-from mash_step import MashStep
-from yeast import Yeast
-from style import Style
-from fermentable import Fermentable
+from .recipe import *
+from .hop import Hop
+from .mash import Mash
+from .mash_step import MashStep
+from .yeast import Yeast
+from .style import Style
+from .fermentable import Fermentable
 import sys
 
 
