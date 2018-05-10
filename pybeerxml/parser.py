@@ -78,19 +78,16 @@ class Parser(object):
                     self.nodes_to_object(recipeProperty, style)
 
                 elif tag_name == "mash":
+                    mash = Mash()
+                    recipe.mash = mash
+                    self.nodes_to_object(recipeProperty, mash)
 
                     for mash_node in list(recipeProperty):
-                        mash = Mash()
-                        recipe.mash = mash
-
                         if self.to_lower(mash_node.tag) == "mash_steps":
                             for mash_step_node in list(mash_node):
                                 mash_step = MashStep()
                                 self.nodes_to_object(mash_step_node, mash_step)
                                 mash.steps.append(mash_step)
-                        else:
-                            self.nodes_to_object(mash_node, mash)
-
                 else:
                     self.node_to_object(recipeProperty, recipe)
 
