@@ -2,7 +2,7 @@
 
 A simple BeerXML parser for Python
 
-[![Build Status](https://img.shields.io/travis/hotzenklotz/pybeerxml.svg?style=flat-square)](https://travis-ci.org/hotzenklotz/pybeerxml)
+[![CircleCI](https://circleci.com/gh/hotzenklotz/pybeerxml/tree/master.svg?style=svg)](https://circleci.com/gh/hotzenklotz/pybeerxml/tree/master)
 [![PyPi Version](https://img.shields.io/pypi/v/pybeerxml.svg?style=flat-square)](https://pypi.python.org/pypi?:action=display&name=pybeerxml&version=1.0)
 
 Parses all recipes within a BeerXML file and returns <Recipe> object containing all ingredients,
