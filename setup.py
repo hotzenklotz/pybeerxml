@@ -7,7 +7,7 @@ import pybeerxml
 class PyTest(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
-        self.test_args = []
+        self.test_args = ["--junitxml=test-reports/pytest/junit.xml"]
         self.test_suite = True
 
     def run_tests(self):
@@ -23,7 +23,7 @@ setup(
     author = 'Tom Herold',
     author_email = 'heroldtom@gmail.com',
     url = 'https://github.com/hotzenklotz/pybeerxml',
-    download_url = 'https://github.com/hotzenklotz/pybeerxml/tarball/0.1',
+    download_url = 'https://github.com/hotzenklotz/pybeerxml/tarball/1.0.1',
     tests_require=['pytest'],
     cmdclass={'test': PyTest},
     platforms='any',

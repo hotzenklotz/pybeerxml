@@ -53,7 +53,7 @@ for recipe in recipes:
 Unit test can be run with PyTest:
 
 ```
-py.test tests
+python setup.py test
 ```
 
 ## License

@@ -1,0 +1,22 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/pybeerxml
+    docker:
+      - image: circleci/python:3.7.0
+    steps:
+      - checkout
+      - run:
+          name: Install Python Dependencies
+          command: |
+            sudo pip install pipenv
+            pipenv install --three
+      - run:
+          name: Run Tests
+          command: |
+            pipenv run python setup.py test
+      - store_test_results:
+          path: test-reports
+      - store_artifacts:
+          path: test-reports
+
