@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import pytest
 import os
 from pybeerxml import Parser, Recipe
@@ -98,7 +101,7 @@ class TestParser:
         assert(recipe.miscs[0].use == "Boil")
         assert(recipe.miscs[0].use_for == None)
         assert(recipe.miscs[0].amount == 0.0016)
-        assert(recipe.miscs[0].amount_is_weight == "TRUE")
+        assert(recipe.miscs[0].amount_is_weight == True)
         assert(recipe.miscs[0].time == 15)
         assert(recipe.miscs[0].notes == "Half a tablet @ 15 minutes")
 
