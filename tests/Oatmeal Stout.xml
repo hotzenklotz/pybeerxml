@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<RECIPES>
+  <RECIPE>
+    <NAME>Oatmeal Stout no. 1</NAME>
+    <VERSION>1</VERSION>
+    <BREWER>Niels Kj&#xF8;ller</BREWER>
+    <EST_COLOR>79 EBC</EST_COLOR>
+    <EST_OG>1059</EST_OG>
+    <EST_FG>1014</EST_FG>
+    <EST_ABV>5.9</EST_ABV>
+    <IBU>35</IBU>
+    <BATCH_SIZE>25</BATCH_SIZE>
+    <BOIL_SIZE>31</BOIL_SIZE>
+    <EFFICIENCY>75</EFFICIENCY>
+    <NOTES/>
+    <FERMENTATION_STAGES>1</FERMENTATION_STAGES>
+    <STYLE>
+      <NAME>Oatmeal Stout</NAME>
+      <VERSION>1</VERSION>
+    </STYLE>
+    <YEASTS>
+      <YEAST>
+        <NAME>SafAle S-04</NAME>
+        <VERSION>1</VERSION>
+        <ATTENUATION>75</ATTENUATION>
+        <ADD_TO_SECONDARY>FALSE</ADD_TO_SECONDARY>
+      </YEAST>
+    </YEASTS>
+    <PRIMARY_AGE>21</PRIMARY_AGE>
+    <PRIMARY_TEMP>18</PRIMARY_TEMP>
+    <MASH>
+      <NAME>Mash for Oatmeal Stout no. 1</NAME>
+      <VERSION>1</VERSION>
+      <GRAIN_TEMP>unknown</GRAIN_TEMP>
+      <MASH_STEPS>
+        <MASH_STEP>
+          <NAME>Mash step</NAME>
+          <VERSION>1</VERSION>
+          <TYPE>Temperature</TYPE>
+          <STEP_TIME>60</STEP_TIME>
+          <STEP_TEMP>68</STEP_TEMP>
+        </MASH_STEP>
+        <MASH_STEP>
+          <NAME>Sparge</NAME>
+          <VERSION>1</VERSION>
+          <TYPE>Temperature</TYPE>
+          <STEP_TIME>10</STEP_TIME>
+          <STEP_TEMP>76</STEP_TEMP>
+        </MASH_STEP>
+      </MASH_STEPS>
+    </MASH>
+    <HOPS>
+      <HOP>
+        <NAME>Fuggle</NAME>
+        <VERSION>1</VERSION>
+        <ALPHA>4.0</ALPHA>
+        <AMOUNT>0.1</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>45</TIME>
+      </HOP>
+    </HOPS>
+    <BOIL_TIME>60</BOIL_TIME>
+    <FERMENTABLES>
+      <FERMENTABLE>
+        <NAME>Maris Otter Pale Malt</NAME>
+        <VERSION>1</VERSION>
+        <TYPE>Grain</TYPE>
+        <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
+        <AMOUNT>4.6</AMOUNT>
+        <COLOR>2.5</COLOR>
+        <YIELD>83</YIELD>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Crystal Malt</NAME>
+        <VERSION>1</VERSION>
+        <TYPE>Grain</TYPE>
+        <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
+        <AMOUNT>0.5</AMOUNT>
+        <COLOR>69</COLOR>
+        <YIELD>72</YIELD>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Chocolate Malt</NAME>
+        <VERSION>1</VERSION>
+        <TYPE>Grain</TYPE>
+        <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
+        <AMOUNT>0.5</AMOUNT>
+        <COLOR>410</COLOR>
+        <YIELD>65</YIELD>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Roasted Barley</NAME>
+        <VERSION>1</VERSION>
+        <TYPE>Grain</TYPE>
+        <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
+        <AMOUNT>0.2</AMOUNT>
+        <COLOR>560</COLOR>
+        <YIELD>65</YIELD>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Flaked Oats</NAME>
+        <VERSION>1</VERSION>
+        <TYPE>Grain</TYPE>
+        <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
+        <AMOUNT>0.6</AMOUNT>
+        <COLOR>2</COLOR>
+        <YIELD>74</YIELD>
+      </FERMENTABLE>
+    </FERMENTABLES>
+    <TYPE>All Grain</TYPE>
+    <MISCS>
+      <MISC>
+        <NAME>Protafloc</NAME>
+        <VERSION>1</VERSION>
+        <USE_FOR/>
+        <NOTES>Half a tablet @ 15 minutes</NOTES>
+        <USE>Boil</USE>
+        <AMOUNT>0.0016</AMOUNT>
+        <AMOUNT_IS_WEIGHT>TRUE</AMOUNT_IS_WEIGHT>
+        <TIME>15</TIME>
+      </MISC>
+    </MISCS>
+  </RECIPE>
+</RECIPES>
