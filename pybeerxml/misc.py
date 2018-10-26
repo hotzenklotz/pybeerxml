@@ -11,9 +11,13 @@ class Misc(object):
 
     @property
     def amount_is_weight(self):
-        return bool(self._amount_is_weight)
+        if isinstance(self._amount_is_weight, str):
+            return self._amount_is_weight.lower() == "true"
+        elif isinstance(self._amount_is_weight, int) or isinstance(self._amount_is_weight, float):
+            return bool(self._amount_is_weight)
+        else:
+            return False
 
     @amount_is_weight.setter
     def amount_is_weight(self, value):
-        print(value)
         self._amount_is_weight = value

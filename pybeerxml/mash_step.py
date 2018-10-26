@@ -1,5 +1,6 @@
 class MashStep(object):
     def __init__(self):
+        self.name = None
         self.type = None
         self.infuse_amount = None
         self.step_temp = None
