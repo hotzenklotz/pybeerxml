@@ -44,6 +44,7 @@ setup(
     packages = ['pybeerxml'],
     version = VERSION,
     description = 'A BeerXML Parser',
+    long_description=readme(),
     author = 'Tom Herold',
     author_email = 'heroldtom@gmail.com',
     url = 'https://github.com/hotzenklotz/pybeerxml',
@@ -55,7 +56,12 @@ setup(
     },
     platforms='any',
     keywords = ['beerxml', 'beer', 'xml', 'brewing'],
-    classifiers = [],
+    classifiers = [
+        "Intended Audience :: Developers",
+        "Programming Language :: Python",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+    ],
+    license='MIT',
     extras_require={
           'testing': ['pytest'],
       }
