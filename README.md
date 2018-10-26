@@ -3,7 +3,7 @@
 A simple BeerXML parser for Python
 
 [![CircleCI](https://circleci.com/gh/hotzenklotz/pybeerxml/tree/master.svg?style=svg)](https://circleci.com/gh/hotzenklotz/pybeerxml/tree/master)
-[![PyPi Version](https://img.shields.io/pypi/v/pybeerxml.svg?style=flat-square)](https://pypi.python.org/pypi?:action=display&name=pybeerxml&version=1.0)
+[![PyPi Version](https://img.shields.io/pypi/v/pybeerxml.svg?style=flat-square)](https://pypi.python.org/pypi?:action=display&name=pybeerxml)
 
 Parses all recipes within a BeerXML file and returns <Recipe> object containing all ingredients,
 style information and metadata. OG, FG, ABV and IBU are calculated from the ingredient list. (your
