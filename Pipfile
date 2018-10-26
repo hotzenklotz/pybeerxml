@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 pytest = "==3.8.1"
+twine = "*"
 
 [dev-packages]
 
