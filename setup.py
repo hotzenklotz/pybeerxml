@@ -7,7 +7,7 @@ import os
 import pybeerxml
 
 # circleci.py version
-VERSION = "1.0.3"
+VERSION = "1.0.4"
 
 def readme():
     """print long description"""
@@ -45,6 +45,7 @@ setup(
     version = VERSION,
     description = 'A BeerXML Parser',
     long_description=readme(),
+    long_description_content_type="text/markdown",
     author = 'Tom Herold',
     author_email = 'heroldtom@gmail.com',
     url = 'https://github.com/hotzenklotz/pybeerxml',
