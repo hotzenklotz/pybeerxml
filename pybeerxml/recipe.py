@@ -92,6 +92,15 @@ class Recipe(object):
 
         return _fg
 
+    @property
+    def color(self):
+        # Formula source: http://brewwiki.com/index.php/Estimating_Color
+        mcu = 0
+        for f in self.fermentables:
+            mcu += f.amount * f.color * 8.3453 / self.batch_size
+        return 1.4922 * (mcu**0.6859)
+
+
     @ibu.setter
     def ibu(self, value):
         pass
@@ -106,4 +115,8 @@ class Recipe(object):
 
     @abv.setter
     def abv(self, value):
+        pass
+
+    @color.setter
+    def color(self, value):
         pass
