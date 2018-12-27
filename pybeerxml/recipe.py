@@ -95,9 +95,11 @@ class Recipe(object):
     @property
     def color(self):
         # Formula source: http://brewwiki.com/index.php/Estimating_Color
-        mcu = 0
+        mcu = 0.0
         for f in self.fermentables:
-            mcu += f.amount * f.color * 8.3453 / self.batch_size
+            if f.amount is not None and f.color is not None:
+                # 8.3454 is conversion factor from kg/L to lb/gal
+                mcu += f.amount * f.color * 8.3454 / self.batch_size
         return 1.4922 * (mcu**0.6859)
 
 

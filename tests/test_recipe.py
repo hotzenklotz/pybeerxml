@@ -2,7 +2,7 @@ import pytest
 from pybeerxml.recipe import Recipe
 
 def test_setters():
-  "setters for og, fg, ibu, abv should be ignored, since these are calculated properties"
+  "setters for og, fg, ibu, abv, color should be ignored, since these are calculated properties"
 
   recipe = Recipe()
 
@@ -17,3 +17,6 @@ def test_setters():
 
   recipe.ibu = 1.10
   assert(recipe.ibu == 0.0)
+
+  recipe.color = 1.10
+  assert(recipe.color == 0.0)
