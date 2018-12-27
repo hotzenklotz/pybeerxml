@@ -48,6 +48,7 @@ class TestParser:
         assert(recipe.efficiency == 76.0)
         assert(recipe.batch_size == 14.9902306488)
         assert(recipe.boil_time == 30.0)
+        assert(round(recipe.color, 2) == 6.27)
 
         "should have the correct style metadata"
         assert(recipe.style.name == "American IPA")
@@ -91,6 +92,7 @@ class TestParser:
         assert(recipe.efficiency == 75.0)
         assert(recipe.batch_size == 25)
         assert(recipe.ibu == 32.21660448470247)
+        assert(round(recipe.color, 2) == 40.16)
 
         "should have the correct style metadata"
         assert(recipe.style.name == "Oatmeal Stout")
@@ -135,7 +137,3 @@ class TestParser:
         assert(recipe_parser.to_lower("") == "")
         assert(recipe_parser.to_lower(10) == "")
         assert(recipe_parser.to_lower(None) == "")
-
-
-
-
