@@ -7,7 +7,7 @@ import os
 import pybeerxml
 
 # circleci.py version
-VERSION = "1.0.6"
+VERSION = "1.0.7"
 
 def readme():
     """print long description"""

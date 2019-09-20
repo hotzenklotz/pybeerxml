@@ -13,13 +13,13 @@ import sys
 class Parser(object):
 
     def nodes_to_object(self, node, object):
-        "Map all child nodes to one object's attributes"
+        "Map all child nodes to an object's attributes"
 
         for n in list(node):
             self.node_to_object(n, object)
 
     def node_to_object(self, node, object):
-        "Map a single node to one object's attributes"
+        "Map a single node to an object's attributes"
 
         attribute = self.to_lower(node.tag)
 
