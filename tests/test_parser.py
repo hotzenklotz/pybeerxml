@@ -10,6 +10,7 @@ from math import floor
 
 RECIPE_PATH = os.path.join(os.path.dirname(__file__), "Simcoe IPA.xml")
 RECIPE_PATH_2 = os.path.join(os.path.dirname(__file__), "Oatmeal Stout.xml")
+RECIPE_PATH_3 = os.path.join(os.path.dirname(__file__), "CoffeeStout.xml")
 
 class TestParser:
 
@@ -106,6 +107,59 @@ class TestParser:
         assert(recipe.miscs[0].amount_is_weight == True)
         assert(recipe.miscs[0].time == 15)
         assert(recipe.miscs[0].notes == "Half a tablet @ 15 minutes")
+
+    def test_parse_recipe_3(self):
+
+        recipe_parser = Parser()
+        recipes = recipe_parser.parse(RECIPE_PATH_3)
+
+        "should have at least one recipe"
+        assert(len(recipes) > 0)
+
+        recipe = recipes[0]
+
+        "should be of type Recipe"
+        assert(type(recipe) is Recipe)
+
+        "should have the correct amount of ingredients"
+        assert(len(recipe.hops) == 2)
+        assert(len(recipe.yeasts) == 1)
+        assert(len(recipe.fermentables) == 4)
+
+        "should have mashing steps"
+        assert(len(recipe.mash.steps) == 2)
+        assert(recipe.mash.steps[0].name == "Conversion")
+        assert(recipe.mash.steps[0].step_time == 60)
+        assert(recipe.mash.steps[0].step_temp == 66.66666667)
+
+        "should have the correctly calculated properties"
+        assert(round(recipe.og, 4) == 1.0594)
+        assert(round(recipe.og_plato, 4) == 14.6092)
+        assert(round(recipe.fg, 4) == 1.0184)
+        assert(round(recipe.fg_plato, 4) == 4.684)
+        assert(floor(recipe.ibu) == 25)
+        assert(round(recipe.abv, 2) == 5.35)
+
+        "should have the correct recipe metadata"
+        assert(recipe.name == "Coffee Stout")
+        assert(recipe.brewer == None) # https://github.com/jwjulien
+        assert(recipe.efficiency == 70.0)
+        assert(recipe.batch_size == 20.82)
+        assert(round(recipe.ibu, 2) == 25.97)
+        assert(round(recipe.color, 2) == 35.01)
+
+        "should have the correct style metadata"
+        assert(recipe.style.name == "Dry Stout")
+
+        "should have misc ingredients"
+        assert(len(recipe.miscs) == 1)
+        assert(recipe.miscs[0].name == "Coffee, Dark Roast")
+        assert(recipe.miscs[0].use == "Boil")
+        assert(recipe.miscs[0].use_for == "Adding coffee notes.")
+        assert(recipe.miscs[0].amount == 0.11339809)
+        assert(recipe.miscs[0].amount_is_weight == True)
+        assert(recipe.miscs[0].time == 0)
+        assert(recipe.miscs[0].notes == "Use a coarse grind, add at flameout, steep 20 minutes.")
 
 
     def test_node_to_object(self):
