@@ -22,6 +22,7 @@ class Recipe(object):
         self.fermentables = []
         self.miscs = []
         self.mash = None
+        self.waters = []
 
     @property
     def abv(self):
