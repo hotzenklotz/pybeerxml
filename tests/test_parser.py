@@ -14,52 +14,74 @@ RECIPE_PATH_3 = os.path.join(os.path.dirname(__file__), "CoffeeStout.xml")
 
 class TestParser:
 
-    def test_parse_recipe(self):
+    def test_parse_recipe_1_from_file(self):
 
         recipe_parser = Parser()
         recipes = recipe_parser.parse(RECIPE_PATH)
+        self.assert_simcoe_ipa_recipe(recipes)
 
+
+    def test_parse_recipe_1_from_string(self):
+
+        xml_data = open(RECIPE_PATH, 'r').read()
+        recipe_parser = Parser()
+        recipes = recipe_parser.parse_string(xml_data)
+        self.assert_simcoe_ipa_recipe(recipes)
+
+
+    def assert_simcoe_ipa_recipe(self, recipes):
         "should have at least one recipe"
-        assert(len(recipes) > 0)
+        assert (len(recipes) > 0)
 
         recipe = recipes[0]
 
         "should be of type Recipe"
-        assert(type(recipe) is Recipe)
+        assert (type(recipe) is Recipe)
 
         "should have the correct amount of ingredients"
-        assert(len(recipe.hops) == 3)
-        assert(len(recipe.yeasts) == 1)
-        assert(len(recipe.fermentables) == 2)
+        assert (len(recipe.hops) == 3)
+        assert (len(recipe.yeasts) == 1)
+        assert (len(recipe.fermentables) == 2)
 
         "should have mashing steps"
         # TODO
 
         "should have the correctly calculated properties"
-        assert(round(recipe.og, 4) == 1.0338)
-        assert(round(recipe.og_plato, 4) == 8.4815)
-        assert(round(recipe.fg, 4) == 1.0047)
-        assert(round(recipe.fg_plato, 4) == 1.2156)
-        assert(floor(recipe.ibu) == 99)
-        assert(round(recipe.abv, 2) == 3.84)
+        assert (round(recipe.og, 4) == 1.0338)
+        assert (round(recipe.og_plato, 4) == 8.4815)
+        assert (round(recipe.fg, 4) == 1.0047)
+        assert (round(recipe.fg_plato, 4) == 1.2156)
+        assert (floor(recipe.ibu) == 99)
+        assert (round(recipe.abv, 2) == 3.84)
 
         "should have the correct recipe metadata"
-        assert(recipe.name == "Simcoe IPA")
-        assert(recipe.brewer == "Tom Herold")
-        assert(recipe.efficiency == 76.0)
-        assert(recipe.batch_size == 14.9902306488)
-        assert(recipe.boil_time == 30.0)
-        assert(round(recipe.color, 2) == 6.27)
+        assert (recipe.name == "Simcoe IPA")
+        assert (recipe.brewer == "Tom Herold")
+        assert (recipe.efficiency == 76.0)
+        assert (recipe.batch_size == 14.9902306488)
+        assert (recipe.boil_time == 30.0)
+        assert (round(recipe.color, 2) == 6.27)
 
         "should have the correct style metadata"
-        assert(recipe.style.name == "American IPA")
+        assert (recipe.style.name == "American IPA")
 
 
-    def test_parse_recipe_2(self):
+    def test_parse_recipe_2_from_file(self):
 
         recipe_parser = Parser()
         recipes = recipe_parser.parse(RECIPE_PATH_2)
+        self.assert_oatmeal_stout_recipe(recipes)
 
+
+    def test_parse_recipe_2_from_string(self):
+
+        xml_data = open(RECIPE_PATH_2, 'r').read()
+        recipe_parser = Parser()
+        recipes = recipe_parser.parse_string(xml_data)
+        self.assert_oatmeal_stout_recipe(recipes)
+
+
+    def assert_oatmeal_stout_recipe(self, recipes):
         "should have at least one recipe"
         assert(len(recipes) > 0)
 
@@ -108,11 +130,23 @@ class TestParser:
         assert(recipe.miscs[0].time == 15)
         assert(recipe.miscs[0].notes == "Half a tablet @ 15 minutes")
 
-    def test_parse_recipe_3(self):
+
+    def test_parse_recipe_3_from_file(self):
 
         recipe_parser = Parser()
         recipes = recipe_parser.parse(RECIPE_PATH_3)
+        self.assert_coffee_stout_recipe(recipes)
 
+
+    def test_parse_recipe_3_from_string(self):
+
+        xml_data = open(RECIPE_PATH_3, 'r').read()
+        recipe_parser = Parser()
+        recipes = recipe_parser.parse_string(xml_data)
+        self.assert_coffee_stout_recipe(recipes)
+
+
+    def assert_coffee_stout_recipe(self, recipes):
         "should have at least one recipe"
         assert(len(recipes) > 0)
 
