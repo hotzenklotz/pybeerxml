@@ -1,3 +1,6 @@
+from pybeerxml.util import cast_to_bool
+
+
 class Misc(object):
     def __init__(self):
         self.name = None
@@ -11,12 +14,7 @@ class Misc(object):
 
     @property
     def amount_is_weight(self):
-        if isinstance(self._amount_is_weight, str):
-            return self._amount_is_weight.lower() == "true"
-        elif isinstance(self._amount_is_weight, int) or isinstance(self._amount_is_weight, float):
-            return bool(self._amount_is_weight)
-        else:
-            return False
+        return cast_to_bool(self._amount_is_weight)
 
     @amount_is_weight.setter
     def amount_is_weight(self, value):

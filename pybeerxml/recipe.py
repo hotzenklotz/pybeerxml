@@ -1,20 +1,46 @@
+from pybeerxml.util import cast_to_bool
+
+
 class Recipe(object):
     def __init__(self):
         self.name = None
+        self.version = None
+        self.type = None
         self.brewer = None
+        self.asst_brewer = None
         self.batch_size = None
+        self.boil_size = None
         self.boil_time = None
         self.efficiency = None
+        self.notes = None
+        self.taste_notes = None
+        self.taste_rating = None
+        self.fermentation_stages = None
         self.primary_age = None
         self.primary_temp = None
         self.secondary_age = None
         self.secondary_temp = None
         self.tertiary_age = None
         self.tertiary_temp = None
-        self.carbonation = None
-        self.carbonation_temp = None
         self.age = None
         self.age_temp = None
+        self.date = None
+        self.carbonation = None
+        self._forced_carbonation = None
+        self.priming_sugar_name = None
+        self.carbonation_temp = None
+        self.priming_sugar_equiv = None
+        self.keg_priming_factor = None
+
+        # Recipe extension fields
+        self.est_og = None
+        self.est_fg = None
+        self.est_color = None
+        self.ibu_method = None
+        self.est_abv = None
+        self.actual_efficiency = None
+        self.calories = None
+        self.carbonation_used = None
 
         self.style = None
         self.hops = []
@@ -23,6 +49,7 @@ class Recipe(object):
         self.miscs = []
         self.mash = None
         self.waters = []
+        self.equipment = []
 
     @property
     def abv(self):
@@ -123,3 +150,11 @@ class Recipe(object):
     @color.setter
     def color(self, value):
         pass
+
+    @property
+    def forced_carbonation(self):
+        return cast_to_bool(self._forced_carbonation)
+
+    @forced_carbonation.setter
+    def forced_carbonation(self, value):
+        self._forced_carbonation = value
