@@ -162,7 +162,7 @@ class Parser:
                             self.nodes_to_object(mash_step_node, mash_step)
                             mash.steps.append(mash_step)
                     else:
-                        self.nodes_to_object(mash_node, mash)
+                        self.node_to_object(mash_node, mash)
 
             else:
                 self.node_to_object(recipe_property, recipe)
