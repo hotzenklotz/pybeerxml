@@ -5,6 +5,7 @@ from pybeerxml.hop import Hop
 from pybeerxml.mash import Mash
 from pybeerxml.misc import Misc
 from pybeerxml.yeast import Yeast
+from pybeerxml.style import Style
 
 
 class Recipe:
@@ -25,7 +26,7 @@ class Recipe:
         self.age: Optional[float] = None
         self.age_temp: Optional[float] = None
 
-        self.style: Optional[Text] = None
+        self.style: Optional[Style] = None
         self.hops: List[Hop] = []
         self.yeasts: List[Yeast] = []
         self.fermentables: List[Fermentable] = []
@@ -67,6 +68,7 @@ class Recipe:
     def set_ibu(self, value):
         pass
 
+    # pylint: disable=invalid-name
     @property
     def og(self):
 
@@ -95,6 +97,7 @@ class Recipe:
     def set_og(self, value):
         pass
 
+    # pylint: disable=invalid-name
     @property
     def fg(self):
 

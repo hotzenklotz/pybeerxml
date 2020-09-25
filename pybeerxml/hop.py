@@ -1,7 +1,8 @@
 import math
 from typing import Optional, Text
 
-class Hop():
+
+class Hop:
     def __init__(self):
         self.name: Optional[Text] = None
         self.alpha: Optional[float] = None

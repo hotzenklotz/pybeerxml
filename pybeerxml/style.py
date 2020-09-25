@@ -1,6 +1,7 @@
 from typing import Optional, Text
 
-class Style():
+
+class Style:
     def __init__(self):
         self.name: Optional[Text] = None
         self.category: Optional[Text] = None

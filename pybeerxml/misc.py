@@ -6,7 +6,7 @@ class Misc:
         self.name: Optional[Text] = None
         self.type: Optional[Text] = None
         self.amount: Optional[float] = None
-        self._amount_is_weight: Optional[bool] = None
+        self._amount_is_weight: bool = False
         self.use: Optional[Text] = None
         self.use_for: Optional[Text] = None
         self.time: Optional[float] = None
@@ -14,7 +14,6 @@ class Misc:
 
     @property
     def amount_is_weight(self) -> bool:
-
         return self._amount_is_weight
 
     @amount_is_weight.setter

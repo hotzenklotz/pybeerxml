@@ -13,7 +13,7 @@ class MashStep:
         self.step_time: Optional[float] = None  # time in minutes
         self.decoction_amt: Optional[Text] = None
 
-        # pylint: disable=invalid-name
+        # pylint: disable=invalid-name, unused-variable
         @property
         def waterRatio(self):
             raise NotImplementedError("waterRation")

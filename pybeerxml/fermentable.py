@@ -1,15 +1,21 @@
+# pylint: disable=line-too-long
 import re
+import logging
 from typing import Text, Optional
+
+logger = logging.getLogger(__name__)
+
+
+STEEP = re.compile(
+    "/biscuit|black|cara|chocolate|crystal|munich|roast|special|toast|victory|vienna/i"
+)
+BOIL = re.compile(
+    "/candi|candy|dme|dry|extract|honey|lme|liquid|sugar|syrup|turbinado/i"
+)
 
 
 class Fermentable:
     # Regular expressions to match for boiling sugars (DME, LME, etc).
-    STEEP = re.compile(
-        "/biscuit|black|cara|chocolate|crystal|munich|roast|special|toast|victory|vienna/i"
-    )
-    BOIL = re.compile(
-        "/candi|candy|dme|dry|extract|honey|lme|liquid|sugar|syrup|turbinado/i"
-    )
 
     def __init__(self):
         self.name: Optional[Text] = None
@@ -27,12 +33,24 @@ class Fermentable:
         self._add_after_boil = value
 
     @property
-    def ppg(self) -> float:
-        return 0.46214 * self._yield
+    def ppg(self) -> Optional[float]:
+        if self._yield is not None:
+            return 0.46214 * self._yield
+
+        logger.error(
+            "Property 'ppg' could not be calculated because property 'yield' is missing. Default to 'None'"
+        )
+        return None
 
     @property
     def addition(self) -> Text:
         # When is this item added in the brewing process? Boil, steep, or mash?
+
+        if self.name is None:
+            logger.error(
+                "Property 'addition' could not be calculated because property 'name' is missing. Defaults to 'mash'"
+            )
+            return "mash"
 
         regexes = [
             # Forced values take precedence, then search known names and
@@ -40,8 +58,8 @@ class Fermentable:
             [re.compile("mash/i"), "mash"],
             [re.compile("steep/i"), "steep"],
             [re.compile("boil/i"), "boil"],
-            [Fermentable.BOIL, "boil"],
-            [Fermentable.STEEP, "steep"],
+            [BOIL, "boil"],
+            [STEEP, "steep"],
             [re.compile(".*"), "mash"],
         ]
 
@@ -54,8 +72,14 @@ class Fermentable:
 
         return "mash"
 
-    def gu(self, liters: float = 1.0) -> float:
+    # pylint: disable=invalid-name
+    def gu(self, liters: float = 1.0) -> Optional[float]:
         # Get the gravity units for a specific liquid volume with 100% efficiency
+        if self.amount is None:
+            logger.error(
+                "Property 'gu' could not be calculated because property 'amount' is missing. Defaults to 'None'"
+            )
+            return None
 
         # gu = parts per gallon * weight in pounds / gallons
         weight_lb = self.amount * 2.20462

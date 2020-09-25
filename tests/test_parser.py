@@ -5,6 +5,7 @@ from xml.etree.ElementTree import Element, SubElement
 
 from pybeerxml.parser import Parser, Recipe
 from pybeerxml.hop import Hop
+from pybeerxml.utils import to_lower
 
 RECIPE_PATH = os.path.join(os.path.dirname(__file__), "Simcoe IPA.xml")
 RECIPE_PATH_2 = os.path.join(os.path.dirname(__file__), "Oatmeal Stout.xml")
@@ -103,7 +104,7 @@ class TestParser:
         assert recipe.miscs[0].use == "Boil"
         assert recipe.miscs[0].use_for is None
         assert recipe.miscs[0].amount == 0.0016
-        assert recipe.miscs[0].amount_is_weight # True
+        assert recipe.miscs[0].amount_is_weight  # True
         assert recipe.miscs[0].time == 15
         assert recipe.miscs[0].notes == "Half a tablet @ 15 minutes"
 
@@ -151,7 +152,7 @@ class TestParser:
         assert recipe.miscs[0].use == "Boil"
         assert recipe.miscs[0].use_for == "Adding coffee notes."
         assert recipe.miscs[0].amount == 0.11339809
-        assert recipe.miscs[0].amount_is_weight # True
+        assert recipe.miscs[0].amount_is_weight  # True
         assert recipe.miscs[0].time == 0
         assert (
             recipe.miscs[0].notes
@@ -181,8 +182,7 @@ class TestParser:
 
     def test_to_lower(self):
 
-        recipe_parser = Parser()
-        assert recipe_parser.to_lower("MASH") == "mash"
-        assert recipe_parser.to_lower("") == ""
-        assert recipe_parser.to_lower(10) == ""
-        assert recipe_parser.to_lower(None) == ""
+        assert to_lower("MASH") == "mash"
+        assert to_lower("") == ""
+        assert to_lower(10) == ""
+        assert to_lower(None) == ""
