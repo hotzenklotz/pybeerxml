@@ -3,8 +3,12 @@ import re
 
 class Fermentable(object):
     # Regular expressions to match for boiling sugars (DME, LME, etc).
-    STEEP = re.compile("/biscuit|black|cara|chocolate|crystal|munich|roast|special|toast|victory|vienna/i")
-    BOIL = re.compile("/candi|candy|dme|dry|extract|honey|lme|liquid|sugar|syrup|turbinado/i")
+    STEEP = re.compile(
+        "/biscuit|black|cara|chocolate|crystal|munich|roast|special|toast|victory|vienna/i"
+    )
+    BOIL = re.compile(
+        "/candi|candy|dme|dry|extract|honey|lme|liquid|sugar|syrup|turbinado/i"
+    )
 
     def __init__(self):
         self.name = None
@@ -36,7 +40,7 @@ class Fermentable(object):
             [re.compile("boil/i"), "boil"],
             [Fermentable.BOIL, "boil"],
             [Fermentable.STEEP, "steep"],
-            [re.compile(".*"), "mash"]
+            [re.compile(".*"), "mash"],
         ]
 
         for regex, addition in regexes:

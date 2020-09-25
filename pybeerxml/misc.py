@@ -13,7 +13,9 @@ class Misc(object):
     def amount_is_weight(self):
         if isinstance(self._amount_is_weight, str):
             return self._amount_is_weight.lower() == "true"
-        elif isinstance(self._amount_is_weight, int) or isinstance(self._amount_is_weight, float):
+        elif isinstance(self._amount_is_weight, int) or isinstance(
+            self._amount_is_weight, float
+        ):
             return bool(self._amount_is_weight)
         else:
             return False

@@ -100,8 +100,7 @@ class Recipe(object):
             if f.amount is not None and f.color is not None:
                 # 8.3454 is conversion factor from kg/L to lb/gal
                 mcu += f.amount * f.color * 8.3454 / self.batch_size
-        return 1.4922 * (mcu**0.6859)
-
+        return 1.4922 * (mcu ** 0.6859)
 
     @ibu.setter
     def ibu(self, value):

@@ -11,7 +11,6 @@ import sys
 
 
 class Parser(object):
-
     def nodes_to_object(self, node, object):
         "Map all child nodes to an object's attributes"
 
