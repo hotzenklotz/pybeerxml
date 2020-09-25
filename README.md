@@ -59,6 +59,25 @@ Unit test can be run with PyTest:
 python setup.py test
 ```
 
+## Contributing / Development
+Community contributions are welcome.
+
+Dependency management is handled through Poety:
+
+```
+pip install poetry
+
+poetry install
+```
+
+Make sure to Test, Lint, Format, & Type-Check your code before sending a pull request:
+```
+python -m pytest picobrew_server
+python -m pylint picobrew_server
+python -m black picobrew_server
+python -m mypy picobrew_server
+```
+
 ## License
 
 MIT
