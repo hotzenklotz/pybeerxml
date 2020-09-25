@@ -56,16 +56,16 @@ for recipe in recipes:
 
 ## Testing
 
-Unit test can be run with PyTest:
+Unit tests can be run with PyTest:
 
 ```
-python setup.py test
+python -m pytest tests
 ```
 
 ## Contributing / Development
 Community contributions are welcome.
 
-Dependency management is handled through Poety:
+Dependency management is handled through [Poetry](https://python-poetry.org/):
 
 ```
 pip install poetry
