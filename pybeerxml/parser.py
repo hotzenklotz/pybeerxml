@@ -40,13 +40,20 @@ class Parser(object):
         except AttributeError():
             sys.stderr.write("Attribute <%s> not supported." % attribute)
 
-    def parse(self, xml_file):
-        "Get a list of parsed recipes from BeerXML input"
+    def parse_string(self, xml_string):
+        "Get a list of parsed recipes from BeerXML string"
+        tree = ElementTree.ElementTree(ElementTree.fromstring(xml_string))
+        return self.parse_tree(tree)
 
-        recipes = []
+    def parse(self, xml_file):
+        "Get a list of parsed recipes from BeerXML file"
 
         with open(xml_file, "rt") as f:
             tree = ElementTree.parse(f)
+            return self.parse_tree(tree)
+
+    def parse_tree(self, tree):
+        recipes = []
 
         for recipeNode in tree.iter():
             if self.to_lower(recipeNode.tag) != "recipe":
