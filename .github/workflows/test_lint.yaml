@@ -8,7 +8,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.7, 3.8]
+        python-version: [3.6, 3.7, 3.8]
 
     steps:
     - uses: actions/checkout@v1
@@ -37,10 +37,10 @@ jobs:
         source ~/.venv/bin/activate
         python -m pylint pybeerxml
 
-    - name: Check typing
-      run: |
-        source ~/.venv/bin/activate
-        python -m mypy pybeerxml
+    # - name: Check typing
+    #   run: |
+    #     source ~/.venv/bin/activate
+    #     python -m mypy pybeerxml
 
     - name: Run Unit Tests
       run: |
