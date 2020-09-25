@@ -1,27 +1,36 @@
-class Recipe(object):
-    def __init__(self):
-        self.name = None
-        self.brewer = None
-        self.batch_size = None
-        self.boil_time = None
-        self.efficiency = None
-        self.primary_age = None
-        self.primary_temp = None
-        self.secondary_age = None
-        self.secondary_temp = None
-        self.tertiary_age = None
-        self.tertiary_temp = None
-        self.carbonation = None
-        self.carbonation_temp = None
-        self.age = None
-        self.age_temp = None
+from typing import Optional, Text, List
 
-        self.style = None
-        self.hops = []
-        self.yeasts = []
-        self.fermentables = []
-        self.miscs = []
-        self.mash = None
+from pybeerxml.fermentable import Fermentable
+from pybeerxml.hop import Hop
+from pybeerxml.mash import Mash
+from pybeerxml.misc import Misc
+from pybeerxml.yeast import Yeast
+
+
+class Recipe:
+    def __init__(self):
+        self.name: Optional[Text] = None
+        self.brewer: Optional[Text] = None
+        self.batch_size: Optional[float] = None
+        self.boil_time: Optional[float] = None
+        self.efficiency: Optional[float] = None
+        self.primary_age: Optional[float] = None
+        self.primary_temp: Optional[float] = None
+        self.secondary_age: Optional[float] = None
+        self.secondary_temp: Optional[float] = None
+        self.tertiary_age: Optional[float] = None
+        self.tertiary_temp: Optional[float] = None
+        self.carbonation: Optional[float] = None
+        self.carbonation_temp: Optional[float] = None
+        self.age: Optional[float] = None
+        self.age_temp: Optional[float] = None
+
+        self.style: Optional[Text] = None
+        self.hops: List[Hop] = []
+        self.yeasts: List[Yeast] = []
+        self.fermentables: List[Fermentable] = []
+        self.miscs: List[Misc] = []
+        self.mash: Optional[Mash] = None
 
     @property
     def abv(self):

@@ -1,15 +1,15 @@
 import math
+from typing import Optional, Text
 
-
-class Hop(object):
+class Hop():
     def __init__(self):
-        self.name = None
-        self.alpha = None
-        self.amount = None
-        self.use = None
-        self.form = None
-        self.notes = None
-        self.time = None
+        self.name: Optional[Text] = None
+        self.alpha: Optional[float] = None
+        self.amount: Optional[float] = None
+        self.use: Optional[Text] = None
+        self.form: Optional[Text] = None
+        self.notes: Optional[Text] = None
+        self.time: Optional[float] = None
 
     def utilization_factor(self):
         "Account for better utilization from pellets vs. whole"

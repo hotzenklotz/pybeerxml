@@ -1,25 +1,29 @@
-class Misc(object):
+from typing import Optional, Text, Any
+
+
+class Misc:
     def __init__(self):
-        self.name = None
-        self.type = None
-        self.amount = None
-        self._amount_is_weight = None
-        self.use = None
-        self.use_for = None
-        self.time = None
-        self.notes = None
+        self.name: Optional[Text] = None
+        self.type: Optional[Text] = None
+        self.amount: Optional[float] = None
+        self._amount_is_weight: Optional[bool] = None
+        self.use: Optional[Text] = None
+        self.use_for: Optional[Text] = None
+        self.time: Optional[float] = None
+        self.notes: Optional[Text] = None
 
     @property
-    def amount_is_weight(self):
-        if isinstance(self._amount_is_weight, str):
-            return self._amount_is_weight.lower() == "true"
-        elif isinstance(self._amount_is_weight, int) or isinstance(
-            self._amount_is_weight, float
-        ):
-            return bool(self._amount_is_weight)
-        else:
-            return False
+    def amount_is_weight(self) -> bool:
+
+        return self._amount_is_weight
 
     @amount_is_weight.setter
-    def amount_is_weight(self, value):
-        self._amount_is_weight = value
+    def amount_is_weight(self, value: Any):
+        if isinstance(value, str):
+            self._amount_is_weight = value.lower() == "true"
+        elif isinstance(value, (float, int)):
+            self._amount_is_weight = bool(value)
+        elif isinstance(value, bool):
+            self._amount_is_weight = value
+
+        return False

@@ -1,23 +1,34 @@
-from xml.etree import ElementTree
-from .recipe import *
-from .hop import Hop
-from .mash import Mash
-from .mash_step import MashStep
-from .misc import Misc
-from .yeast import Yeast
-from .style import Style
-from .fermentable import Fermentable
 import sys
+from xml.etree import ElementTree
+from xml.etree.ElementTree import Element
+from typing import Union, List, Text, Optional
+
+from pybeerxml.recipe import Recipe
+from pybeerxml.hop import Hop
+from pybeerxml.mash import Mash
+from pybeerxml.mash_step import MashStep
+from pybeerxml.misc import Misc
+from pybeerxml.yeast import Yeast
+from pybeerxml.style import Style
+from pybeerxml.fermentable import Fermentable
 
 
-class Parser(object):
-    def nodes_to_object(self, node, object):
+class Parser:
+    def nodes_to_object(
+        self,
+        nodes: Element,
+        beerxml_object: Union[Mash, Yeast, Fermentable, Hop, Misc, MashStep],
+    ):
         "Map all child nodes to an object's attributes"
 
-        for n in list(node):
-            self.node_to_object(n, object)
+        for node in list(nodes):
+            self.node_to_object(node, beerxml_object)
 
-    def node_to_object(self, node, object):
+    def node_to_object(
+        self,
+        node: Element,
+        beerxml_object: Union[Recipe, Mash, Yeast, Fermentable, Hop, Misc, MashStep],
+    ):
         "Map a single node to an object's attributes"
 
         attribute = self.to_lower(node.tag)
@@ -26,54 +37,54 @@ class Parser(object):
         attribute = "_yield" if attribute == "yield" else attribute
 
         try:
-            valueString = node.text or ""
-            value = float(valueString)
+            value_string = node.text or ""
+            value = float(value_string)
         except ValueError:
             value = node.text
 
         try:
-            setattr(object, attribute, value)
-        except AttributeError():
+            setattr(beerxml_object, attribute, value)
+        except AttributeError:
             sys.stderr.write("Attribute <%s> not supported." % attribute)
 
-    def parse(self, xml_file):
+    def parse(self, xml_file) -> List[Recipe]:
         "Get a list of parsed recipes from BeerXML input"
 
         recipes = []
 
-        with open(xml_file, "rt") as f:
-            tree = ElementTree.parse(f)
+        with open(xml_file, "rt") as file:
+            tree = ElementTree.parse(file)
 
-        for recipeNode in tree.iter():
-            if self.to_lower(recipeNode.tag) != "recipe":
+        for recipe_node in tree.iter():
+            if self.to_lower(recipe_node.tag) != "recipe":
                 continue
 
             recipe = Recipe()
             recipes.append(recipe)
 
-            for recipeProperty in list(recipeNode):
-                tag_name = self.to_lower(recipeProperty.tag)
+            for recipe_property in list(recipe_node):
+                tag_name = self.to_lower(recipe_property.tag)
 
                 if tag_name == "fermentables":
-                    for fermentable_node in list(recipeProperty):
+                    for fermentable_node in list(recipe_property):
                         fermentable = Fermentable()
                         self.nodes_to_object(fermentable_node, fermentable)
                         recipe.fermentables.append(fermentable)
 
                 elif tag_name == "yeasts":
-                    for yeast_node in list(recipeProperty):
+                    for yeast_node in list(recipe_property):
                         yeast = Yeast()
                         self.nodes_to_object(yeast_node, yeast)
                         recipe.yeasts.append(yeast)
 
                 elif tag_name == "hops":
-                    for hop_node in list(recipeProperty):
+                    for hop_node in list(recipe_property):
                         hop = Hop()
                         self.nodes_to_object(hop_node, hop)
                         recipe.hops.append(hop)
 
                 elif tag_name == "miscs":
-                    for misc_node in list(recipeProperty):
+                    for misc_node in list(recipe_property):
                         misc = Misc()
                         self.nodes_to_object(misc_node, misc)
                         recipe.miscs.append(misc)
@@ -81,13 +92,13 @@ class Parser(object):
                 elif tag_name == "style":
                     style = Style()
                     recipe.style = style
-                    self.nodes_to_object(recipeProperty, style)
+                    self.nodes_to_object(recipe_property, style)
 
                 elif tag_name == "mash":
                     mash = Mash()
                     recipe.mash = mash
 
-                    for mash_node in list(recipeProperty):
+                    for mash_node in list(recipe_property):
                         if self.to_lower(mash_node.tag) == "mash_steps":
                             for mash_step_node in list(mash_node):
                                 mash_step = MashStep()
@@ -97,16 +108,16 @@ class Parser(object):
                             self.nodes_to_object(mash_node, mash)
 
                 else:
-                    self.node_to_object(recipeProperty, recipe)
+                    self.node_to_object(recipe_property, recipe)
 
         return recipes
 
-    def to_lower(self, string):
+    def to_lower(self, string) -> Optional[Text]:
         "Helper function to transform strings to lower case"
         value = None
         try:
             value = string.lower()
         except AttributeError:
             value = ""
-        finally:
-            return value
+
+        return value

@@ -1,7 +1,8 @@
 import re
+from typing import Text, Optional
 
 
-class Fermentable(object):
+class Fermentable:
     # Regular expressions to match for boiling sugars (DME, LME, etc).
     STEEP = re.compile(
         "/biscuit|black|cara|chocolate|crystal|munich|roast|special|toast|victory|vienna/i"
@@ -11,14 +12,14 @@ class Fermentable(object):
     )
 
     def __init__(self):
-        self.name = None
-        self.amount = None
-        self._yield = None
-        self.color = None
-        self._add_after_boil = None  # Should be Bool
+        self.name: Optional[Text] = None
+        self.amount: Optional[float] = None
+        self._yield: Optional[float] = None
+        self.color: Optional[float] = None
+        self._add_after_boil: Optional[bool] = None  # Should be Bool
 
     @property
-    def add_after_boil(self):
+    def add_after_boil(self) -> bool:
         return bool(self._add_after_boil)
 
     @add_after_boil.setter
@@ -26,12 +27,13 @@ class Fermentable(object):
         self._add_after_boil = value
 
     @property
-    def ppg(self):
+    def ppg(self) -> float:
         return 0.46214 * self._yield
 
-    # When is this item added in the brewing process? Boil, steep, or mash?
     @property
-    def addition(self):
+    def addition(self) -> Text:
+        # When is this item added in the brewing process? Boil, steep, or mash?
+
         regexes = [
             # Forced values take precedence, then search known names and
             # default to mashing
@@ -48,10 +50,13 @@ class Fermentable(object):
                 if re.search(regex, self.name.lower()):
                     return addition
             except AttributeError:
-                return "mash"
+                break
 
-    # Get the gravity units for a specific liquid volume with 100% efficiency
-    def gu(self, liters=1.0):
+        return "mash"
+
+    def gu(self, liters: float = 1.0) -> float:
+        # Get the gravity units for a specific liquid volume with 100% efficiency
+
         # gu = parts per gallon * weight in pounds / gallons
         weight_lb = self.amount * 2.20462
         volume_gallons = liters * 0.264172
