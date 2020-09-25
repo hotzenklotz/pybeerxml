@@ -30,16 +30,19 @@ jobs:
     - name: Check code formatting
       run: |
         source ~/.venv/bin/activate
-        python -m black picobrew_server
+        python -m black pybeerxml
     
     - name: Lint code
       run: |
         source ~/.venv/bin/activate
-        python -m pylint picobrew_server
+        python -m pylint pybeerxml
 
     - name: Check typing
       run: |
         source ~/.venv/bin/activate
-        python -m mypy picobrew_server
+        python -m mypy pybeerxml
 
-  
+    - name: Check code formatting
+      run: |
+        source ~/.venv/bin/activate
+        python -m pytest pybeerxml

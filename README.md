@@ -2,8 +2,11 @@
 
 A simple BeerXML parser for Python
 
-[![CircleCI](https://circleci.com/gh/hotzenklotz/pybeerxml/tree/master.svg?style=svg)](https://circleci.com/gh/hotzenklotz/pybeerxml/tree/master)
-[![PyPi Version](https://img.shields.io/pypi/v/pybeerxml.svg?style=flat-square)](https://pypi.python.org/pypi?:action=display&name=pybeerxml)
+[![PyPi Version](https://img.shields.io/pypi/v/pybeerxml.svg?style=flat-square)]
+(https://pypi.python.org/pypi?:action=display&name=pybeerxml)
+[![Build Status](https://img.shields.io/github/workflow/status/hotzenklotz/pybeerxml/test-and-lint)](https://github.com/hotzenklotz/pybeerxml/actions?query=workflow%3A%22Test+and+branch%3Amaster+)
+[![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 
 Parses all recipes within a BeerXML file and returns `Recipe` objects containing all ingredients,
 style information and metadata. OG, FG, ABV and IBU are calculated from the ingredient list. (your
@@ -72,10 +75,10 @@ poetry install
 
 Make sure to Test, Lint, Format, & Type-Check your code before sending a pull request:
 ```
-python -m pytest picobrew_server
-python -m pylint picobrew_server
-python -m black picobrew_server
-python -m mypy picobrew_server
+python -m pytest pybeerxml
+python -m pylint pybeerxml
+python -m black pybeerxml
+python -m mypy pybeerxml
 ```
 
 ## License
