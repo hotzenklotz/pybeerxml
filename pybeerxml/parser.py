@@ -64,56 +64,62 @@ class Parser:
         for recipe_node in tree.iter():
             if to_lower(recipe_node.tag) != "recipe":
                 continue
-
-            recipe = Recipe()
+            recipe = self.parse_recipe(recipe_node)
             recipes.append(recipe)
 
-            for recipe_property in list(recipe_node):
-                tag_name = to_lower(recipe_property.tag)
-
-                if tag_name == "fermentables":
-                    for fermentable_node in list(recipe_property):
-                        fermentable = Fermentable()
-                        self.nodes_to_object(fermentable_node, fermentable)
-                        recipe.fermentables.append(fermentable)
-
-                elif tag_name == "yeasts":
-                    for yeast_node in list(recipe_property):
-                        yeast = Yeast()
-                        self.nodes_to_object(yeast_node, yeast)
-                        recipe.yeasts.append(yeast)
-
-                elif tag_name == "hops":
-                    for hop_node in list(recipe_property):
-                        hop = Hop()
-                        self.nodes_to_object(hop_node, hop)
-                        recipe.hops.append(hop)
-
-                elif tag_name == "miscs":
-                    for misc_node in list(recipe_property):
-                        misc = Misc()
-                        self.nodes_to_object(misc_node, misc)
-                        recipe.miscs.append(misc)
-
-                elif tag_name == "style":
-                    style = Style()
-                    recipe.style = style
-                    self.nodes_to_object(recipe_property, style)
-
-                elif tag_name == "mash":
-                    mash = Mash()
-                    recipe.mash = mash
-
-                    for mash_node in list(recipe_property):
-                        if to_lower(mash_node.tag) == "mash_steps":
-                            for mash_step_node in list(mash_node):
-                                mash_step = MashStep()
-                                self.nodes_to_object(mash_step_node, mash_step)
-                                mash.steps.append(mash_step)
-                        else:
-                            self.nodes_to_object(mash_node, mash)
-
-                else:
-                    self.node_to_object(recipe_property, recipe)
-
         return recipes
+
+    # pylint: disable=too-many-branches, too-many-locals
+    def parse_recipe(self, recipe_node: Element) -> Recipe:
+
+        recipe = Recipe()
+
+        for recipe_property in list(recipe_node):
+            tag_name = to_lower(recipe_property.tag)
+
+            if tag_name == "fermentables":
+                for fermentable_node in list(recipe_property):
+                    fermentable = Fermentable()
+                    self.nodes_to_object(fermentable_node, fermentable)
+                    recipe.fermentables.append(fermentable)
+
+            elif tag_name == "yeasts":
+                for yeast_node in list(recipe_property):
+                    yeast = Yeast()
+                    self.nodes_to_object(yeast_node, yeast)
+                    recipe.yeasts.append(yeast)
+
+            elif tag_name == "hops":
+                for hop_node in list(recipe_property):
+                    hop = Hop()
+                    self.nodes_to_object(hop_node, hop)
+                    recipe.hops.append(hop)
+
+            elif tag_name == "miscs":
+                for misc_node in list(recipe_property):
+                    misc = Misc()
+                    self.nodes_to_object(misc_node, misc)
+                    recipe.miscs.append(misc)
+
+            elif tag_name == "style":
+                style = Style()
+                recipe.style = style
+                self.nodes_to_object(recipe_property, style)
+
+            elif tag_name == "mash":
+                mash = Mash()
+                recipe.mash = mash
+
+                for mash_node in list(recipe_property):
+                    if to_lower(mash_node.tag) == "mash_steps":
+                        for mash_step_node in list(mash_node):
+                            mash_step = MashStep()
+                            self.nodes_to_object(mash_step_node, mash_step)
+                            mash.steps.append(mash_step)
+                    else:
+                        self.nodes_to_object(mash_node, mash)
+
+            else:
+                self.node_to_object(recipe_property, recipe)
+
+        return recipe
