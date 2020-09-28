@@ -10,3 +10,15 @@ def to_lower(possible_string: Any) -> Text:
         pass
 
     return value
+
+
+def cast_to_bool(value: Any) -> bool:
+
+    if isinstance(value, str):
+        return value.lower() == "true"
+    if isinstance(value, (float, int)):
+        return bool(value)
+    if isinstance(value, bool):
+        return value
+
+    return False
