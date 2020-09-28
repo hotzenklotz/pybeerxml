@@ -1,4 +1,4 @@
-from typing import Optional, Text, List
+from typing import Optional, Text, List, Any
 
 from pybeerxml.fermentable import Fermentable
 from pybeerxml.hop import Hop
@@ -10,14 +10,22 @@ from pybeerxml.water import Water
 from pybeerxml.equipment import Equipment
 from pybeerxml.utils import cast_to_bool
 
-
+# pylint: disable=too-many-instance-attributes
 class Recipe:
     def __init__(self):
         self.name: Optional[Text] = None
+        self.version: Optional[float] = None
+        self.type: Optional[Text] = None
         self.brewer: Optional[Text] = None
+        self.asst_brewer: Optional[Text] = None
         self.batch_size: Optional[float] = None
         self.boil_time: Optional[float] = None
+        self.boil_size: Optional[float] = None
         self.efficiency: Optional[float] = None
+        self.notes: Optional[Text] = None
+        self.taste_notes: Optional[Text] = None
+        self.taste_rating: Optional[float] = None
+        self.fermentation_stages: Optional[Text] = None
         self.primary_age: Optional[float] = None
         self.primary_temp: Optional[float] = None
         self.secondary_age: Optional[float] = None
@@ -28,6 +36,23 @@ class Recipe:
         self.carbonation_temp: Optional[float] = None
         self.age: Optional[float] = None
         self.age_temp: Optional[float] = None
+        self.date: Optional[float] = None
+        self.carbonation: Optional[float] = None
+        self._forced_carbonation: Optional[bool] = None
+        self.priming_sugar_name: Optional[float] = None
+        self.carbonation_temp: Optional[float] = None
+        self.priming_sugar_equiv: Optional[Text] = None
+        self.keg_priming_factor: Optional[float] = None
+
+        # Recipe extension fields
+        self.est_og = None
+        self.est_fg = None
+        self.est_color = None
+        self.ibu_method = None
+        self.est_abv = None
+        self.actual_efficiency = None
+        self.calories = None
+        self.carbonation_used = None
 
         self.style: Optional[Style] = None
         self.hops: List[Hop] = []
@@ -141,8 +166,8 @@ class Recipe:
 
     @property
     def forced_carbonation(self):
-        return cast_to_bool(self._forced_carbonation)
+        return self._forced_carbonation
 
     @forced_carbonation.setter
-    def forced_carbonation(self, value):
-        self._forced_carbonation = value
+    def forced_carbonation(self, value: Any) -> bool:
+        self._forced_carbonation = cast_to_bool(value)

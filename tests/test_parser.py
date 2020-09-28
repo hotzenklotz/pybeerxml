@@ -165,12 +165,36 @@ class TestParser:
         assert floor(recipe.ibu) == 25
         assert round(recipe.abv, 2) == 5.35
 
+        # general recipe metadata
         assert recipe.name == "Coffee Stout"
         assert recipe.brewer == "https://github.com/jwjulien"
         assert recipe.efficiency == 70.0
         assert recipe.batch_size == 20.82
         assert round(recipe.ibu, 2) == 25.97
         assert round(recipe.color, 2) == 35.01
+        assert recipe.version == 1
+        assert recipe.type == "All Grain"
+        assert recipe.asst_brewer == "Brewtarget: free beer software"
+        assert recipe.boil_size == 25.552
+        assert recipe.notes == "Recipe Notes"
+        assert recipe.taste_notes == "Taste Notes"
+        assert recipe.taste_rating == 42
+        assert recipe.fermentation_stages == 1
+        assert recipe.date == "3 Dec 04"
+        assert recipe.carbonation == 2.1
+        assert not recipe.forced_carbonation
+        assert recipe.priming_sugar_name == "Honey"
+        assert recipe.carbonation_temp == 20.0
+        assert recipe.priming_sugar_equiv == 1.1
+        assert recipe.keg_priming_factor == 1.2
+        assert recipe.est_og == 1.049
+        assert recipe.est_fg == 1.015
+        assert recipe.est_color == 3.1
+        assert recipe.ibu_method == "Tinseth"
+        assert recipe.est_abv == 6.23
+        assert recipe.actual_efficiency == 65.1
+        assert recipe.calories == "180 Cal/pint"
+        assert recipe.carbonation_used == "50g corn sugar"
 
         assert (
             recipe.style.name == "Dry Stout"
@@ -187,6 +211,25 @@ class TestParser:
             recipe.miscs[0].notes
             == "Use a coarse grind, add at flameout, steep 20 minutes."
         )
+
+        # should have equipments
+        assert isinstance(recipe.equipment, Equipment)
+        assert recipe.equipment.name == "5.5 gal - All Grain - 10 gal Igloo Cooler"
+        assert recipe.equipment.version == 1
+        assert recipe.equipment.boil_size == 25.552
+        assert recipe.equipment.batch_size == 20.82
+        assert recipe.equipment.tun_volume == 37.854
+        assert recipe.equipment.tun_weight == 4.082
+        assert recipe.equipment.tun_specific_heat == 0.3
+        assert recipe.equipment.top_up_water == 0.1
+        assert recipe.equipment.trub_chiller_loss == 1.893
+        assert recipe.equipment.evap_rate == 13.63592699
+        assert recipe.equipment.boil_time == 60.0
+        assert recipe.equipment.calc_boil_volume # True
+        assert recipe.equipment.lauter_deadspace == 0.2
+        assert recipe.equipment.top_up_kettle == 0.4
+        assert recipe.equipment.hop_utilization == 100.0
+        assert recipe.equipment.notes == "Equipment notes"
 
     def test_node_to_object(self):
         "test XML node parsing to Python object"
