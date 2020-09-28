@@ -8,6 +8,8 @@ from pybeerxml.hop import Hop
 from pybeerxml.equipment import Equipment
 from pybeerxml.utils import to_lower
 
+from pybeerxml.mash import Mash
+
 RECIPE_PATH = os.path.join(os.path.dirname(__file__), "Simcoe IPA.xml")
 RECIPE_PATH_2 = os.path.join(os.path.dirname(__file__), "Oatmeal Stout.xml")
 RECIPE_PATH_3 = os.path.join(os.path.dirname(__file__), "CoffeeStout.xml")
@@ -39,14 +41,20 @@ class TestParser:
             len(recipe.fermentables) == 2
         ), "should have the correct amount of fermentables"
 
-        # TODO test mashing steps
+        # should have mashing steps
+        assert(len(recipe.mash.steps) == 4)
+        assert(recipe.mash.steps[0].name == "Dough In")
+        assert(recipe.mash.steps[0].version == 1)
+        assert(recipe.mash.steps[0].type == "Infusion")
+        assert(recipe.mash.steps[0].step_temp == 102)
+        assert(recipe.mash.steps[0].step_time == 20)
 
         # should have the original recipe properties
-        assert round(recipe.og, 4) == 1.0756
-        assert round(recipe.og_plato, 4) == 18.3327
-        assert round(recipe.fg, 4) == 1.0106
-        assert round(recipe.fg_plato, 4) == 2.7119
-        assert recipe.ibu == 64
+        assert (round(recipe.og, 4) == 1.0756)
+        assert (round(recipe.og_plato, 4) == 18.3327)
+        assert (round(recipe.fg, 4) == 1.0106)
+        assert (round(recipe.fg_plato, 4) == 2.7119)
+        assert (floor(recipe.ibu) == 64)
 
         # should fall back to the calculated value for missing properties
         assert round(recipe.abv, 2) == 3.84
@@ -119,6 +127,19 @@ class TestParser:
         assert round(recipe.ibu, 2) == 32.22
         assert round(recipe.abv, 2) == 5.47
 
+        # should have mashing base information
+        assert(type(recipe.mash) is Mash)
+        assert (recipe.mash.name == "Mash for Oatmeal Stout no. 1")
+        assert (recipe.mash.grain_temp == "unknown")
+
+        # should have mashing steps
+        assert(len(recipe.mash.steps) == 2)
+        assert(recipe.mash.steps[0].name == "Mash step")
+        assert(recipe.mash.steps[0].version == 1)
+        assert(recipe.mash.steps[0].type == "Temperature")
+        assert(recipe.mash.steps[0].step_time == 60)
+        assert(recipe.mash.steps[0].step_temp == 68)
+
         # should have the same calculated properties
         assert round(recipe.og_calculated, 4) == 1.0556
         assert round(recipe.og_calculated_plato, 4) == 13.7108
@@ -176,6 +197,23 @@ class TestParser:
         assert recipe.mash.steps[0].name == "Conversion"
         assert recipe.mash.steps[0].step_time == 60
         assert recipe.mash.steps[0].step_temp == 66.66666667
+
+        # should have mashing base information
+        assert(type(recipe.mash) is Mash)
+        assert (recipe.mash.name == "Single Step")
+        assert (recipe.mash.grain_temp == 20.0)
+        assert (recipe.mash.sparge_temp == 74.0)
+        assert (recipe.mash.ph == 7)
+        assert (recipe.mash.tun_temp == 21.0)
+        assert (recipe.mash.tun_weight == 4.082)
+        assert (recipe.mash.tun_specific_heat == 0.3)
+        assert (recipe.mash.equip_adjust == True)
+
+        # should have mashing steps
+        assert(len(recipe.mash.steps) == 2)
+        assert(recipe.mash.steps[0].name == "Conversion")
+        assert(recipe.mash.steps[0].step_time == 60)
+        assert(recipe.mash.steps[0].step_temp == 66.66666667)
 
         # should have the original recipe properties
         assert round(recipe.og, 4) == 1.0489
