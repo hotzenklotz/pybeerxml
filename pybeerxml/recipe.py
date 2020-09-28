@@ -1,3 +1,4 @@
+import logging
 from typing import Optional, Text, List, Any
 
 from pybeerxml.fermentable import Fermentable
@@ -9,6 +10,8 @@ from pybeerxml.style import Style
 from pybeerxml.water import Water
 from pybeerxml.equipment import Equipment
 from pybeerxml.utils import cast_to_bool, gravity_to_plato
+
+logger = logging.getLogger(__name__)
 
 # pylint: disable=too-many-instance-attributes, too-many-statements, too-many-public-methods
 class Recipe:
@@ -76,6 +79,7 @@ class Recipe:
         if self._abv is not None:
             return self._abv
 
+        logger.debug("The value for ABV has been calculated from OG and FG")
         return self.abv_calculated
 
     @abv.setter
@@ -133,6 +137,9 @@ class Recipe:
         if self._ibu is not None:
             return self._ibu
 
+        logger.debug(
+            "The value for IBU has been calculated from the hop bill using Tinseth's formula"
+        )
         return self.ibu_calculated
 
     @ibu.setter
@@ -162,6 +169,7 @@ class Recipe:
         if self._og is not None:
             return self._og
 
+        logger.debug("The value for OG has been calculated from the mashing steps")
         return self.og_calculated
 
     @og.setter
@@ -203,6 +211,7 @@ class Recipe:
         if self._fg is not None:
             return self._fg
 
+        logger.debug("The value for FG has been calculated from OG and yeast")
         return self.fg_calculated
 
     @fg.setter
@@ -237,6 +246,9 @@ class Recipe:
         if self._color is not None:
             return self._color
 
+        logger.debug(
+            "The value for color has been calculated from fermentables using the Morey Equation"
+        )
         return self.color_calculated
 
     @color.setter
