@@ -41,13 +41,25 @@ class TestParser:
 
         # TODO test mashing steps
 
-        # should have the correctly calculated properties
-        assert round(recipe.og, 4) == 1.0338
-        assert round(recipe.og_plato, 4) == 8.4815
-        assert round(recipe.fg, 4) == 1.0047
-        assert round(recipe.fg_plato, 4) == 1.2156
-        assert floor(recipe.ibu) == 99
+        # should have the original recipe properties
+        assert round(recipe.og, 4) == 1.0756
+        assert round(recipe.og_plato, 4) == 18.3327
+        assert round(recipe.fg, 4) == 1.0106
+        assert round(recipe.fg_plato, 4) == 2.7119
+        assert recipe.ibu == 64
+
+        # should fall back to the calculated value for missing properties
         assert round(recipe.abv, 2) == 3.84
+        assert round(recipe.color, 2) == 6.27
+
+        # should have the correctly calculated properties
+        assert round(recipe.og_calculated, 4) == 1.0338
+        assert round(recipe.og_calculated_plato, 4) == 8.4815
+        assert round(recipe.fg_calculated, 4) == 1.0047
+        assert round(recipe.fg_calculated_plato, 4) == 1.2156
+        assert round(recipe.ibu_calculated, 2) == 99.85
+        assert round(recipe.abv_calculated, 2) == 3.84
+        assert round(recipe.color_calculated, 2) == 6.27
 
         # should have the correct recipe metadata
         assert recipe.name == "Simcoe IPA"
@@ -55,7 +67,6 @@ class TestParser:
         assert recipe.efficiency == 76.0
         assert recipe.batch_size == 14.9902306488
         assert recipe.boil_time == 30.0
-        assert round(recipe.color, 2) == 6.27
 
         assert (
             recipe.style.name == "American IPA"
@@ -92,6 +103,7 @@ class TestParser:
         assert recipe.mash.steps[0].step_time == 60
         assert recipe.mash.steps[0].step_temp == 68
 
+        # should fall back to calculated values for missing properties
         assert (
             round(recipe.og, 4) == 1.0556
         ), "should have the correctly calculated og property"
@@ -104,16 +116,22 @@ class TestParser:
         assert (
             round(recipe.fg_plato, 4) == 3.5467
         ), "should have the correctly calculated fg_plato property in Plato"
-        assert floor(recipe.ibu) == 32
+        assert round(recipe.ibu, 2) == 32.22
         assert round(recipe.abv, 2) == 5.47
+
+        # should have the same calculated properties
+        assert round(recipe.og_calculated, 4) == 1.0556
+        assert round(recipe.og_calculated_plato, 4) == 13.7108
+        assert round(recipe.fg_calculated, 4) == 1.0139
+        assert round(recipe.fg_calculated_plato, 4) == 3.5467
+        assert round(recipe.ibu_calculated, 2) == 32.22
+        assert round(recipe.abv_calculated, 2) == 5.47
 
         # should have the correct recipe metadata
         assert recipe.name == "Oatmeal Stout no. 1"
         assert recipe.brewer == "Niels Kjøller"
         assert recipe.efficiency == 75.0
         assert recipe.batch_size == 25
-        assert recipe.ibu == 32.21660448470247
-        assert round(recipe.color, 2) == 40.16
 
         assert (
             recipe.style.name == "Oatmeal Stout"
@@ -159,20 +177,29 @@ class TestParser:
         assert recipe.mash.steps[0].step_time == 60
         assert recipe.mash.steps[0].step_temp == 66.66666667
 
-        assert round(recipe.og, 4) == 1.0594
-        assert round(recipe.og_plato, 4) == 14.6092
-        assert round(recipe.fg, 4) == 1.0184
-        assert round(recipe.fg_plato, 4) == 4.684
-        assert floor(recipe.ibu) == 25
-        assert round(recipe.abv, 2) == 5.35
+        # should have the original recipe properties
+        assert round(recipe.og, 4) == 1.0489
+        assert round(recipe.og_plato, 4) == 12.1176
+        assert round(recipe.fg, 4) == 1.0151
+        assert round(recipe.fg_plato, 4) == 3.8613
+        assert round(recipe.ibu, 2) == 35
+        assert round(recipe.abv, 2) == 5.76
+        assert round(recipe.color, 2) == 37
+
+        # should have the correctly calculated properties
+        assert round(recipe.og_calculated, 4) == 1.0594
+        assert round(recipe.og_calculated_plato, 4) == 14.6092
+        assert round(recipe.fg_calculated, 4) == 1.0184
+        assert round(recipe.fg_calculated_plato, 4) == 4.684
+        assert round(recipe.ibu_calculated, 2) == 25.97
+        assert round(recipe.abv_calculated, 2) == 5.35
+        assert round(recipe.color_calculated, 2) == 35.01
 
         # general recipe metadata
         assert recipe.name == "Coffee Stout"
         assert recipe.brewer == "https://github.com/jwjulien"
         assert recipe.efficiency == 70.0
         assert recipe.batch_size == 20.82
-        assert round(recipe.ibu, 2) == 25.97
-        assert round(recipe.color, 2) == 35.01
         assert recipe.version == 1
         assert recipe.type == "All Grain"
         assert recipe.asst_brewer == "Brewtarget: free beer software"

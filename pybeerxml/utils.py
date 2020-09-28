@@ -22,3 +22,10 @@ def cast_to_bool(value: Any) -> bool:
         return value
 
     return False
+
+
+def gravity_to_plato(gravity):
+    if gravity is None:
+        return None
+
+    return (-463.37) + (668.72 * gravity) - (205.35 * (gravity * gravity))
