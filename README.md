@@ -2,9 +2,8 @@
 
 A simple BeerXML parser for Python
 
-[![PyPi Version](https://img.shields.io/pypi/v/pybeerxml.svg?style=flat-square)]
-(https://pypi.python.org/pypi?:action=display&name=pybeerxml)
-[![Build Status](https://img.shields.io/github/workflow/status/hotzenklotz/pybeerxml/test-and-lint)](https://github.com/hotzenklotz/pybeerxml/actions?query=workflow%3A%22Test+and+branch%3Amaster+)
+[![PyPi Version](https://img.shields.io/pypi/v/pybeerxml.svg?style=flat-square)](https://pypi.python.org/pypi?:action=display&name=pybeerxml)
+[![Build Status](https://img.shields.io/github/workflow/status/hotzenklotz/pybeerxml/Test%20and%20Lint/master)](https://github.com/hotzenklotz/pybeerxml/actions?query=branch%3Amaster+workflow%3A%22Test+and+Lint%22)
 [![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
