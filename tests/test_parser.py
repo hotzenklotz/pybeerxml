@@ -42,19 +42,19 @@ class TestParser:
         ), "should have the correct amount of fermentables"
 
         # should have mashing steps
-        assert(len(recipe.mash.steps) == 4)
-        assert(recipe.mash.steps[0].name == "Dough In")
-        assert(recipe.mash.steps[0].version == 1)
-        assert(recipe.mash.steps[0].type == "Infusion")
-        assert(recipe.mash.steps[0].step_temp == 102)
-        assert(recipe.mash.steps[0].step_time == 20)
+        assert len(recipe.mash.steps) == 4
+        assert recipe.mash.steps[0].name == "Dough In"
+        assert recipe.mash.steps[0].version == 1
+        assert recipe.mash.steps[0].type == "Infusion"
+        assert recipe.mash.steps[0].step_temp == 102
+        assert recipe.mash.steps[0].step_time == 20
 
         # should have the original recipe properties
-        assert (round(recipe.og, 4) == 1.0756)
-        assert (round(recipe.og_plato, 4) == 18.3327)
-        assert (round(recipe.fg, 4) == 1.0106)
-        assert (round(recipe.fg_plato, 4) == 2.7119)
-        assert (floor(recipe.ibu) == 64)
+        assert round(recipe.og, 4) == 1.0756
+        assert round(recipe.og_plato, 4) == 18.3327
+        assert round(recipe.fg, 4) == 1.0106
+        assert round(recipe.fg_plato, 4) == 2.7119
+        assert floor(recipe.ibu) == 64
 
         # should fall back to the calculated value for missing properties
         assert round(recipe.abv, 2) == 3.84
@@ -128,17 +128,17 @@ class TestParser:
         assert round(recipe.abv, 2) == 5.47
 
         # should have mashing base information
-        assert(type(recipe.mash) is Mash)
-        assert (recipe.mash.name == "Mash for Oatmeal Stout no. 1")
-        assert (recipe.mash.grain_temp == "unknown")
+        assert isinstance(recipe.mash, Mash)
+        assert recipe.mash.name == "Mash for Oatmeal Stout no. 1"
+        assert recipe.mash.grain_temp == "unknown"
 
         # should have mashing steps
-        assert(len(recipe.mash.steps) == 2)
-        assert(recipe.mash.steps[0].name == "Mash step")
-        assert(recipe.mash.steps[0].version == 1)
-        assert(recipe.mash.steps[0].type == "Temperature")
-        assert(recipe.mash.steps[0].step_time == 60)
-        assert(recipe.mash.steps[0].step_temp == 68)
+        assert len(recipe.mash.steps) == 2
+        assert recipe.mash.steps[0].name == "Mash step"
+        assert recipe.mash.steps[0].version == 1
+        assert recipe.mash.steps[0].type == "Temperature"
+        assert recipe.mash.steps[0].step_time == 60
+        assert recipe.mash.steps[0].step_temp == 68
 
         # should have the same calculated properties
         assert round(recipe.og_calculated, 4) == 1.0556
@@ -199,21 +199,21 @@ class TestParser:
         assert recipe.mash.steps[0].step_temp == 66.66666667
 
         # should have mashing base information
-        assert(type(recipe.mash) is Mash)
-        assert (recipe.mash.name == "Single Step")
-        assert (recipe.mash.grain_temp == 20.0)
-        assert (recipe.mash.sparge_temp == 74.0)
-        assert (recipe.mash.ph == 7)
-        assert (recipe.mash.tun_temp == 21.0)
-        assert (recipe.mash.tun_weight == 4.082)
-        assert (recipe.mash.tun_specific_heat == 0.3)
-        assert (recipe.mash.equip_adjust == True)
+        assert isinstance(recipe.mash, Mash)
+        assert recipe.mash.name == "Single Step"
+        assert recipe.mash.grain_temp == 20.0
+        assert recipe.mash.sparge_temp == 74.0
+        assert recipe.mash.ph == 7
+        assert recipe.mash.tun_temp == 21.0
+        assert recipe.mash.tun_weight == 4.082
+        assert recipe.mash.tun_specific_heat == 0.3
+        assert recipe.mash.equip_adjust
 
         # should have mashing steps
-        assert(len(recipe.mash.steps) == 2)
-        assert(recipe.mash.steps[0].name == "Conversion")
-        assert(recipe.mash.steps[0].step_time == 60)
-        assert(recipe.mash.steps[0].step_temp == 66.66666667)
+        assert len(recipe.mash.steps) == 2
+        assert recipe.mash.steps[0].name == "Conversion"
+        assert recipe.mash.steps[0].step_time == 60
+        assert recipe.mash.steps[0].step_temp == 66.66666667
 
         # should have the original recipe properties
         assert round(recipe.og, 4) == 1.0489
@@ -291,7 +291,7 @@ class TestParser:
         assert recipe.equipment.trub_chiller_loss == 1.893
         assert recipe.equipment.evap_rate == 13.63592699
         assert recipe.equipment.boil_time == 60.0
-        assert recipe.equipment.calc_boil_volume # True
+        assert recipe.equipment.calc_boil_volume  # True
         assert recipe.equipment.lauter_deadspace == 0.2
         assert recipe.equipment.top_up_kettle == 0.4
         assert recipe.equipment.hop_utilization == 100.0

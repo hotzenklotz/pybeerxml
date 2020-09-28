@@ -2,7 +2,8 @@ from pybeerxml.recipe import Recipe
 
 
 def test_calculated_properties():
-    # Values og, fg, ibu, abv, color from the XML should be preferred, calculated properties should ignore these values
+    # Values og, fg, ibu, abv, color from the XML should be preferred, calculated properties should
+    # ignore these values
 
     recipe = Recipe()
 
