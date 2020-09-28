@@ -5,6 +5,7 @@ from xml.etree.ElementTree import Element, SubElement
 
 from pybeerxml.parser import Parser, Recipe
 from pybeerxml.hop import Hop
+from pybeerxml.equipment import Equipment
 from pybeerxml.utils import to_lower
 
 RECIPE_PATH = os.path.join(os.path.dirname(__file__), "Simcoe IPA.xml")
