@@ -1,4 +1,4 @@
-import sys
+import logging
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 from typing import Union, List, Text
@@ -15,13 +15,24 @@ from pybeerxml.equipment import Equipment
 from pybeerxml.fermentable import Fermentable
 from pybeerxml.utils import to_lower
 
+logger = logging.getLogger("__name__")
+
 
 class Parser:
     def nodes_to_object(
         self,
         nodes: Element,
         beerxml_object: Union[
-            Recipe, Mash, Yeast, Fermentable, Hop, Misc, MashStep, Style
+            Recipe,
+            Mash,
+            Yeast,
+            Fermentable,
+            Hop,
+            Misc,
+            MashStep,
+            Style,
+            Water,
+            Equipment,
         ],
     ):
         "Map all child nodes to an object's attributes"
@@ -34,7 +45,16 @@ class Parser:
         self,
         node: Element,
         beerxml_object: Union[
-            Recipe, Mash, Yeast, Fermentable, Hop, Misc, MashStep, Style
+            Recipe,
+            Mash,
+            Yeast,
+            Fermentable,
+            Hop,
+            Misc,
+            MashStep,
+            Style,
+            Water,
+            Equipment,
         ],
     ):
         "Map a single node to an object's attributes"
@@ -44,16 +64,20 @@ class Parser:
         # Yield is a protected keyword in Python, so let's rename it
         attribute = "_yield" if attribute == "yield" else attribute
 
-        try:
-            value_string = node.text or ""
-            value = float(value_string)
-        except ValueError:
-            value = node.text
+        value: Union[Text, float, None] = node.text or None
 
-        try:
-            setattr(beerxml_object, attribute, value)
-        except AttributeError:
-            sys.stderr.write("Attribute {} not supported.".format(attribute))
+        if value is not None:
+            # XML numbers are represented as strings in some cases
+            # try to parse as number if possible
+            try:
+                value = float(value)
+            except ValueError:
+                pass
+
+            try:
+                setattr(beerxml_object, attribute, value)
+            except AttributeError:
+                logger.error("Attribute %s not supported.", attribute)
 
     def parse_from_string(self, xml_string):
         "Get a list of parsed recipes from BeerXML string"
@@ -69,7 +93,7 @@ class Parser:
 
         return self.parse_tree(tree)
 
-    def parse_tree(self, tree: Element) -> List[Recipe]:
+    def parse_tree(self, tree: ElementTree.ElementTree) -> List[Recipe]:
         recipes = []
         for recipe_node in tree.iter():
             if to_lower(recipe_node.tag) != "recipe":

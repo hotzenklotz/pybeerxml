@@ -7,15 +7,18 @@ class Misc:
         self.name: Optional[Text] = None
         self.type: Optional[Text] = None
         self.amount: Optional[float] = None
-        self._amount_is_weight: bool = False
+        self._amount_is_weight: Optional[bool] = False
         self.use: Optional[Text] = None
         self.use_for: Optional[Text] = None
         self.time: Optional[float] = None
         self.notes: Optional[Text] = None
 
     @property
-    def amount_is_weight(self) -> bool:
-        return self._amount_is_weight
+    def amount_is_weight(self) -> Optional[bool]:
+        if self._amount_is_weight is not None:
+            return self._amount_is_weight
+
+        return None
 
     @amount_is_weight.setter
     def amount_is_weight(self, value: Any):

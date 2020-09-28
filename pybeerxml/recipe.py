@@ -45,14 +45,14 @@ class Recipe:
         self.keg_priming_factor: Optional[float] = None
 
         # Recipe extension fields
-        self.est_og = None
-        self.est_fg = None
-        self.est_color = None
-        self.ibu_method = None
-        self.est_abv = None
-        self.actual_efficiency = None
-        self.calories = None
-        self.carbonation_used = None
+        self.est_og: Optional[float] = None
+        self.est_fg: Optional[float] = None
+        self.est_color: Optional[float] = None
+        self.ibu_method: Optional[Text] = None
+        self.est_abv: Optional[float] = None
+        self.actual_efficiency: Optional[float] = None
+        self.calories: Optional[float] = None
+        self.carbonation_used: Optional[Text] = None
 
         self.style: Optional[Style] = None
         self.hops: List[Hop] = []
@@ -67,7 +67,7 @@ class Recipe:
     def abv(self):
         return ((1.05 * (self.og - self.fg)) / self.fg) / 0.79 * 100.0
 
-    @abv.setter
+    @abv.setter  # type: ignore
     def set_abv(self, value):
         pass
 
@@ -94,7 +94,7 @@ class Recipe:
 
         return _ibu
 
-    @ibu.setter
+    @ibu.setter  # type: ignore
     def set_ibu(self, value):
         pass
 
@@ -123,7 +123,7 @@ class Recipe:
 
         return _og
 
-    @og.setter
+    @og.setter  # type: ignore
     def set_og(self, value):
         pass
 
@@ -146,7 +146,7 @@ class Recipe:
 
         return _fg
 
-    @fg.setter
+    @fg.setter  # type: ignore
     def set_fg(self, value):
         pass
 
@@ -160,7 +160,7 @@ class Recipe:
                 mcu += fermentable.amount * fermentable.color * 8.3454 / self.batch_size
         return 1.4922 * (mcu ** 0.6859)
 
-    @color.setter
+    @color.setter  # type: ignore
     def set_color(self, value):
         pass
 
@@ -168,6 +168,6 @@ class Recipe:
     def forced_carbonation(self):
         return self._forced_carbonation
 
-    @forced_carbonation.setter
-    def forced_carbonation(self, value: Any) -> bool:
+    @forced_carbonation.setter  # type: ignore
+    def forced_carbonation(self, value: Any):
         self._forced_carbonation = cast_to_bool(value)

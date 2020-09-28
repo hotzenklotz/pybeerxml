@@ -1,16 +1,18 @@
 # pylint: disable=line-too-long
 import re
 import logging
-from typing import Text, Optional
+from typing import Pattern, Text, Optional, List, Tuple
 
 logger = logging.getLogger(__name__)
 
 
 STEEP = re.compile(
-    "/biscuit|black|cara|chocolate|crystal|munich|roast|special|toast|victory|vienna/i"
+    re.compile(
+        "/biscuit|black|cara|chocolate|crystal|munich|roast|special|toast|victory|vienna/i"
+    )
 )
 BOIL = re.compile(
-    "/candi|candy|dme|dry|extract|honey|lme|liquid|sugar|syrup|turbinado/i"
+    re.compile("/candi|candy|dme|dry|extract|honey|lme|liquid|sugar|syrup|turbinado/i")
 )
 
 
@@ -52,15 +54,15 @@ class Fermentable:
             )
             return "mash"
 
-        regexes = [
+        regexes: List[Tuple[Pattern, Text]] = [
             # Forced values take precedence, then search known names and
             # default to mashing
-            [re.compile("mash/i"), "mash"],
-            [re.compile("steep/i"), "steep"],
-            [re.compile("boil/i"), "boil"],
-            [BOIL, "boil"],
-            [STEEP, "steep"],
-            [re.compile(".*"), "mash"],
+            (re.compile("mash/i"), "mash"),
+            (re.compile("steep/i"), "steep"),
+            (re.compile("boil/i"), "boil"),
+            (BOIL, "boil"),
+            (STEEP, "steep"),
+            (re.compile(".*"), "mash"),
         ]
 
         for regex, addition in regexes:
@@ -78,6 +80,12 @@ class Fermentable:
         if self.amount is None:
             logger.error(
                 "Property 'gu' could not be calculated because property 'amount' is missing. Defaults to 'None'"
+            )
+            return None
+
+        if self.ppg is None:
+            logger.error(
+                "Property 'gu' could not be calculated because property 'ppg' is missing. Defaults to 'None'"
             )
             return None
 

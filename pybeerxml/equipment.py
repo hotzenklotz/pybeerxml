@@ -22,8 +22,11 @@ class Equipment:
         self.notes: Optional[Text] = None
 
     @property
-    def calc_boil_volume(self) -> bool:
-        return self._calc_boil_volume
+    def calc_boil_volume(self) -> Optional[bool]:
+        if self._calc_boil_volume is not None:
+            return self._calc_boil_volume
+
+        return None
 
     @calc_boil_volume.setter
     def calc_boil_volume(self, value: Any):
