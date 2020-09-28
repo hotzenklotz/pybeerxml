@@ -1,4 +1,5 @@
 from typing import Optional, Text, Any
+from pybeerxml.utils import cast_to_bool
 
 
 class Misc:
@@ -18,11 +19,4 @@ class Misc:
 
     @amount_is_weight.setter
     def amount_is_weight(self, value: Any):
-        if isinstance(value, str):
-            self._amount_is_weight = value.lower() == "true"
-        elif isinstance(value, (float, int)):
-            self._amount_is_weight = bool(value)
-        elif isinstance(value, bool):
-            self._amount_is_weight = value
-
-        return False
+        self._amount_is_weight = cast_to_bool(value)

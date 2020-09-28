@@ -1,7 +1,7 @@
 import sys
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
-from typing import Union, List
+from typing import Union, List, Text
 
 from pybeerxml.recipe import Recipe
 from pybeerxml.hop import Hop
@@ -9,7 +9,9 @@ from pybeerxml.mash import Mash
 from pybeerxml.mash_step import MashStep
 from pybeerxml.misc import Misc
 from pybeerxml.yeast import Yeast
+from pybeerxml.water import Water
 from pybeerxml.style import Style
+from pybeerxml.equipment import Equipment
 from pybeerxml.fermentable import Fermentable
 from pybeerxml.utils import to_lower
 
@@ -53,14 +55,22 @@ class Parser:
         except AttributeError:
             sys.stderr.write("Attribute {} not supported.".format(attribute))
 
-    def parse(self, xml_file) -> List[Recipe]:
-        "Get a list of parsed recipes from BeerXML input"
+    def parse_from_string(self, xml_string):
+        "Get a list of parsed recipes from BeerXML string"
+        tree = ElementTree.ElementTree(ElementTree.fromstring(xml_string))
 
-        recipes = []
+        return self.parse_tree(tree)
+
+    def parse(self, xml_file: Text) -> List[Recipe]:
+        "Get a list of parsed recipes from BeerXML input"
 
         with open(xml_file, "rt") as file:
             tree = ElementTree.parse(file)
 
+        return self.parse_tree(tree)
+
+    def parse_tree(self, tree: Element) -> List[Recipe]:
+        recipes = []
         for recipe_node in tree.iter():
             if to_lower(recipe_node.tag) != "recipe":
                 continue
@@ -105,6 +115,17 @@ class Parser:
                 style = Style()
                 recipe.style = style
                 self.nodes_to_object(recipe_property, style)
+
+            elif tag_name == "waters":
+                for water_node in list(recipe_property):
+                    water = Water()
+                    self.nodes_to_object(water_node, water)
+                    recipe.waters.append(water)
+
+            elif tag_name == "equipment":
+                equipment = Equipment()
+                recipe.equipment = equipment
+                self.nodes_to_object(recipe_property, equipment)
 
             elif tag_name == "mash":
                 mash = Mash()

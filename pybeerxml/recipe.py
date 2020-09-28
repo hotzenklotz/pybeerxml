@@ -6,6 +6,9 @@ from pybeerxml.mash import Mash
 from pybeerxml.misc import Misc
 from pybeerxml.yeast import Yeast
 from pybeerxml.style import Style
+from pybeerxml.water import Water
+from pybeerxml.equipment import Equipment
+from pybeerxml.utils import cast_to_bool
 
 
 class Recipe:
@@ -32,6 +35,8 @@ class Recipe:
         self.fermentables: List[Fermentable] = []
         self.miscs: List[Misc] = []
         self.mash: Optional[Mash] = None
+        self.waters: List[Water] = []
+        self.equipment: Optional[Equipment] = None
 
     @property
     def abv(self):
@@ -133,3 +138,11 @@ class Recipe:
     @color.setter
     def set_color(self, value):
         pass
+
+    @property
+    def forced_carbonation(self):
+        return cast_to_bool(self._forced_carbonation)
+
+    @forced_carbonation.setter
+    def forced_carbonation(self, value):
+        self._forced_carbonation = value

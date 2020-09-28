@@ -13,11 +13,20 @@ RECIPE_PATH_3 = os.path.join(os.path.dirname(__file__), "CoffeeStout.xml")
 
 
 class TestParser:
-    def test_parse_recipe(self):
+    def test_parse_recipe_1_from_file(self):
 
         recipe_parser = Parser()
         recipes = recipe_parser.parse(RECIPE_PATH)
+        self.assert_simcoe_ipa_recipe(recipes)
 
+    def test_parse_recipe_1_from_string(self):
+
+        xml_data = open(RECIPE_PATH, "r").read()
+        recipe_parser = Parser()
+        recipes = recipe_parser.parse_from_string(xml_data)
+        self.assert_simcoe_ipa_recipe(recipes)
+
+    def assert_simcoe_ipa_recipe(self, recipes):
         assert len(recipes) > 0, "should have at least one recipe"
 
         recipe = recipes[0]
@@ -51,10 +60,20 @@ class TestParser:
             recipe.style.name == "American IPA"
         ), "should have the correct style metadata"
 
-    def test_parse_recipe_2(self):
+    def test_parse_recipe_2_from_file(self):
 
         recipe_parser = Parser()
         recipes = recipe_parser.parse(RECIPE_PATH_2)
+        self.assert_oatmeal_stout_recipe(recipes)
+
+    def test_parse_recipe_2_from_string(self):
+
+        xml_data = open(RECIPE_PATH_2, "r").read()
+        recipe_parser = Parser()
+        recipes = recipe_parser.parse_from_string(xml_data)
+        self.assert_oatmeal_stout_recipe(recipes)
+
+    def assert_oatmeal_stout_recipe(self, recipes):
 
         assert len(recipes) > 0, "should have at least one recipe"
 
@@ -108,10 +127,20 @@ class TestParser:
         assert recipe.miscs[0].time == 15
         assert recipe.miscs[0].notes == "Half a tablet @ 15 minutes"
 
-    def test_parse_recipe_3(self):
+    def test_parse_recipe_3_from_file(self):
 
         recipe_parser = Parser()
         recipes = recipe_parser.parse(RECIPE_PATH_3)
+        self.assert_coffee_stout_recipe(recipes)
+
+    def test_parse_recipe_3_from_string(self):
+
+        xml_data = open(RECIPE_PATH_3, "r").read()
+        recipe_parser = Parser()
+        recipes = recipe_parser.parse_from_string(xml_data)
+        self.assert_coffee_stout_recipe(recipes)
+
+    def assert_coffee_stout_recipe(self, recipes):
 
         assert len(recipes) > 0, "should have at least one recipe"
 
@@ -137,7 +166,7 @@ class TestParser:
         assert round(recipe.abv, 2) == 5.35
 
         assert recipe.name == "Coffee Stout"
-        assert recipe.brewer is None  # https://github.com/jwjulien
+        assert recipe.brewer == "https://github.com/jwjulien"
         assert recipe.efficiency == 70.0
         assert recipe.batch_size == 20.82
         assert round(recipe.ibu, 2) == 25.97
