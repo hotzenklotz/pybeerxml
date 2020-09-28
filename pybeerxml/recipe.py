@@ -1,69 +1,60 @@
-from pybeerxml.util import cast_to_bool
+from typing import Optional, Text, List
+
+from pybeerxml.fermentable import Fermentable
+from pybeerxml.hop import Hop
+from pybeerxml.mash import Mash
+from pybeerxml.misc import Misc
+from pybeerxml.yeast import Yeast
+from pybeerxml.style import Style
+from pybeerxml.water import Water
+from pybeerxml.equipment import Equipment
+from pybeerxml.utils import cast_to_bool
 
 
-class Recipe(object):
+class Recipe:
     def __init__(self):
-        self.name = None
-        self.version = None
-        self.type = None
-        self.brewer = None
-        self.asst_brewer = None
-        self.batch_size = None
-        self.boil_size = None
-        self.boil_time = None
-        self.efficiency = None
-        self.notes = None
-        self.taste_notes = None
-        self.taste_rating = None
-        self.fermentation_stages = None
-        self.primary_age = None
-        self.primary_temp = None
-        self.secondary_age = None
-        self.secondary_temp = None
-        self.tertiary_age = None
-        self.tertiary_temp = None
-        self.age = None
-        self.age_temp = None
-        self.date = None
-        self.carbonation = None
-        self._forced_carbonation = None
-        self.priming_sugar_name = None
-        self.carbonation_temp = None
-        self.priming_sugar_equiv = None
-        self.keg_priming_factor = None
+        self.name: Optional[Text] = None
+        self.brewer: Optional[Text] = None
+        self.batch_size: Optional[float] = None
+        self.boil_time: Optional[float] = None
+        self.efficiency: Optional[float] = None
+        self.primary_age: Optional[float] = None
+        self.primary_temp: Optional[float] = None
+        self.secondary_age: Optional[float] = None
+        self.secondary_temp: Optional[float] = None
+        self.tertiary_age: Optional[float] = None
+        self.tertiary_temp: Optional[float] = None
+        self.carbonation: Optional[float] = None
+        self.carbonation_temp: Optional[float] = None
+        self.age: Optional[float] = None
+        self.age_temp: Optional[float] = None
 
-        # Recipe extension fields
-        self.est_og = None
-        self.est_fg = None
-        self.est_color = None
-        self.ibu_method = None
-        self.est_abv = None
-        self.actual_efficiency = None
-        self.calories = None
-        self.carbonation_used = None
-
-        self.style = None
-        self.hops = []
-        self.yeasts = []
-        self.fermentables = []
-        self.miscs = []
-        self.mash = None
-        self.waters = []
-        self.equipment = []
+        self.style: Optional[Style] = None
+        self.hops: List[Hop] = []
+        self.yeasts: List[Yeast] = []
+        self.fermentables: List[Fermentable] = []
+        self.miscs: List[Misc] = []
+        self.mash: Optional[Mash] = None
+        self.waters: List[Water] = []
+        self.equipment: Optional[Equipment] = None
 
     @property
     def abv(self):
         return ((1.05 * (self.og - self.fg)) / self.fg) / 0.79 * 100.0
 
+    @abv.setter
+    def set_abv(self, value):
+        pass
+
     # Gravity degrees plato approximations
     @property
     def og_plato(self):
-        og = self.og or self.calc_og()
+        og = self.og
         return (-463.37) + (668.72 * og) - (205.35 * (og * og))
 
     @property
     def fg_plato(self):
-        fg = self.fg or self.calc_fg()
+        fg = self.fg
         return (-463.37) + (668.72 * fg) - (205.35 * (fg * fg))
 
     @property
@@ -78,6 +69,11 @@ class Recipe(object):
 
         return _ibu
 
+    @ibu.setter
+    def set_ibu(self, value):
+        pass
+
+    # pylint: disable=invalid-name
     @property
     def og(self):
 
@@ -102,6 +98,11 @@ class Recipe(object):
 
         return _og
 
+    @og.setter
+    def set_og(self, value):
+        pass
+
+    # pylint: disable=invalid-name
     @property
     def fg(self):
 
@@ -120,35 +121,22 @@ class Recipe(object):
 
         return _fg
 
+    @fg.setter
+    def set_fg(self, value):
+        pass
+
     @property
     def color(self):
         # Formula source: http://brewwiki.com/index.php/Estimating_Color
         mcu = 0.0
-        for f in self.fermentables:
-            if f.amount is not None and f.color is not None:
+        for fermentable in self.fermentables:
+            if fermentable.amount is not None and fermentable.color is not None:
                 # 8.3454 is conversion factor from kg/L to lb/gal
-                mcu += f.amount * f.color * 8.3454 / self.batch_size
-        return 1.4922 * (mcu**0.6859)
-
-
-    @ibu.setter
-    def ibu(self, value):
-        pass
-
-    @fg.setter
-    def fg(self, value):
-        pass
-
-    @og.setter
-    def og(self, value):
-        pass
-
-    @abv.setter
-    def abv(self, value):
-        pass
+                mcu += fermentable.amount * fermentable.color * 8.3454 / self.batch_size
+        return 1.4922 * (mcu ** 0.6859)
 
     @color.setter
-    def color(self, value):
+    def set_color(self, value):
         pass
 
     @property

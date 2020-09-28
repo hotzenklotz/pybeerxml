@@ -1,134 +1,146 @@
-from xml.etree import ElementTree
-from .recipe import *
-from .hop import Hop
-from .mash import Mash
-from .mash_step import MashStep
-from .misc import Misc
-from .yeast import Yeast
-from .style import Style
-from .fermentable import Fermentable
-from .water import Water
-from .equipment import Equipment
-
 import sys
+from xml.etree import ElementTree
+from xml.etree.ElementTree import Element
+from typing import Union, List, Text
+
+from pybeerxml.recipe import Recipe
+from pybeerxml.hop import Hop
+from pybeerxml.mash import Mash
+from pybeerxml.mash_step import MashStep
+from pybeerxml.misc import Misc
+from pybeerxml.yeast import Yeast
+from pybeerxml.water import Water
+from pybeerxml.style import Style
+from pybeerxml.equipment import Equipment
+from pybeerxml.fermentable import Fermentable
+from pybeerxml.utils import to_lower
 
 
-class Parser(object):
-
-    def nodes_to_object(self, node, object):
+class Parser:
+    def nodes_to_object(
+        self,
+        nodes: Element,
+        beerxml_object: Union[
+            Recipe, Mash, Yeast, Fermentable, Hop, Misc, MashStep, Style
+        ],
+    ):
         "Map all child nodes to an object's attributes"
 
-        for n in list(node):
-            self.node_to_object(n, object)
+        for node in list(nodes):
+            self.node_to_object(node, beerxml_object)
 
-    def node_to_object(self, node, object):
+    # pylint: disable=no-self-use
+    def node_to_object(
+        self,
+        node: Element,
+        beerxml_object: Union[
+            Recipe, Mash, Yeast, Fermentable, Hop, Misc, MashStep, Style
+        ],
+    ):
         "Map a single node to an object's attributes"
 
-        attribute = self.to_lower(node.tag)
+        attribute = to_lower(node.tag)
 
         # Yield is a protected keyword in Python, so let's rename it
         attribute = "_yield" if attribute == "yield" else attribute
 
         try:
-            valueString = node.text or ""
-            value = float(valueString)
+            value_string = node.text or ""
+            value = float(value_string)
         except ValueError:
             value = node.text
 
         try:
-            setattr(object, attribute, value)
-        except AttributeError():
-            sys.stderr.write("Attribute <%s> not supported." % attribute)
+            setattr(beerxml_object, attribute, value)
+        except AttributeError:
+            sys.stderr.write("Attribute {} not supported.".format(attribute))
 
-    def parse_string(self, xml_string):
+    def parse_from_string(self, xml_string):
         "Get a list of parsed recipes from BeerXML string"
         tree = ElementTree.ElementTree(ElementTree.fromstring(xml_string))
+
         return self.parse_tree(tree)
 
-    def parse(self, xml_file):
-        "Get a list of parsed recipes from BeerXML file"
+    def parse(self, xml_file: Text) -> List[Recipe]:
+        "Get a list of parsed recipes from BeerXML input"
 
-        with open(xml_file, "rt") as f:
-            tree = ElementTree.parse(f)
-            return self.parse_tree(tree)
+        with open(xml_file, "rt") as file:
+            tree = ElementTree.parse(file)
 
-    def parse_tree(self, tree):
+        return self.parse_tree(tree)
+
+    def parse_tree(self, tree: Element) -> List[Recipe]:
         recipes = []
-
-        for recipeNode in tree.iter():
-            if self.to_lower(recipeNode.tag) != "recipe":
+        for recipe_node in tree.iter():
+            if to_lower(recipe_node.tag) != "recipe":
                 continue
-
-            recipe = Recipe()
+            recipe = self.parse_recipe(recipe_node)
             recipes.append(recipe)
-
-            for recipeProperty in list(recipeNode):
-                tag_name = self.to_lower(recipeProperty.tag)
-
-                if tag_name == "fermentables":
-                    for fermentable_node in list(recipeProperty):
-                        fermentable = Fermentable()
-                        self.nodes_to_object(fermentable_node, fermentable)
-                        recipe.fermentables.append(fermentable)
-
-                elif tag_name == "yeasts":
-                    for yeast_node in list(recipeProperty):
-                        yeast = Yeast()
-                        self.nodes_to_object(yeast_node, yeast)
-                        recipe.yeasts.append(yeast)
-
-                elif tag_name == "hops":
-                    for hop_node in list(recipeProperty):
-                        hop = Hop()
-                        self.nodes_to_object(hop_node, hop)
-                        recipe.hops.append(hop)
-
-                elif tag_name == "miscs":
-                    for misc_node in list(recipeProperty):
-                        misc = Misc()
-                        self.nodes_to_object(misc_node, misc)
-                        recipe.miscs.append(misc)
-
-                elif tag_name == "style":
-                    style = Style()
-                    recipe.style = style
-                    self.nodes_to_object(recipeProperty, style)
-
-                elif tag_name == "waters":
-                    for water_node in list(recipeProperty):
-                        water = Water()
-                        self.nodes_to_object(water_node, water)
-                        recipe.waters.append(water)
-
-                elif tag_name == "equipment":
-                    equipment = Equipment()
-                    recipe.equipment = equipment
-                    self.nodes_to_object(recipeProperty, equipment)
- 
-                elif tag_name == "mash":
-                    mash = Mash()
-                    recipe.mash = mash
-
-                    for mash_node in list(recipeProperty):
-                        if self.to_lower(mash_node.tag) == "mash_steps":
-                            for mash_step_node in list(mash_node):
-                                mash_step = MashStep()
-                                self.nodes_to_object(mash_step_node, mash_step)
-                                mash.steps.append(mash_step)
-                        else:
-                            self.nodes_to_object(mash_node, mash)
-
-                else:
-                    self.node_to_object(recipeProperty, recipe)
 
         return recipes
 
-    def to_lower(self, string):
-        "Helper function to transform strings to lower case"
-        value = None
-        try:
-            value = string.lower()
-        except AttributeError:
-            value = ""
-        finally:
-            return value
+    # pylint: disable=too-many-branches, too-many-locals
+    def parse_recipe(self, recipe_node: Element) -> Recipe:
+
+        recipe = Recipe()
+
+        for recipe_property in list(recipe_node):
+            tag_name = to_lower(recipe_property.tag)
+
+            if tag_name == "fermentables":
+                for fermentable_node in list(recipe_property):
+                    fermentable = Fermentable()
+                    self.nodes_to_object(fermentable_node, fermentable)
+                    recipe.fermentables.append(fermentable)
+
+            elif tag_name == "yeasts":
+                for yeast_node in list(recipe_property):
+                    yeast = Yeast()
+                    self.nodes_to_object(yeast_node, yeast)
+                    recipe.yeasts.append(yeast)
+
+            elif tag_name == "hops":
+                for hop_node in list(recipe_property):
+                    hop = Hop()
+                    self.nodes_to_object(hop_node, hop)
+                    recipe.hops.append(hop)
+
+            elif tag_name == "miscs":
+                for misc_node in list(recipe_property):
+                    misc = Misc()
+                    self.nodes_to_object(misc_node, misc)
+                    recipe.miscs.append(misc)
+
+            elif tag_name == "style":
+                style = Style()
+                recipe.style = style
+                self.nodes_to_object(recipe_property, style)
+
+            elif tag_name == "waters":
+                for water_node in list(recipe_property):
+                    water = Water()
+                    self.nodes_to_object(water_node, water)
+                    recipe.waters.append(water)
+
+            elif tag_name == "equipment":
+                equipment = Equipment()
+                recipe.equipment = equipment
+                self.nodes_to_object(recipe_property, equipment)
+
+            elif tag_name == "mash":
+                mash = Mash()
+                recipe.mash = mash
+
+                for mash_node in list(recipe_property):
+                    if to_lower(mash_node.tag) == "mash_steps":
+                        for mash_step_node in list(mash_node):
+                            mash_step = MashStep()
+                            self.nodes_to_object(mash_step_node, mash_step)
+                            mash.steps.append(mash_step)
+                    else:
+                        self.nodes_to_object(mash_node, mash)
+
+            else:
+                self.node_to_object(recipe_property, recipe)
+
+        return recipe

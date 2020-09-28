@@ -1,21 +1,22 @@
-from pybeerxml.util import cast_to_bool
+from typing import Optional, Text, Any
+from pybeerxml.utils import cast_to_bool
 
 
-class Misc(object):
+class Misc:
     def __init__(self):
-        self.name = None
-        self.type = None
-        self.amount = None
-        self._amount_is_weight = None
-        self.use = None
-        self.use_for = None
-        self.time = None
-        self.notes = None
+        self.name: Optional[Text] = None
+        self.type: Optional[Text] = None
+        self.amount: Optional[float] = None
+        self._amount_is_weight: bool = False
+        self.use: Optional[Text] = None
+        self.use_for: Optional[Text] = None
+        self.time: Optional[float] = None
+        self.notes: Optional[Text] = None
 
     @property
-    def amount_is_weight(self):
-        return cast_to_bool(self._amount_is_weight)
+    def amount_is_weight(self) -> bool:
+        return self._amount_is_weight
 
     @amount_is_weight.setter
-    def amount_is_weight(self, value):
-        self._amount_is_weight = value
+    def amount_is_weight(self, value: Any):
+        self._amount_is_weight = cast_to_bool(value)

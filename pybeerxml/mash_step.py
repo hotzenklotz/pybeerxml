@@ -1,13 +1,19 @@
-class MashStep(object):
-    def __init__(self):
-        self.name = None
-        self.type = None
-        self.infuse_amount = None
-        self.step_temp = None
-        self.end_temp = None
-        self.step_time = None
-        self.decoction_amt = None
+from typing import Optional, Text
 
+
+class MashStep:
+    def __init__(self):
+        self.name: Optional[Text] = None
+        self.type: Optional[
+            Text
+        ] = None  # May be "Infusion", "Temperature" or "Decoction"
+        self.infuse_amount: Optional[float] = None  # liters
+        self.step_temp: Optional[float] = None  # temperature (should be Celsius)
+        self.end_temp: Optional[float] = None  # temperature (should be Celsius)
+        self.step_time: Optional[float] = None  # time in minutes
+        self.decoction_amt: Optional[Text] = None
+
+        # pylint: disable=invalid-name, unused-variable
         @property
         def waterRatio(self):
             raise NotImplementedError("waterRation")
