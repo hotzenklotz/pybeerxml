@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pybeerxml"
-version = "2.0.0"
+version = "2.1.0"
 description = "A BeerXML implementation for Python"
 authors = ["Tom Herold <heroldtom@gmail.com>"]
 repository = "https://github.com/hotzenklotz/picobrew-server"
