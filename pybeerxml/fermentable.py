@@ -3,6 +3,8 @@ import re
 import logging
 from typing import Pattern, Text, Optional, List, Tuple
 
+from pybeerxml.utils import cast_to_bool
+
 logger = logging.getLogger(__name__)
 
 
@@ -25,6 +27,18 @@ class Fermentable:
         self._yield: Optional[float] = None
         self.color: Optional[float] = None
         self._add_after_boil: Optional[bool] = None  # Should be Bool
+        self.version: Optional[int] = None
+        self.type: Optional[Text] = None
+        self.origin: Optional[Text] = None
+        self.supplier: Optional[Text] = None
+        self.notes: Optional[Text] = None
+        self.coarse_fine_diff: Optional[float] = None
+        self.moisture: Optional[float] = None
+        self.diastatic_power: Optional[float] = None
+        self.protein: Optional[float] = None
+        self.max_in_batch: Optional[float] = None
+        self._recommend_mash: Optional[bool] = None
+        self.ibu_gal_per_lb: Optional[float] = None
 
     @property
     def add_after_boil(self) -> bool:
@@ -93,3 +107,11 @@ class Fermentable:
         weight_lb = self.amount * 2.20462
         volume_gallons = liters * 0.264172
         return self.ppg * weight_lb / volume_gallons
+
+    @property
+    def recommend_mash(self):
+        return self._recommend_mash
+
+    @recommend_mash.setter
+    def recommend_mash(self, value):
+        self._recommend_mash = cast_to_bool(value)

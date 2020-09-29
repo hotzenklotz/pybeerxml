@@ -1,4 +1,4 @@
-from typing import Text, Any
+from typing import Text, Any, Optional
 
 
 def to_lower(possible_string: Any) -> Text:
@@ -22,3 +22,10 @@ def cast_to_bool(value: Any) -> bool:
         return value
 
     return False
+
+
+def gravity_to_plato(gravity: Optional[float]) -> Optional[float]:
+    if gravity is None:
+        return None
+
+    return (-463.37) + (668.72 * gravity) - (205.35 * (gravity * gravity))

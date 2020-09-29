@@ -11,6 +11,16 @@ class Hop:
         self.form: Optional[Text] = None
         self.notes: Optional[Text] = None
         self.time: Optional[float] = None
+        self.version: Optional[int] = None
+        self.type: Optional[Text] = None
+        self.beta: Optional[float] = None
+        self.hsi: Optional[float] = None
+        self.origin: Optional[Text] = None
+        self.substitutes: Optional[Text] = None
+        self.humulene: Optional[float] = None
+        self.caryophyllene: Optional[float] = None
+        self.cohumulone: Optional[float] = None
+        self.myrcene: Optional[float] = None
 
     def utilization_factor(self):
         "Account for better utilization from pellets vs. whole"

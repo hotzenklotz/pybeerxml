@@ -74,10 +74,10 @@ poetry install
 
 Make sure to Test, Lint, Format, & Type-Check your code before sending a pull request:
 ```
+python -m black pybeerxml tests
 python -m pytest tests
-python -m pylint pybeerxml
-python -m black pybeerxml
-python -m mypy pybeerxml
+python -m pylint pybeerxml tests
+python -m mypy pybeerxml tests
 ```
 
 ## License
