@@ -58,11 +58,11 @@ class Recipe:
         self.carbonation_used: Optional[Text] = None
 
         # Values from the recipe, which are calculated as a fallback
-        self._abv = None
-        self._og = None
-        self._fg = None
-        self._ibu = None
-        self._color = None
+        self._abv: Optional[float] = None
+        self._og: Optional[float] = None
+        self._fg: Optional[float] = None
+        self._ibu: Optional[float] = None
+        self._color: Optional[float] = None
 
         self.style: Optional[Style] = None
         self.hops: List[Hop] = []

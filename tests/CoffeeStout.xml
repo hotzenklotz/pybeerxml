@@ -195,7 +195,7 @@
     <NOTES>This extremely flocculent yeast produces distincly malty beers. Attenuation levels are typically less than most other yeast strains making a slightly sweeter finish. Ales produced with this strain tend to be fruity, increasingly so with higher fermentation temperatures (21-23C). Diacetyl production is noticeable and a thorough rest is necessary. A very good cask conditioned ale strain due to thorough flocculation. Bright beers easily achieved with days without filtration.
  </NOTES>
     <BEST_FOR>Ordinary/Special Bitters, ESB, Mild Ale, Southern English Brown, English IPA, Strong/Old Ale, English Barley Wine, Wood Aged Ale, Spiced/Herb/Vegetable Ale, Fruit Ale</BEST_FOR>
-    <TIMES_CULTURED>0</TIMES_CULTURED>
+    <TIMES_CULTURED>1</TIMES_CULTURED>
     <MAX_REUSE>0</MAX_REUSE>
     <ADD_TO_SECONDARY>FALSE</ADD_TO_SECONDARY>
    </YEAST>
