@@ -226,7 +226,7 @@ class Recipe:
 
         # Get attenuation for final gravity
         for yeast in self.yeasts:
-            if yeast.attenuation > attenuation:
+            if yeast.attenuation is not None and yeast.attenuation > attenuation:
                 attenuation = yeast.attenuation
 
         if attenuation == 0:
