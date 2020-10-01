@@ -64,7 +64,7 @@ python -m pytest tests
 ## Contributing / Development
 Community contributions are welcome.
 
-Dependency management is handled through [Poetry](https://python-poetry.org/):
+Some kind of virtual environment for Python is recommended. Consider `venv`, `conda`or similar. Dependency management is handled through [Poetry](https://python-poetry.org/):
 
 ```
 pip install poetry
