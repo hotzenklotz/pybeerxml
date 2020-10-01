@@ -301,6 +301,24 @@ def assert_coffee_stout_recipe(recipes):
     assert recipe.equipment.hop_utilization == 100.0
     assert recipe.equipment.notes == "Equipment notes"
 
+    assert recipe.yeasts[0].name == "Wyeast - London ESB Ale"
+    assert recipe.yeasts[0].version == 1
+    assert recipe.yeasts[0].type == "Ale"
+    assert recipe.yeasts[0].form == "Liquid"
+    assert recipe.yeasts[0].amount == 0.125
+    assert not recipe.yeasts[0].amount_is_weight
+    assert recipe.yeasts[0].laboratory == "Wyeast Labs"
+    assert recipe.yeasts[0].product_id == 1968
+    assert recipe.yeasts[0].min_temperature == 18
+    assert recipe.yeasts[0].max_temperature == 22
+    assert recipe.yeasts[0].flocculation == "Very High"
+    assert recipe.yeasts[0].attenuation == 69.0
+    assert recipe.yeasts[0].notes.startswith("This extremely flocculent yeast produces")
+    assert recipe.yeasts[0].best_for.startswith("Ordinary/Special Bitters, ESB")
+    assert recipe.yeasts[0].times_cultured == 1
+    assert recipe.yeasts[0].max_reuse == 0
+    assert not recipe.yeasts[0].add_to_secondary
+
 
 def test_node_to_object():
     "test XML node parsing to Python object"
