@@ -20,7 +20,7 @@ pip install pybeerxml
 ## Usage
 
 ```
-from pybeerxml import Parser
+from pybeerxml.parser import Parser
 
 path_to_beerxml_file = "/tmp/SimcoeIPA.beerxml"
 
