@@ -1,0 +1,39 @@
+[project]
+site_name = "pybeerxml"
+site_url = "https://hotzenklotz.github.io/pybeerxml/"
+site_description = "A BeerXML parser for Python"
+site_author = "Tom Herold"
+copyright = "Copyright 2026 Tom Herold"
+docs_dir = "docs"
+site_dir = "site"
+
+[project.theme]
+name = "material"
+
+[project.plugins.mkdocstrings.handlers.python]
+paths = ["."]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+docstring_style = "google"
+show_source = false
+show_root_heading = true
+show_symbol_type_heading = true
+show_symbol_type_toc = true
+
+[[project.nav]]
+Home = "index.md"
+
+[[project.nav]]
+"Getting Started" = "getting-started.md"
+
+[[project.nav]]
+"API Reference" = [
+  { Overview = "api/index.md" },
+  { Parser = "api/parser.md" },
+  { Recipe = "api/recipe.md" },
+  { Fermentable = "api/fermentable.md" },
+  { Hop = "api/hop.md" },
+  { Yeast = "api/yeast.md" },
+  { "Mash & MashStep" = "api/mash.md" },
+  { "Misc, Style, Water & Equipment" = "api/misc-models.md" },
+]
