@@ -1,6 +1,6 @@
 [project]
 site_name = "pybeerxml"
-site_url = "https://hotzenklotz.github.io/pybeerxml/"
+site_url = "https://pybeerxml.onrender.com/"
 site_description = "A BeerXML parser for Python"
 site_author = "Tom Herold"
 copyright = "Copyright 2026 Tom Herold"
