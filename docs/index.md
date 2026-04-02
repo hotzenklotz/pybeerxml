@@ -7,6 +7,7 @@ description: A BeerXML parser for Python
 
 [![PyPi Version](https://img.shields.io/pypi/v/pybeerxml.svg?style=flat-square)](https://pypi.python.org/pypi?:action=display&name=pybeerxml)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/hotzenklotz/pybeerxml/test_lint.yaml?branch=master&style=flat-square)](https://github.com/hotzenklotz/pybeerxml/actions/workflows/test_lint.yaml)
+[![Docs](https://img.shields.io/badge/docs-pybeerxml.onrender.com-blue?style=flat-square)](https://pybeerxml.onrender.com/)
 
 **pybeerxml** is a Python library for parsing [BeerXML](http://www.beerxml.com/) recipe files. It reads all recipes from a `.beerxml` file and returns structured `Recipe` objects — including ingredients, style metadata, and automatically calculated values for OG, FG, ABV, IBU, and colour.
 

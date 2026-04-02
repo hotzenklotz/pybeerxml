@@ -5,6 +5,7 @@ A simple BeerXML parser for Python
 [![PyPi Version](https://img.shields.io/pypi/v/pybeerxml.svg?style=flat-square)](https://pypi.python.org/pypi?:action=display&name=pybeerxml)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/hotzenklotz/pybeerxml/test_lint.yaml?branch=master&style=flat-square)](https://github.com/hotzenklotz/pybeerxml/actions/workflows/test_lint.yaml)
 [![Code Style](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json&style=flat-square)](https://github.com/astral-sh/ruff)
+[![Docs](https://img.shields.io/badge/docs-pybeerxml.onrender.com-blue?style=flat-square)](https://pybeerxml.onrender.com/)
 
 
 Parses all recipes within a BeerXML file and returns `Recipe` objects containing all ingredients,
@@ -18,6 +19,8 @@ pip install pybeerxml
 ```
 
 ## Usage
+
+Full documentation is available at [pybeerxml.onrender.com](https://pybeerxml.onrender.com/).
 
 ```
 from pybeerxml import Parser
