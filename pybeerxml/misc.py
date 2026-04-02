@@ -4,6 +4,21 @@ from pybeerxml.utils import cast_to_bool
 
 
 class Misc:
+    """A miscellaneous ingredient — finings, spices, water agents, etc.
+
+    Attributes:
+        name: Ingredient name.
+        type: Category — ``"Spice"``, ``"Fining"``, ``"Water Agent"``,
+            ``"Herb"``, ``"Flavor"``, or ``"Other"``.
+        amount: Quantity — weight in kg or volume in litres depending on
+            ``amount_is_weight``.
+        use: When the ingredient is added — ``"Boil"``, ``"Mash"``,
+            ``"Primary"``, ``"Secondary"``, or ``"Bottling"``.
+        use_for: Description of the ingredient's purpose.
+        time: Contact time in minutes.
+        notes: Free-text notes.
+    """
+
     def __init__(self):
         self.name: str | None = None
         self.type: str | None = None
@@ -16,6 +31,7 @@ class Misc:
 
     @property
     def amount_is_weight(self) -> bool | None:
+        """``True`` if ``amount`` is measured by weight (kg), ``False`` if by volume (L)."""
         return self._amount_is_weight
 
     @amount_is_weight.setter

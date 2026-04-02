@@ -23,23 +23,48 @@ BeerXMLObject = Recipe | Mash | Yeast | Fermentable | Hop | Misc | MashStep | St
 
 
 class Parser:
+    """Reads BeerXML files or strings and returns a list of `Recipe` objects.
+
+    A single BeerXML document may contain multiple `<RECIPE>` elements; all
+    three parse methods always return a list.  Unknown XML fields are logged at
+    ``ERROR`` level and silently ignored so that non-standard files do not raise.
+
+    Examples:
+        >>> from pybeerxml import Parser
+        >>> parser = Parser()
+        >>> recipes = parser.parse("recipe.beerxml")
+        >>> for recipe in recipes:
+        ...     print(recipe.name, recipe.og)
+    """
+
     def nodes_to_object(self, nodes: Element, beerxml_object: BeerXMLObject) -> None:
-        "Map all child nodes to an object's attributes"
+        """Map all child XML nodes onto an object's attributes.
+
+        Args:
+            nodes: Parent XML element whose children will be mapped.
+            beerxml_object: Target object to receive the attribute values.
+        """
         for node in nodes:
             self.node_to_object(node, beerxml_object)
 
     def node_to_object(self, node: Element, beerxml_object: BeerXMLObject) -> None:
-        "Map a single node to an object's attributes"
-        attribute = to_lower(node.tag)
+        """Map a single XML node onto an object attribute.
 
-        # Yield is a protected keyword in Python, so let's rename it
+        The node tag is lower-cased and used as the attribute name.  Numeric
+        string values are coerced to ``float`` automatically.  The BeerXML
+        field ``YIELD`` is mapped to ``_yield`` because ``yield`` is a Python
+        keyword.
+
+        Args:
+            node: XML element to map.
+            beerxml_object: Target object to receive the attribute value.
+        """
+        attribute = to_lower(node.tag)
         attribute = "_yield" if attribute == "yield" else attribute
 
         value: str | float | None = node.text or None
 
         if value is not None:
-            # XML numbers are represented as strings in some cases
-            # try to parse as number if possible
             try:
                 value = float(value)
             except ValueError:
@@ -51,17 +76,49 @@ class Parser:
                 logger.error("Attribute %s not supported.", attribute)
 
     def parse_from_string(self, xml_string: str) -> list[Recipe]:
-        "Get a list of parsed recipes from BeerXML string"
+        """Parse BeerXML content from a string.
+
+        Args:
+            xml_string: A valid BeerXML document as a string.
+
+        Returns:
+            A list of `Recipe` objects found in the document.
+
+        Raises:
+            xml.etree.ElementTree.ParseError: If ``xml_string`` is not valid XML.
+        """
         tree = ElementTree.ElementTree(ElementTree.fromstring(xml_string))
         return self.parse_tree(tree)
 
     def parse(self, xml_file: str) -> list[Recipe]:
-        "Get a list of parsed recipes from BeerXML input"
+        """Parse a BeerXML file from disk.
+
+        Args:
+            xml_file: Path to the ``.beerxml`` file.
+
+        Returns:
+            A list of `Recipe` objects found in the file.
+
+        Raises:
+            FileNotFoundError: If ``xml_file`` does not exist.
+            xml.etree.ElementTree.ParseError: If the file is not valid XML.
+        """
         with open(xml_file, "rt") as file:
             tree = ElementTree.parse(file)
         return self.parse_tree(tree)
 
     def parse_tree(self, tree: ElementTree.ElementTree[Any]) -> list[Recipe]:
+        """Parse an already-constructed ``ElementTree``.
+
+        Useful when you need full control over XML loading (e.g. custom
+        encoding handling).
+
+        Args:
+            tree: A parsed XML tree.
+
+        Returns:
+            A list of `Recipe` objects found in the tree.
+        """
         recipes = []
         for recipe_node in tree.iter():
             if to_lower(recipe_node.tag) != "recipe":
@@ -71,6 +128,14 @@ class Parser:
         return recipes
 
     def parse_recipe(self, recipe_node: Element) -> Recipe:
+        """Parse a single ``<RECIPE>`` element into a `Recipe` object.
+
+        Args:
+            recipe_node: The ``<RECIPE>`` XML element.
+
+        Returns:
+            A populated `Recipe` instance.
+        """
         recipe = Recipe()
 
         for recipe_property in recipe_node:
