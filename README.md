@@ -3,8 +3,8 @@
 A simple BeerXML parser for Python
 
 [![PyPi Version](https://img.shields.io/pypi/v/pybeerxml.svg?style=flat-square)](https://pypi.python.org/pypi?:action=display&name=pybeerxml)
-[![Build Status](https://img.shields.io/github/workflow/status/hotzenklotz/pybeerxml/Test%20and%20Lint/master)](https://github.com/hotzenklotz/pybeerxml/actions?query=branch%3Amaster+workflow%3A%22Test+and+Lint%22)
-[![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/hotzenklotz/pybeerxml/test_lint.yaml?branch=master&style=flat-square)](https://github.com/hotzenklotz/pybeerxml/actions/workflows/test_lint.yaml)
+[![Code Style](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json&style=flat-square)](https://github.com/astral-sh/ruff)
 
 
 Parses all recipes within a BeerXML file and returns `Recipe` objects containing all ingredients,
@@ -48,36 +48,36 @@ for recipe in recipes:
 
     for yeast in recipe.yeasts:
         print(yeast.name)
-        
+
     for misc in recipe.miscs:
         print(misc.name)
 ```
 
 ## Testing
 
-Unit tests can be run with PyTest:
+Unit tests can be run with pytest:
 
 ```
-python -m pytest tests
+uv run pytest
 ```
 
 ## Contributing / Development
+
 Community contributions are welcome.
 
-Some kind of virtual environment for Python is recommended. Consider `venv`, `conda`or similar. Dependency management is handled through [Poetry](https://python-poetry.org/):
+Install [uv](https://docs.astral.sh/uv/), then sync dependencies:
 
 ```
-pip install poetry
-
-poetry install
+uv sync
 ```
 
-Make sure to Test, Lint, Format, & Type-Check your code before sending a pull request:
+Make sure to test, lint, format, and type-check your code before sending a pull request:
+
 ```
-python -m pytest tests
-python -m black pybeerxml tests/*.py
-python -m pylint pybeerxml tests/*.py
-python -m mypy pybeerxml tests/*.py
+uv run pytest
+uv run ruff format .
+uv run ruff check .
+uv run ty check pybeerxml
 ```
 
 ## License

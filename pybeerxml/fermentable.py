@@ -1,21 +1,14 @@
-# pylint: disable=line-too-long
-import re
 import logging
-from typing import Pattern, Text, Optional, List, Tuple
+import re
+from typing import List, Optional, Pattern, Text, Tuple
 
 from pybeerxml.utils import cast_to_bool
 
 logger = logging.getLogger(__name__)
 
 
-STEEP = re.compile(
-    re.compile(
-        "/biscuit|black|cara|chocolate|crystal|munich|roast|special|toast|victory|vienna/i"
-    )
-)
-BOIL = re.compile(
-    re.compile("/candi|candy|dme|dry|extract|honey|lme|liquid|sugar|syrup|turbinado/i")
-)
+STEEP = re.compile(re.compile("/biscuit|black|cara|chocolate|crystal|munich|roast|special|toast|victory|vienna/i"))
+BOIL = re.compile(re.compile("/candi|candy|dme|dry|extract|honey|lme|liquid|sugar|syrup|turbinado/i"))
 
 
 class Fermentable:
@@ -53,9 +46,7 @@ class Fermentable:
         if self._yield is not None:
             return 0.46214 * self._yield
 
-        logger.error(
-            "Property 'ppg' could not be calculated because property 'yield' is missing. Default to 'None'"
-        )
+        logger.error("Property 'ppg' could not be calculated because property 'yield' is missing. Default to 'None'")
         return None
 
     @property
@@ -88,7 +79,6 @@ class Fermentable:
 
         return "mash"
 
-    # pylint: disable=invalid-name
     def gu(self, liters: float = 1.0) -> Optional[float]:
         # Get the gravity units for a specific liquid volume with 100% efficiency
         if self.amount is None:
@@ -98,9 +88,7 @@ class Fermentable:
             return None
 
         if self.ppg is None:
-            logger.error(
-                "Property 'gu' could not be calculated because property 'ppg' is missing. Defaults to 'None'"
-            )
+            logger.error("Property 'gu' could not be calculated because property 'ppg' is missing. Defaults to 'None'")
             return None
 
         # gu = parts per gallon * weight in pounds / gallons

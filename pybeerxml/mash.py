@@ -1,4 +1,5 @@
-from typing import Optional, Text, List
+from typing import List, Optional, Text
+
 from pybeerxml.mash_step import MashStep
 from pybeerxml.utils import cast_to_bool
 
@@ -8,7 +9,6 @@ class Mash:
         self.name: Optional[Text] = None
         self.grain_temp: Optional[float] = None
         self.sparge_temp: Optional[float] = None
-        # pylint: disable=invalid-name
         self.ph: Optional[float] = None
         self.notes: Optional[Text] = None
         self.name: Optional[Text] = None

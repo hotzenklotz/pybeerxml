@@ -1,19 +1,19 @@
 import logging
-from typing import Optional, Text, List, Any
+from typing import Any, List, Optional, Text
 
+from pybeerxml.equipment import Equipment
 from pybeerxml.fermentable import Fermentable
 from pybeerxml.hop import Hop
 from pybeerxml.mash import Mash
 from pybeerxml.misc import Misc
-from pybeerxml.yeast import Yeast
 from pybeerxml.style import Style
-from pybeerxml.water import Water
-from pybeerxml.equipment import Equipment
 from pybeerxml.utils import cast_to_bool, gravity_to_plato
+from pybeerxml.water import Water
+from pybeerxml.yeast import Yeast
 
 logger = logging.getLogger(__name__)
 
-# pylint: disable=too-many-instance-attributes, too-many-statements, too-many-public-methods
+
 class Recipe:
     def __init__(self):
         self.name: Optional[Text] = None
@@ -88,11 +88,7 @@ class Recipe:
 
     @property
     def abv_calculated(self):
-        return (
-            ((1.05 * (self.og_calculated - self.fg_calculated)) / self.fg_calculated)
-            / 0.79
-            * 100.0
-        )
+        return ((1.05 * (self.og_calculated - self.fg_calculated)) / self.fg_calculated) / 0.79 * 100.0
 
     @abv_calculated.setter
     def abv_calculated(self, value):
@@ -137,9 +133,7 @@ class Recipe:
         if self._ibu is not None:
             return self._ibu
 
-        logger.debug(
-            "The value for IBU has been calculated from the hop bill using Tinseth's formula"
-        )
+        logger.debug("The value for IBU has been calculated from the hop bill using Tinseth's formula")
         return self.ibu_calculated
 
     @ibu.setter
@@ -153,7 +147,7 @@ class Recipe:
         _ibu = 0.0
 
         for hop in self.hops:
-            if hop.alpha and hop.use.lower() == "boil":
+            if hop.alpha and hop.use is not None and hop.use.lower() == "boil":
                 _ibu += hop.bitterness(ibu_method, self.og_calculated, self.batch_size)
 
         return _ibu
@@ -162,7 +156,6 @@ class Recipe:
     def ibu_calculated(self, value):
         pass
 
-    # pylint: disable=invalid-name
     @property
     def og(self):
 
@@ -183,6 +176,9 @@ class Recipe:
         steep_efficiency = 50
         mash_efficiency = 75
 
+        if self.batch_size is None:
+            return _og
+
         # Calculate gravities and color from fermentables
         for fermentable in self.fermentables:
             addition = fermentable.addition
@@ -194,8 +190,10 @@ class Recipe:
                 efficiency = 1.0
 
             # Update gravities
-            gu = fermentable.gu(self.batch_size) * efficiency
-            gravity = gu / 1000.0
+            gu = fermentable.gu(self.batch_size)
+            if gu is None:
+                continue
+            gravity = gu * efficiency / 1000.0
             _og += gravity
 
         return _og
@@ -204,7 +202,6 @@ class Recipe:
     def og_calculated(self, value):
         pass
 
-    # pylint: disable=invalid-name
     @property
     def fg(self):
 
@@ -246,9 +243,7 @@ class Recipe:
         if self._color is not None:
             return self._color
 
-        logger.debug(
-            "The value for color has been calculated from fermentables using the Morey Equation"
-        )
+        logger.debug("The value for color has been calculated from fermentables using the Morey Equation")
         return self.color_calculated
 
     @color.setter
@@ -258,12 +253,14 @@ class Recipe:
     @property
     def color_calculated(self):
         # Formula source: http://brewwiki.com/index.php/Estimating_Color
+        if self.batch_size is None:
+            return 0.0
         mcu = 0.0
         for fermentable in self.fermentables:
             if fermentable.amount is not None and fermentable.color is not None:
                 # 8.3454 is conversion factor from kg/L to lb/gal
                 mcu += fermentable.amount * fermentable.color * 8.3454 / self.batch_size
-        return 1.4922 * (mcu ** 0.6859)
+        return 1.4922 * (mcu**0.6859)
 
     @color_calculated.setter
     def color_calculated(self, value):

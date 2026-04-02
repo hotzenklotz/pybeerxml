@@ -12,7 +12,6 @@ def test_add_after_boil():
 def test_ppg():
 
     fermentable = Fermentable()
-    # pylint: disable=protected-access
     fermentable._yield = 1
 
     assert fermentable.ppg == 0.46214
@@ -35,7 +34,6 @@ def test_addition():
 def test_gu():
 
     fermentable = Fermentable()
-    # pylint: disable=protected-access
     fermentable._yield = 1
     fermentable.amount = 1  # kg
 

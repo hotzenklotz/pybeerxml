@@ -29,6 +29,9 @@ class Hop:
     def bitterness(self, ibu_method, early_og, batch_size):
         "Calculate bitterness based on chosen method"
 
+        if self.time is None or self.alpha is None or self.amount is None:
+            raise ValueError("Hop is missing required fields (time, alpha, amount) for bitterness calculation")
+
         if ibu_method == "tinseth":
             bitterness = (
                 1.65

@@ -1,22 +1,33 @@
-[tool.poetry]
+[project]
 name = "pybeerxml"
 version = "2.1.2"
 description = "A BeerXML implementation for Python"
-authors = ["Tom Herold <heroldtom@gmail.com>"]
-repository = "https://github.com/hotzenklotz/pybeerxml/"
-keywords = ["pybeerxml", "beerxml"]
-license = "MIT"
+authors = [{ name = "Tom Herold", email = "heroldtom@gmail.com" }]
+license = { text = "MIT" }
 readme = "README.md"
+keywords = ["pybeerxml", "beerxml"]
+requires-python = ">=3.10"
 
-[tool.poetry.dependencies]
-python = "^3.6"
+[project.urls]
+Repository = "https://github.com/hotzenklotz/pybeerxml/"
 
-[tool.poetry.dev-dependencies]
-pytest = "^6.0.2"
-black = "^20.8b1"
-pylint = "^2.6.0"
-mypy = "^0.782"
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.9",
+    "ty>=0.0.1",
+]
 
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

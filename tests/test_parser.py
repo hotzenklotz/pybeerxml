@@ -3,12 +3,11 @@ import os
 from math import floor
 from xml.etree.ElementTree import Element, SubElement
 
-from pybeerxml.parser import Parser, Recipe
-from pybeerxml.hop import Hop
 from pybeerxml.equipment import Equipment
-from pybeerxml.utils import to_lower
-
+from pybeerxml.hop import Hop
 from pybeerxml.mash import Mash
+from pybeerxml.parser import Parser, Recipe
+from pybeerxml.utils import to_lower
 
 RECIPE_PATH = os.path.join(os.path.dirname(__file__), "Simcoe IPA.xml")
 RECIPE_PATH_2 = os.path.join(os.path.dirname(__file__), "Oatmeal Stout.xml")
@@ -38,9 +37,7 @@ def assert_simcoe_ipa_recipe(recipes):
 
     assert len(recipe.hops) == 3, "should have the correct amount of hops"
     assert len(recipe.yeasts) == 1, "should have the correct amount of yeasts"
-    assert (
-        len(recipe.fermentables) == 2
-    ), "should have the correct amount of fermentables"
+    assert len(recipe.fermentables) == 2, "should have the correct amount of fermentables"
 
     # should have mashing steps
     assert len(recipe.mash.steps) == 4
@@ -104,9 +101,7 @@ def assert_oatmeal_stout_recipe(recipes):
 
     assert len(recipe.hops) == 1, "should have the correct amount of hops"
     assert len(recipe.yeasts) == 1, "should have the correct amount of yeasts"
-    assert (
-        len(recipe.fermentables) == 5
-    ), "should have the correct amount of fermentables"
+    assert len(recipe.fermentables) == 5, "should have the correct amount of fermentables"
 
     assert len(recipe.mash.steps) == 2, "should have 2 mashing steps"
     assert recipe.mash.steps[0].name == "Mash step"
@@ -114,18 +109,10 @@ def assert_oatmeal_stout_recipe(recipes):
     assert recipe.mash.steps[0].step_temp == 68
 
     # should fall back to calculated values for missing properties
-    assert (
-        round(recipe.og, 4) == 1.0556
-    ), "should have the correctly calculated og property"
-    assert (
-        round(recipe.og_plato, 4) == 13.7108
-    ), "should have the correctly calculated og_plato property in Plato"
-    assert (
-        round(recipe.fg, 4) == 1.0139
-    ), "should have the correctly calculated fg property"
-    assert (
-        round(recipe.fg_plato, 4) == 3.5467
-    ), "should have the correctly calculated fg_plato property in Plato"
+    assert round(recipe.og, 4) == 1.0556, "should have the correctly calculated og property"
+    assert round(recipe.og_plato, 4) == 13.7108, "should have the correctly calculated og_plato property in Plato"
+    assert round(recipe.fg, 4) == 1.0139, "should have the correctly calculated fg property"
+    assert round(recipe.fg_plato, 4) == 3.5467, "should have the correctly calculated fg_plato property in Plato"
     assert round(recipe.ibu, 2) == 32.22
     assert round(recipe.abv, 2) == 5.47
 
@@ -156,9 +143,7 @@ def assert_oatmeal_stout_recipe(recipes):
     assert recipe.efficiency == 75.0
     assert recipe.batch_size == 25
 
-    assert (
-        recipe.style.name == "Oatmeal Stout"
-    ), "should have the correct style metadata"
+    assert recipe.style.name == "Oatmeal Stout", "should have the correct style metadata"
 
     assert len(recipe.miscs) == 1, "should have misc ingredients"
     assert recipe.miscs[0].name == "Protafloc"
@@ -185,7 +170,6 @@ def test_parse_recipe_3_from_string():
     assert_coffee_stout_recipe(recipes)
 
 
-# pylint: disable=too-many-statements
 def assert_coffee_stout_recipe(recipes):
 
     assert len(recipes) > 0, "should have at least one recipe"
@@ -195,9 +179,7 @@ def assert_coffee_stout_recipe(recipes):
 
     assert len(recipe.hops) == 2, "should have the correct amount of hops"
     assert len(recipe.yeasts) == 1, "should have the correct amount of yeasts"
-    assert (
-        len(recipe.fermentables) == 4
-    ), "should have the correct amount of fermentables"
+    assert len(recipe.fermentables) == 4, "should have the correct amount of fermentables"
 
     assert len(recipe.mash.steps) == 2, "should have two mashing steps"
     assert recipe.mash.steps[0].name == "Conversion"
@@ -277,10 +259,7 @@ def assert_coffee_stout_recipe(recipes):
     assert recipe.miscs[0].amount == 0.11339809
     assert recipe.miscs[0].amount_is_weight  # True
     assert recipe.miscs[0].time == 0
-    assert (
-        recipe.miscs[0].notes
-        == "Use a coarse grind, add at flameout, steep 20 minutes."
-    )
+    assert recipe.miscs[0].notes == "Use a coarse grind, add at flameout, steep 20 minutes."
 
     # should have equipments
     assert isinstance(recipe.equipment, Equipment)

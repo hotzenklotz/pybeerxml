@@ -1,4 +1,5 @@
 import pytest
+
 from pybeerxml.hop import Hop
 
 
