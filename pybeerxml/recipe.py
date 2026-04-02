@@ -1,17 +1,18 @@
 import logging
-from typing import Optional, Text, List, Any
+from typing import Any, List, Optional, Text
 
+from pybeerxml.equipment import Equipment
 from pybeerxml.fermentable import Fermentable
 from pybeerxml.hop import Hop
 from pybeerxml.mash import Mash
 from pybeerxml.misc import Misc
-from pybeerxml.yeast import Yeast
 from pybeerxml.style import Style
-from pybeerxml.water import Water
-from pybeerxml.equipment import Equipment
 from pybeerxml.utils import cast_to_bool, gravity_to_plato
+from pybeerxml.water import Water
+from pybeerxml.yeast import Yeast
 
 logger = logging.getLogger(__name__)
+
 
 # pylint: disable=too-many-instance-attributes, too-many-statements, too-many-public-methods
 class Recipe:
@@ -88,11 +89,7 @@ class Recipe:
 
     @property
     def abv_calculated(self):
-        return (
-            ((1.05 * (self.og_calculated - self.fg_calculated)) / self.fg_calculated)
-            / 0.79
-            * 100.0
-        )
+        return ((1.05 * (self.og_calculated - self.fg_calculated)) / self.fg_calculated) / 0.79 * 100.0
 
     @abv_calculated.setter
     def abv_calculated(self, value):
@@ -137,9 +134,7 @@ class Recipe:
         if self._ibu is not None:
             return self._ibu
 
-        logger.debug(
-            "The value for IBU has been calculated from the hop bill using Tinseth's formula"
-        )
+        logger.debug("The value for IBU has been calculated from the hop bill using Tinseth's formula")
         return self.ibu_calculated
 
     @ibu.setter
@@ -246,9 +241,7 @@ class Recipe:
         if self._color is not None:
             return self._color
 
-        logger.debug(
-            "The value for color has been calculated from fermentables using the Morey Equation"
-        )
+        logger.debug("The value for color has been calculated from fermentables using the Morey Equation")
         return self.color_calculated
 
     @color.setter
@@ -263,7 +256,7 @@ class Recipe:
             if fermentable.amount is not None and fermentable.color is not None:
                 # 8.3454 is conversion factor from kg/L to lb/gal
                 mcu += fermentable.amount * fermentable.color * 8.3454 / self.batch_size
-        return 1.4922 * (mcu ** 0.6859)
+        return 1.4922 * (mcu**0.6859)
 
     @color_calculated.setter
     def color_calculated(self, value):

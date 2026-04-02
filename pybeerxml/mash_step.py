@@ -4,9 +4,7 @@ from typing import Optional, Text
 class MashStep:
     def __init__(self):
         self.name: Optional[Text] = None
-        self.type: Optional[
-            Text
-        ] = None  # May be "Infusion", "Temperature" or "Decoction"
+        self.type: Optional[Text] = None  # May be "Infusion", "Temperature" or "Decoction"
         self.infuse_amount: Optional[float] = None  # liters
         self.step_temp: Optional[float] = None  # temperature (should be Celsius)
         self.end_temp: Optional[float] = None  # temperature (should be Celsius)

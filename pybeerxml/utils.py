@@ -1,4 +1,4 @@
-from typing import Text, Any, Optional
+from typing import Any, Optional, Text
 
 
 def to_lower(possible_string: Any) -> Text:

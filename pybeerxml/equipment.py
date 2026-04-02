@@ -1,4 +1,5 @@
 from typing import Any, Optional, Text
+
 from pybeerxml.utils import cast_to_bool
 
 

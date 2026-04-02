@@ -1,19 +1,19 @@
 import logging
+from typing import List, Text, Union
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
-from typing import Union, List, Text
 
-from pybeerxml.recipe import Recipe
+from pybeerxml.equipment import Equipment
+from pybeerxml.fermentable import Fermentable
 from pybeerxml.hop import Hop
 from pybeerxml.mash import Mash
 from pybeerxml.mash_step import MashStep
 from pybeerxml.misc import Misc
-from pybeerxml.yeast import Yeast
-from pybeerxml.water import Water
+from pybeerxml.recipe import Recipe
 from pybeerxml.style import Style
-from pybeerxml.equipment import Equipment
-from pybeerxml.fermentable import Fermentable
 from pybeerxml.utils import to_lower
+from pybeerxml.water import Water
+from pybeerxml.yeast import Yeast
 
 logger = logging.getLogger("__name__")
 

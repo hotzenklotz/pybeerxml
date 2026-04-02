@@ -1,4 +1,4 @@
-from typing import Optional, Text, Any
+from typing import Any, Optional, Text
 
 from pybeerxml.utils import cast_to_bool
 
@@ -13,9 +13,7 @@ class Yeast:
         self.notes: Optional[Text] = None
         self.laboratory: Optional[Text] = None
         self.product_id: Optional[Text] = None
-        self.flocculation: Optional[
-            Text
-        ] = None  # May be "Low", "Medium", "High" or "Very High"
+        self.flocculation: Optional[Text] = None  # May be "Low", "Medium", "High" or "Very High"
         self.amount: Optional[float] = None
         self._amount_is_weight: Optional[bool] = None
         self.min_temperature: Optional[float] = None
