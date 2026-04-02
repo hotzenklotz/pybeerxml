@@ -1,34 +1,32 @@
-from typing import Any, Optional, Text
+from dataclasses import dataclass, field
+from typing import Any
 
 from pybeerxml.utils import cast_to_bool
 
 
+@dataclass
 class Equipment:
-    def __init__(self):
-        self.name: Optional[Text] = None
-        self.version: Optional[Text] = None
-        self.boil_size: Optional[float] = None
-        self.batch_size: Optional[float] = None
-        self.tun_volume: Optional[float] = None
-        self.tun_weight: Optional[float] = None
-        self.tun_specific_heat: Optional[float] = None
-        self.top_up_water: Optional[float] = None
-        self.trub_chiller_loss: Optional[float] = None
-        self.evap_rate: Optional[float] = None
-        self.boil_time: Optional[float] = None
-        self._calc_boil_volume: Optional[bool] = None
-        self.lauter_deadspace: Optional[float] = None
-        self.top_up_kettle: Optional[float] = None
-        self.hop_utilization: Optional[float] = None
-        self.notes: Optional[Text] = None
+    name: str | None = None
+    version: str | None = None
+    boil_size: float | None = None
+    batch_size: float | None = None
+    tun_volume: float | None = None
+    tun_weight: float | None = None
+    tun_specific_heat: float | None = None
+    top_up_water: float | None = None
+    trub_chiller_loss: float | None = None
+    evap_rate: float | None = None
+    boil_time: float | None = None
+    lauter_deadspace: float | None = None
+    top_up_kettle: float | None = None
+    hop_utilization: float | None = None
+    notes: str | None = None
+    _calc_boil_volume: bool | None = field(default=None, init=False, repr=False)
 
     @property
-    def calc_boil_volume(self) -> Optional[bool]:
-        if self._calc_boil_volume is not None:
-            return self._calc_boil_volume
-
-        return None
+    def calc_boil_volume(self) -> bool | None:
+        return self._calc_boil_volume
 
     @calc_boil_volume.setter
-    def calc_boil_volume(self, value: Any):
+    def calc_boil_volume(self, value: Any) -> None:
         self._calc_boil_volume = cast_to_bool(value)

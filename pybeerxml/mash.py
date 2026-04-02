@@ -1,33 +1,28 @@
-from typing import List, Optional, Text
+from dataclasses import dataclass, field
+from typing import Any
 
 from pybeerxml.mash_step import MashStep
 from pybeerxml.utils import cast_to_bool
 
 
+@dataclass
 class Mash:
-    def __init__(self):
-        self.name: Optional[Text] = None
-        self.grain_temp: Optional[float] = None
-        self.sparge_temp: Optional[float] = None
-        self.ph: Optional[float] = None
-        self.notes: Optional[Text] = None
-        self.name: Optional[Text] = None
-        self.version: Optional[int] = None
-        self.grain_temp: Optional[float] = None
-        self.sparge_temp: Optional[float] = None
-        self.ph: Optional[float] = None
-        self.notes: Optional[Text] = None
-        self.tun_temp: Optional[float] = None
-        self.tun_weight: Optional[float] = None
-        self.tun_specific_heat: Optional[float] = None
-        self._equip_adjust: Optional[bool] = None
-
-        self.steps: List[MashStep] = []
+    name: str | None = None
+    version: int | None = None
+    grain_temp: float | None = None
+    sparge_temp: float | None = None
+    ph: float | None = None
+    notes: str | None = None
+    tun_temp: float | None = None
+    tun_weight: float | None = None
+    tun_specific_heat: float | None = None
+    steps: list[MashStep] = field(default_factory=list)
+    _equip_adjust: bool | None = field(default=None, init=False, repr=False)
 
     @property
-    def equip_adjust(self):
+    def equip_adjust(self) -> bool | None:
         return self._equip_adjust
 
     @equip_adjust.setter
-    def equip_adjust(self, value):
+    def equip_adjust(self, value: Any) -> None:
         self._equip_adjust = cast_to_bool(value)

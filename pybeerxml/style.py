@@ -1,20 +1,20 @@
-from typing import Optional, Text
+from dataclasses import dataclass
 
 
+@dataclass
 class Style:
-    def __init__(self):
-        self.name: Optional[Text] = None
-        self.category: Optional[Text] = None
-        self.og_min: Optional[float] = None
-        self.og_max: Optional[float] = None
-        self.fg_min: Optional[float] = None
-        self.fg_max: Optional[float] = None
-        self.ibu_min: Optional[float] = None
-        self.ibu_max: Optional[float] = None
-        self.color_min: Optional[float] = None
-        self.color_max: Optional[float] = None
-        self.abv_min: Optional[float] = None
-        self.abv_max: Optional[float] = None
-        self.carb_min: Optional[float] = None
-        self.carb_max: Optional[float] = None
-        self.notes: Optional[Text] = None
+    name: str | None = None
+    category: str | None = None
+    og_min: float | None = None
+    og_max: float | None = None
+    fg_min: float | None = None
+    fg_max: float | None = None
+    ibu_min: float | None = None
+    ibu_max: float | None = None
+    color_min: float | None = None
+    color_max: float | None = None
+    abv_min: float | None = None
+    abv_max: float | None = None
+    carb_min: float | None = None
+    carb_max: float | None = None
+    notes: str | None = None

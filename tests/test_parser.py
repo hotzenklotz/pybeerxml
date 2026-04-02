@@ -327,3 +327,38 @@ def test_to_lower():
     assert to_lower("") == ""
     assert to_lower(10) == ""
     assert to_lower(None) == ""
+
+
+def test_parse_empty_recipe():
+    xml = "<RECIPES><RECIPE><NAME>Empty</NAME></RECIPE></RECIPES>"
+    recipes = Parser().parse_from_string(xml)
+    assert len(recipes) == 1
+    assert recipes[0].name == "Empty"
+    assert recipes[0].hops == []
+    assert recipes[0].fermentables == []
+    assert recipes[0].yeasts == []
+
+
+def test_parse_multiple_recipes():
+    xml = """<RECIPES>
+        <RECIPE><NAME>Recipe A</NAME></RECIPE>
+        <RECIPE><NAME>Recipe B</NAME></RECIPE>
+    </RECIPES>"""
+    recipes = Parser().parse_from_string(xml)
+    assert len(recipes) == 2
+    assert recipes[0].name == "Recipe A"
+    assert recipes[1].name == "Recipe B"
+
+
+def test_unknown_attribute_does_not_raise():
+    xml = "<RECIPES><RECIPE><NAME>Test</NAME><UNKNOWN_FIELD>value</UNKNOWN_FIELD></RECIPE></RECIPES>"
+    # Should log an error but not raise
+    recipes = Parser().parse_from_string(xml)
+    assert len(recipes) == 1
+
+
+def test_malformed_xml_raises():
+    import pytest
+
+    with pytest.raises(Exception):
+        Parser().parse_from_string("this is not xml")
