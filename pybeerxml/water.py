@@ -12,7 +12,6 @@ class Water:
         self.chloride: Optional[float] = None
         self.sodium: Optional[float] = None
         self.magnesium: Optional[float] = None
-        # pylint: disable=invalid-name
         self.ph: Optional[float] = None
         self.notes: Optional[Text] = None
         self.volume: Optional[float] = None

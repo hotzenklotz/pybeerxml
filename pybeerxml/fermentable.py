@@ -1,4 +1,3 @@
-# pylint: disable=line-too-long
 import logging
 import re
 from typing import List, Optional, Pattern, Text, Tuple
@@ -80,7 +79,6 @@ class Fermentable:
 
         return "mash"
 
-    # pylint: disable=invalid-name
     def gu(self, liters: float = 1.0) -> Optional[float]:
         # Get the gravity units for a specific liquid volume with 100% efficiency
         if self.amount is None:

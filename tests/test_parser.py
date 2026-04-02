@@ -170,7 +170,6 @@ def test_parse_recipe_3_from_string():
     assert_coffee_stout_recipe(recipes)
 
 
-# pylint: disable=too-many-statements
 def assert_coffee_stout_recipe(recipes):
 
     assert len(recipes) > 0, "should have at least one recipe"

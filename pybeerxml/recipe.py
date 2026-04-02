@@ -14,7 +14,6 @@ from pybeerxml.yeast import Yeast
 logger = logging.getLogger(__name__)
 
 
-# pylint: disable=too-many-instance-attributes, too-many-statements, too-many-public-methods
 class Recipe:
     def __init__(self):
         self.name: Optional[Text] = None
@@ -148,7 +147,7 @@ class Recipe:
         _ibu = 0.0
 
         for hop in self.hops:
-            if hop.alpha and hop.use.lower() == "boil":
+            if hop.alpha and hop.use is not None and hop.use.lower() == "boil":
                 _ibu += hop.bitterness(ibu_method, self.og_calculated, self.batch_size)
 
         return _ibu
@@ -157,7 +156,6 @@ class Recipe:
     def ibu_calculated(self, value):
         pass
 
-    # pylint: disable=invalid-name
     @property
     def og(self):
 
@@ -178,6 +176,9 @@ class Recipe:
         steep_efficiency = 50
         mash_efficiency = 75
 
+        if self.batch_size is None:
+            return _og
+
         # Calculate gravities and color from fermentables
         for fermentable in self.fermentables:
             addition = fermentable.addition
@@ -189,8 +190,10 @@ class Recipe:
                 efficiency = 1.0
 
             # Update gravities
-            gu = fermentable.gu(self.batch_size) * efficiency
-            gravity = gu / 1000.0
+            gu = fermentable.gu(self.batch_size)
+            if gu is None:
+                continue
+            gravity = gu * efficiency / 1000.0
             _og += gravity
 
         return _og
@@ -199,7 +202,6 @@ class Recipe:
     def og_calculated(self, value):
         pass
 
-    # pylint: disable=invalid-name
     @property
     def fg(self):
 
@@ -251,6 +253,8 @@ class Recipe:
     @property
     def color_calculated(self):
         # Formula source: http://brewwiki.com/index.php/Estimating_Color
+        if self.batch_size is None:
+            return 0.0
         mcu = 0.0
         for fermentable in self.fermentables:
             if fermentable.amount is not None and fermentable.color is not None:

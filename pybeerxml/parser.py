@@ -1,5 +1,5 @@
 import logging
-from typing import List, Text, Union
+from typing import Any, List, Text, Union
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
@@ -40,7 +40,6 @@ class Parser:
         for node in list(nodes):
             self.node_to_object(node, beerxml_object)
 
-    # pylint: disable=no-self-use
     def node_to_object(
         self,
         node: Element,
@@ -93,7 +92,7 @@ class Parser:
 
         return self.parse_tree(tree)
 
-    def parse_tree(self, tree: ElementTree.ElementTree) -> List[Recipe]:
+    def parse_tree(self, tree: ElementTree.ElementTree[Any]) -> List[Recipe]:
         recipes = []
         for recipe_node in tree.iter():
             if to_lower(recipe_node.tag) != "recipe":
@@ -103,7 +102,6 @@ class Parser:
 
         return recipes
 
-    # pylint: disable=too-many-branches, too-many-locals
     def parse_recipe(self, recipe_node: Element) -> Recipe:
 
         recipe = Recipe()

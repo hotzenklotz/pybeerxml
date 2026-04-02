@@ -12,7 +12,6 @@ class MashStep:
         self.decoction_amt: Optional[Text] = None
         self.version: Optional[int] = None
 
-        # pylint: disable=invalid-name, unused-variable
         @property
         def waterRatio(self):
             raise NotImplementedError("waterRation")
