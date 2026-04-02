@@ -1,0 +1,3 @@
+# Fermentable
+
+::: pybeerxml.fermentable.Fermentable

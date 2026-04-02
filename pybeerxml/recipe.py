@@ -15,6 +15,46 @@ logger = logging.getLogger(__name__)
 
 
 class Recipe:
+    """A complete beer recipe parsed from a BeerXML document.
+
+    Scalar fields (``name``, ``batch_size``, etc.) are populated directly from
+    the XML.  The five key brewing metrics — OG, FG, IBU, ABV, and colour —
+    expose both the stored XML value and an independently calculated value:
+
+    - The plain property (e.g. ``recipe.og``) returns the stored XML value when
+      present and falls back to the calculated value automatically.
+    - The ``_calculated`` variant (e.g. ``recipe.og_calculated``) always
+      computes from the ingredient list, regardless of what the XML says.
+
+    All gravity values are also available in degrees Plato via ``og_plato``,
+    ``og_calculated_plato``, ``fg_plato``, and ``fg_calculated_plato``.
+
+    Attributes:
+        name: Recipe name.
+        brewer: Brewer's name.
+        type: Recipe type, e.g. ``"All Grain"`` or ``"Extract"``.
+        batch_size: Target batch volume in litres.
+        boil_size: Pre-boil volume in litres.
+        boil_time: Boil duration in minutes.
+        efficiency: Mash efficiency as a percentage.
+        notes: Free-text recipe notes.
+        date: Recipe creation date (stored as a string, e.g. ``"3 Dec 04"``).
+        hops: Hop additions.
+        fermentables: Fermentable ingredients.
+        yeasts: Yeast strains.
+        miscs: Miscellaneous ingredients.
+        waters: Water chemistry profiles.
+        mash: Mash profile and steps.
+        style: Beer style guidelines.
+        equipment: Equipment profile.
+
+    Examples:
+        >>> from pybeerxml import Parser
+        >>> recipe = Parser().parse("recipe.beerxml")[0]
+        >>> print(recipe.name, round(recipe.og, 4), round(recipe.ibu, 1))
+        Simcoe IPA 1.0756 64.3
+    """
+
     def __init__(self):
         self.name: str | None = None
         self.version: float | None = None
@@ -73,6 +113,11 @@ class Recipe:
 
     @property
     def abv(self):
+        """ABV in percent.
+
+        Returns the value stored in the XML when available, otherwise falls
+        back to `abv_calculated`.
+        """
         if self._abv is not None:
             return self._abv
         logger.debug("The value for ABV has been calculated from OG and FG")
@@ -84,15 +129,16 @@ class Recipe:
 
     @property
     def abv_calculated(self):
+        """ABV in percent, always computed from `og_calculated` and `fg_calculated`."""
         return ((1.05 * (self.og_calculated - self.fg_calculated)) / self.fg_calculated) / 0.79 * 100.0
 
     @abv_calculated.setter
     def abv_calculated(self, value):
         pass
 
-    # Gravity degrees plato approximations
     @property
     def og_plato(self):
+        """`og` expressed in degrees Plato."""
         return gravity_to_plato(self.og)
 
     @og_plato.setter
@@ -101,6 +147,7 @@ class Recipe:
 
     @property
     def og_calculated_plato(self):
+        """`og_calculated` expressed in degrees Plato."""
         return gravity_to_plato(self.og_calculated)
 
     @og_calculated_plato.setter
@@ -109,6 +156,7 @@ class Recipe:
 
     @property
     def fg_plato(self):
+        """`fg` expressed in degrees Plato."""
         return gravity_to_plato(self.fg)
 
     @fg_plato.setter
@@ -117,6 +165,7 @@ class Recipe:
 
     @property
     def fg_calculated_plato(self):
+        """`fg_calculated` expressed in degrees Plato."""
         return gravity_to_plato(self.fg_calculated)
 
     @fg_calculated_plato.setter
@@ -125,6 +174,11 @@ class Recipe:
 
     @property
     def ibu(self):
+        """IBU bitterness.
+
+        Returns the value stored in the XML when available, otherwise falls
+        back to `ibu_calculated`.
+        """
         if self._ibu is not None:
             return self._ibu
         logger.debug("The value for IBU has been calculated from the hop bill using Tinseth's formula")
@@ -136,6 +190,11 @@ class Recipe:
 
     @property
     def ibu_calculated(self):
+        """IBU, always computed from boil hops using the Tinseth formula.
+
+        Only hops with ``use == "boil"`` contribute. Returns ``0.0`` when
+        ``batch_size`` is not set.
+        """
         if self.batch_size is None:
             return 0.0
         ibu_method = "tinseth"
@@ -151,6 +210,11 @@ class Recipe:
 
     @property
     def og(self):
+        """Original gravity in SG.
+
+        Returns the value stored in the XML when available, otherwise falls
+        back to `og_calculated`.
+        """
         if self._og is not None:
             return self._og
         logger.debug("The value for OG has been calculated from the mashing steps")
@@ -162,6 +226,12 @@ class Recipe:
 
     @property
     def og_calculated(self):
+        """Original gravity in SG, always computed from the fermentable bill.
+
+        Uses fixed efficiencies: **50 %** for steep additions, **75 %** for
+        mash additions, and **100 %** for direct additions (extracts, sugars).
+        Returns ``1.0`` when ``batch_size`` is not set.
+        """
         _og = 1.0
         steep_efficiency = 50
         mash_efficiency = 75
@@ -191,6 +261,11 @@ class Recipe:
 
     @property
     def fg(self):
+        """Final gravity in SG.
+
+        Returns the value stored in the XML when available, otherwise falls
+        back to `fg_calculated`.
+        """
         if self._fg is not None:
             return self._fg
         logger.debug("The value for FG has been calculated from OG and yeast")
@@ -202,6 +277,11 @@ class Recipe:
 
     @property
     def fg_calculated(self):
+        """Final gravity in SG, always computed from `og_calculated` and yeast attenuation.
+
+        Uses the highest attenuation value among all yeasts. Defaults to
+        **75 %** attenuation when no yeast is present.
+        """
         attenuation = 0.0
         for yeast in self.yeasts:
             if yeast.attenuation is not None and yeast.attenuation > attenuation:
@@ -216,6 +296,11 @@ class Recipe:
 
     @property
     def color(self):
+        """Beer colour in SRM.
+
+        Returns the value stored in the XML when available, otherwise falls
+        back to `color_calculated`.
+        """
         if self._color is not None:
             return self._color
         logger.debug("The value for color has been calculated from fermentables using the Morey Equation")
@@ -227,7 +312,10 @@ class Recipe:
 
     @property
     def color_calculated(self):
-        # Formula source: http://brewwiki.com/index.php/Estimating_Color
+        """Beer colour in SRM, always computed using the Morey equation.
+
+        Returns ``0.0`` when ``batch_size`` is not set.
+        """
         if self.batch_size is None:
             return 0.0
         mcu = 0.0
@@ -243,6 +331,7 @@ class Recipe:
 
     @property
     def forced_carbonation(self):
+        """Whether the beer is force-carbonated (``True``) or priming-sugar carbonated (``False``)."""
         return self._forced_carbonation
 
     @forced_carbonation.setter

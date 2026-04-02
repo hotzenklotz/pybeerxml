@@ -2,6 +2,21 @@ import math
 
 
 class Hop:
+    """A hop addition in a beer recipe.
+
+    Attributes:
+        name: Hop variety name.
+        alpha: Alpha acid percentage.
+        amount: Weight in kilograms.
+        use: When the hop is added — ``"boil"``, ``"dry hop"``, ``"aroma"``, etc.
+        form: Physical form — ``"pellet"``, ``"whole"``, or ``"plug"``.
+        time: Contact time in minutes (boil time, dry-hop duration, etc.).
+        type: Hop type — ``"bittering"``, ``"aroma"``, or ``"both"``.
+        beta: Beta acid percentage.
+        origin: Country of origin.
+        notes: Free-text notes.
+    """
+
     def __init__(self):
         self.name: str | None = None
         self.alpha: float | None = None
@@ -22,12 +37,30 @@ class Hop:
         self.myrcene: float | None = None
 
     def utilization_factor(self) -> float:
-        "Account for better utilization from pellets vs. whole"
+        """Utilization multiplier for hop form.
+
+        Pellet hops are approximately 15 % more efficient than whole hops.
+
+        Returns:
+            ``1.15`` for pellets, ``1.0`` for all other forms.
+        """
         return 1.15 if self.form == "pellet" else 1.0
 
     def bitterness(self, ibu_method: str, early_og: float, batch_size: float) -> float:
-        "Calculate bitterness based on chosen method"
+        """Calculate the IBU contribution of this hop addition.
 
+        Args:
+            ibu_method: Formula to use — ``"tinseth"`` or ``"rager"``.
+            early_og: Original gravity at the start of the boil (e.g. ``1.050``).
+            batch_size: Batch volume in litres.
+
+        Returns:
+            IBU contribution as a float.
+
+        Raises:
+            ValueError: If ``time``, ``alpha``, or ``amount`` is ``None``.
+            ValueError: If ``ibu_method`` is not ``"tinseth"`` or ``"rager"``.
+        """
         if self.time is None or self.alpha is None or self.amount is None:
             raise ValueError("Hop is missing required fields (time, alpha, amount) for bitterness calculation")
 

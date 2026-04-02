@@ -1,0 +1,3 @@
+# Recipe
+
+::: pybeerxml.recipe.Recipe

@@ -3,6 +3,29 @@ from dataclasses import dataclass
 
 @dataclass
 class Style:
+    """Beer style guidelines from a BeerXML ``<STYLE>`` element.
+
+    All ``_min`` / ``_max`` pairs define the acceptable range for that
+    parameter within the style.
+
+    Attributes:
+        name: Style name (e.g. ``"American IPA"``).
+        category: Style category (e.g. ``"India Pale Ale"``).
+        og_min: Minimum original gravity.
+        og_max: Maximum original gravity.
+        fg_min: Minimum final gravity.
+        fg_max: Maximum final gravity.
+        ibu_min: Minimum bitterness in IBU.
+        ibu_max: Maximum bitterness in IBU.
+        color_min: Minimum colour in SRM.
+        color_max: Maximum colour in SRM.
+        abv_min: Minimum ABV percentage.
+        abv_max: Maximum ABV percentage.
+        carb_min: Minimum carbonation in volumes of CO₂.
+        carb_max: Maximum carbonation in volumes of CO₂.
+        notes: Free-text style notes.
+    """
+
     name: str | None = None
     category: str | None = None
     og_min: float | None = None

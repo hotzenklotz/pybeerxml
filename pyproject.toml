@@ -16,6 +16,8 @@ dev = [
     "pytest>=8.0",
     "ruff>=0.9",
     "ty>=0.0.1",
+    "zensical",
+    "mkdocstrings-python",
 ]
 
 [build-system]

@@ -19,6 +19,24 @@ BOIL = re.compile(r"candi|candy|dme|dry|extract|honey|lme|liquid|sugar|syrup|tur
 
 @dataclass
 class Fermentable:
+    """A fermentable ingredient — grain, extract, sugar, or adjunct.
+
+    Attributes:
+        name: Ingredient name.
+        amount: Weight in kilograms.
+        color: Colour contribution in degrees Lovibond (°L).
+        type: Ingredient type (e.g. ``"Grain"``, ``"Extract"``, ``"Sugar"``).
+        origin: Country of origin.
+        supplier: Supplier or maltster name.
+        notes: Free-text notes.
+        coarse_fine_diff: Difference between coarse and fine grind yield (%).
+        moisture: Moisture content (%).
+        diastatic_power: Diastatic power in degrees Lintner.
+        protein: Protein content (%).
+        max_in_batch: Maximum recommended percentage of the grain bill.
+        ibu_gal_per_lb: IBU contribution per gallon per pound (for adjuncts).
+    """
+
     name: str | None = None
     amount: float | None = None
     color: float | None = None
@@ -40,6 +58,7 @@ class Fermentable:
 
     @property
     def add_after_boil(self) -> bool:
+        """Whether this fermentable is added after the boil (e.g. honey in secondary)."""
         return bool(self._add_after_boil)
 
     @add_after_boil.setter
@@ -48,6 +67,10 @@ class Fermentable:
 
     @property
     def ppg(self) -> float | None:
+        """Points per pound per gallon, derived from the BeerXML ``YIELD`` field.
+
+        Returns ``None`` when ``YIELD`` is not set.
+        """
         if self._yield is not None:
             return 0.46214 * self._yield
         logger.error("Property 'ppg' could not be calculated because property 'yield' is missing. Default to 'None'")
@@ -55,7 +78,13 @@ class Fermentable:
 
     @property
     def addition(self) -> str:
-        "Determine when this fermentable is added: 'mash', 'steep', or 'boil'."
+        """When this fermentable is added during the brewing process.
+
+        Returns one of ``"mash"``, ``"steep"``, or ``"boil"``, determined by
+        matching the ingredient name against known patterns.  Explicit keywords
+        in the name (``"mash"``, ``"steep"``, ``"boil"``) take precedence over
+        pattern matching.  Unknown ingredients default to ``"mash"``.
+        """
         if self.name is None:
             logger.error(
                 "Property 'addition' could not be calculated because property 'name' is missing. Defaults to 'mash'"
@@ -74,7 +103,15 @@ class Fermentable:
         return "mash"
 
     def gu(self, liters: float = 1.0) -> float | None:
-        "Get the gravity units for a specific liquid volume with 100% efficiency."
+        """Gravity units contributed at 100 % efficiency for the given volume.
+
+        Args:
+            liters: Batch volume in litres.
+
+        Returns:
+            Gravity units as a float, or ``None`` if ``amount`` or ``yield``
+            is not set.
+        """
         if self.amount is None:
             logger.error(
                 "Property 'gu' could not be calculated because property 'amount' is missing. Defaults to 'None'"
@@ -83,13 +120,13 @@ class Fermentable:
         if self.ppg is None:
             logger.error("Property 'gu' could not be calculated because property 'ppg' is missing. Defaults to 'None'")
             return None
-        # gu = parts per gallon * weight in pounds / gallons
         weight_lb = self.amount * 2.20462
         volume_gallons = liters * 0.264172
         return self.ppg * weight_lb / volume_gallons
 
     @property
     def recommend_mash(self) -> bool | None:
+        """Whether mashing is recommended for this fermentable."""
         return self._recommend_mash
 
     @recommend_mash.setter

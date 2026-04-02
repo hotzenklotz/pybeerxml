@@ -6,6 +6,25 @@ from pybeerxml.utils import cast_to_bool
 
 @dataclass
 class Equipment:
+    """Brewing equipment profile from a BeerXML ``<EQUIPMENT>`` element.
+
+    Attributes:
+        name: Equipment set name.
+        boil_size: Pre-boil kettle volume in litres.
+        batch_size: Target post-boil batch volume in litres.
+        tun_volume: Mash tun capacity in litres.
+        tun_weight: Mash tun weight in kg (used for heat loss calculations).
+        tun_specific_heat: Specific heat of the tun material in Cal/(g·°C).
+        top_up_water: Water added to the fermenter to reach ``batch_size`` in litres.
+        trub_chiller_loss: Volume lost to trub and chiller deadspace in litres.
+        evap_rate: Evaporation rate in litres per hour.
+        boil_time: Boil duration in minutes.
+        lauter_deadspace: Volume lost in the lauter tun in litres.
+        top_up_kettle: Water added to the kettle before the boil in litres.
+        hop_utilization: Global hop utilization multiplier (%).
+        notes: Free-text notes.
+    """
+
     name: str | None = None
     version: str | None = None
     boil_size: float | None = None
@@ -25,6 +44,7 @@ class Equipment:
 
     @property
     def calc_boil_volume(self) -> bool | None:
+        """Whether the pre-boil volume should be calculated from equipment parameters."""
         return self._calc_boil_volume
 
     @calc_boil_volume.setter
