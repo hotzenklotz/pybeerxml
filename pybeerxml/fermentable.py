@@ -1,5 +1,6 @@
 import logging
 import re
+from dataclasses import dataclass, field
 from typing import Any
 
 from pybeerxml.utils import cast_to_bool
@@ -16,32 +17,33 @@ STEEP = re.compile(r"biscuit|black|cara|chocolate|crystal|munich|roast|special|t
 BOIL = re.compile(r"candi|candy|dme|dry|extract|honey|lme|liquid|sugar|syrup|turbinado", re.IGNORECASE)
 
 
+@dataclass
 class Fermentable:
-    def __init__(self):
-        self.name: str | None = None
-        self.amount: float | None = None
-        self._yield: float | None = None
-        self.color: float | None = None
-        self._add_after_boil: bool | None = None
-        self.version: int | None = None
-        self.type: str | None = None
-        self.origin: str | None = None
-        self.supplier: str | None = None
-        self.notes: str | None = None
-        self.coarse_fine_diff: float | None = None
-        self.moisture: float | None = None
-        self.diastatic_power: float | None = None
-        self.protein: float | None = None
-        self.max_in_batch: float | None = None
-        self._recommend_mash: bool | None = None
-        self.ibu_gal_per_lb: float | None = None
+    name: str | None = None
+    amount: float | None = None
+    color: float | None = None
+    version: int | None = None
+    type: str | None = None
+    origin: str | None = None
+    supplier: str | None = None
+    notes: str | None = None
+    coarse_fine_diff: float | None = None
+    moisture: float | None = None
+    diastatic_power: float | None = None
+    protein: float | None = None
+    max_in_batch: float | None = None
+    ibu_gal_per_lb: float | None = None
+    # "yield" is a Python keyword, so the parser maps it to _yield via setattr
+    _yield: float | None = field(default=None, init=False, repr=False)
+    _add_after_boil: bool | None = field(default=None, init=False, repr=False)
+    _recommend_mash: bool | None = field(default=None, init=False, repr=False)
 
     @property
     def add_after_boil(self) -> bool:
         return bool(self._add_after_boil)
 
     @add_after_boil.setter
-    def add_after_boil(self, value: Any):
+    def add_after_boil(self, value: Any) -> None:
         self._add_after_boil = cast_to_bool(value)
 
     @property
@@ -91,5 +93,5 @@ class Fermentable:
         return self._recommend_mash
 
     @recommend_mash.setter
-    def recommend_mash(self, value: Any):
+    def recommend_mash(self, value: Any) -> None:
         self._recommend_mash = cast_to_bool(value)

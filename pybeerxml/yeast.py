@@ -1,36 +1,37 @@
+from dataclasses import dataclass, field
 from typing import Any
 
 from pybeerxml.utils import cast_to_bool
 
 
+@dataclass
 class Yeast:
-    def __init__(self):
-        self.name: str | None = None
-        self.version: int | None = None
-        self.type: str | None = None
-        self.form: str | None = None  # May be "Liquid", "Dry", "Slant" or "Culture"
-        self.attenuation: float | None = None  # Percent
-        self.notes: str | None = None
-        self.laboratory: str | None = None
-        self.product_id: str | None = None
-        self.flocculation: str | None = None  # May be "Low", "Medium", "High" or "Very High"
-        self.amount: float | None = None
-        self._amount_is_weight: bool | None = None
-        self.min_temperature: float | None = None
-        self.max_temperature: float | None = None
-        self.best_for: str | None = None
-        self.times_cultured: int | None = None
-        self.max_reuse: int | None = None
-        self._add_to_secondary: bool | None = None
-        self.inventory: str | None = None
-        self.culture_date: str | None = None
+    name: str | None = None
+    version: int | None = None
+    type: str | None = None
+    form: str | None = None  # May be "Liquid", "Dry", "Slant" or "Culture"
+    attenuation: float | None = None  # Percent
+    notes: str | None = None
+    laboratory: str | None = None
+    product_id: str | None = None
+    flocculation: str | None = None  # May be "Low", "Medium", "High" or "Very High"
+    amount: float | None = None
+    min_temperature: float | None = None
+    max_temperature: float | None = None
+    best_for: str | None = None
+    times_cultured: int | None = None
+    max_reuse: int | None = None
+    inventory: str | None = None
+    culture_date: str | None = None
+    _amount_is_weight: bool | None = field(default=None, init=False, repr=False)
+    _add_to_secondary: bool | None = field(default=None, init=False, repr=False)
 
     @property
     def amount_is_weight(self) -> bool | None:
         return self._amount_is_weight
 
     @amount_is_weight.setter
-    def amount_is_weight(self, value: Any):
+    def amount_is_weight(self, value: Any) -> None:
         self._amount_is_weight = cast_to_bool(value)
 
     @property
@@ -38,5 +39,5 @@ class Yeast:
         return self._add_to_secondary
 
     @add_to_secondary.setter
-    def add_to_secondary(self, value: Any):
+    def add_to_secondary(self, value: Any) -> None:
         self._add_to_secondary = cast_to_bool(value)
