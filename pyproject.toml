@@ -1,6 +1,6 @@
 [project]
 name = "pybeerxml"
-version = "2.1.2"
+version = "2.2.0"
 description = "A BeerXML implementation for Python"
 authors = [{ name = "Tom Herold", email = "heroldtom@gmail.com" }]
 license = { text = "MIT" }
