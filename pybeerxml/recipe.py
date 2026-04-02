@@ -1,5 +1,5 @@
 import logging
-from typing import Any, List, Optional, Text
+from typing import Any
 
 from pybeerxml.equipment import Equipment
 from pybeerxml.fermentable import Fermentable
@@ -16,69 +16,65 @@ logger = logging.getLogger(__name__)
 
 class Recipe:
     def __init__(self):
-        self.name: Optional[Text] = None
-        self.version: Optional[float] = None
-        self.type: Optional[Text] = None
-        self.brewer: Optional[Text] = None
-        self.asst_brewer: Optional[Text] = None
-        self.batch_size: Optional[float] = None
-        self.boil_time: Optional[float] = None
-        self.boil_size: Optional[float] = None
-        self.efficiency: Optional[float] = None
-        self.notes: Optional[Text] = None
-        self.taste_notes: Optional[Text] = None
-        self.taste_rating: Optional[float] = None
-        self.fermentation_stages: Optional[Text] = None
-        self.primary_age: Optional[float] = None
-        self.primary_temp: Optional[float] = None
-        self.secondary_age: Optional[float] = None
-        self.secondary_temp: Optional[float] = None
-        self.tertiary_age: Optional[float] = None
-        self.tertiary_temp: Optional[float] = None
-        self.carbonation: Optional[float] = None
-        self.carbonation_temp: Optional[float] = None
-        self.age: Optional[float] = None
-        self.age_temp: Optional[float] = None
-        self.date: Optional[float] = None
-        self.carbonation: Optional[float] = None
-        self._forced_carbonation: Optional[bool] = None
-        self.priming_sugar_name: Optional[float] = None
-        self.carbonation_temp: Optional[float] = None
-        self.priming_sugar_equiv: Optional[Text] = None
-        self.keg_priming_factor: Optional[float] = None
+        self.name: str | None = None
+        self.version: float | None = None
+        self.type: str | None = None
+        self.brewer: str | None = None
+        self.asst_brewer: str | None = None
+        self.batch_size: float | None = None
+        self.boil_time: float | None = None
+        self.boil_size: float | None = None
+        self.efficiency: float | None = None
+        self.notes: str | None = None
+        self.taste_notes: str | None = None
+        self.taste_rating: float | None = None
+        self.fermentation_stages: int | None = None
+        self.primary_age: float | None = None
+        self.primary_temp: float | None = None
+        self.secondary_age: float | None = None
+        self.secondary_temp: float | None = None
+        self.tertiary_age: float | None = None
+        self.tertiary_temp: float | None = None
+        self.carbonation: float | None = None
+        self.carbonation_temp: float | None = None
+        self.age: float | None = None
+        self.age_temp: float | None = None
+        self.date: str | None = None
+        self._forced_carbonation: bool | None = None
+        self.priming_sugar_name: str | None = None
+        self.priming_sugar_equiv: float | None = None
+        self.keg_priming_factor: float | None = None
 
         # Recipe extension fields
-        self.est_og: Optional[float] = None
-        self.est_fg: Optional[float] = None
-        self.est_color: Optional[float] = None
-        self.ibu_method: Optional[Text] = None
-        self.est_abv: Optional[float] = None
-        self.actual_efficiency: Optional[float] = None
-        self.calories: Optional[float] = None
-        self.carbonation_used: Optional[Text] = None
+        self.est_og: float | None = None
+        self.est_fg: float | None = None
+        self.est_color: float | None = None
+        self.ibu_method: str | None = None
+        self.est_abv: float | None = None
+        self.actual_efficiency: float | None = None
+        self.calories: str | None = None
+        self.carbonation_used: str | None = None
 
         # Values from the recipe, which are calculated as a fallback
-        self._abv: Optional[float] = None
-        self._og: Optional[float] = None
-        self._fg: Optional[float] = None
-        self._ibu: Optional[float] = None
-        self._color: Optional[float] = None
+        self._abv: float | None = None
+        self._og: float | None = None
+        self._fg: float | None = None
+        self._ibu: float | None = None
+        self._color: float | None = None
 
-        self.style: Optional[Style] = None
-        self.hops: List[Hop] = []
-        self.yeasts: List[Yeast] = []
-        self.fermentables: List[Fermentable] = []
-        self.miscs: List[Misc] = []
-        self.mash: Optional[Mash] = None
-        self.waters: List[Water] = []
-        self.equipment: Optional[Equipment] = None
+        self.style: Style | None = None
+        self.hops: list[Hop] = []
+        self.yeasts: list[Yeast] = []
+        self.fermentables: list[Fermentable] = []
+        self.miscs: list[Misc] = []
+        self.mash: Mash | None = None
+        self.waters: list[Water] = []
+        self.equipment: Equipment | None = None
 
     @property
     def abv(self):
-
         if self._abv is not None:
             return self._abv
-
         logger.debug("The value for ABV has been calculated from OG and FG")
         return self.abv_calculated
 
@@ -129,10 +125,8 @@ class Recipe:
 
     @property
     def ibu(self):
-
         if self._ibu is not None:
             return self._ibu
-
         logger.debug("The value for IBU has been calculated from the hop bill using Tinseth's formula")
         return self.ibu_calculated
 
@@ -142,14 +136,13 @@ class Recipe:
 
     @property
     def ibu_calculated(self):
-
+        if self.batch_size is None:
+            return 0.0
         ibu_method = "tinseth"
         _ibu = 0.0
-
         for hop in self.hops:
             if hop.alpha and hop.use is not None and hop.use.lower() == "boil":
                 _ibu += hop.bitterness(ibu_method, self.og_calculated, self.batch_size)
-
         return _ibu
 
     @ibu_calculated.setter
@@ -158,10 +151,8 @@ class Recipe:
 
     @property
     def og(self):
-
         if self._og is not None:
             return self._og
-
         logger.debug("The value for OG has been calculated from the mashing steps")
         return self.og_calculated
 
@@ -171,7 +162,6 @@ class Recipe:
 
     @property
     def og_calculated(self):
-
         _og = 1.0
         steep_efficiency = 50
         mash_efficiency = 75
@@ -179,7 +169,6 @@ class Recipe:
         if self.batch_size is None:
             return _og
 
-        # Calculate gravities and color from fermentables
         for fermentable in self.fermentables:
             addition = fermentable.addition
             if addition == "steep":
@@ -189,12 +178,10 @@ class Recipe:
             else:
                 efficiency = 1.0
 
-            # Update gravities
             gu = fermentable.gu(self.batch_size)
             if gu is None:
                 continue
-            gravity = gu * efficiency / 1000.0
-            _og += gravity
+            _og += gu * efficiency / 1000.0
 
         return _og
 
@@ -204,10 +191,8 @@ class Recipe:
 
     @property
     def fg(self):
-
         if self._fg is not None:
             return self._fg
-
         logger.debug("The value for FG has been calculated from OG and yeast")
         return self.fg_calculated
 
@@ -217,21 +202,13 @@ class Recipe:
 
     @property
     def fg_calculated(self):
-
-        _fg = 0
-        attenuation = 0
-
-        # Get attenuation for final gravity
+        attenuation = 0.0
         for yeast in self.yeasts:
             if yeast.attenuation is not None and yeast.attenuation > attenuation:
                 attenuation = yeast.attenuation
-
         if attenuation == 0:
             attenuation = 75.0
-
-        _fg = self.og_calculated - ((self.og_calculated - 1.0) * attenuation / 100.0)
-
-        return _fg
+        return self.og_calculated - ((self.og_calculated - 1.0) * attenuation / 100.0)
 
     @fg_calculated.setter
     def fg_calculated(self, value):
@@ -239,10 +216,8 @@ class Recipe:
 
     @property
     def color(self):
-
         if self._color is not None:
             return self._color
-
         logger.debug("The value for color has been calculated from fermentables using the Morey Equation")
         return self.color_calculated
 

@@ -1,17 +1,17 @@
-from typing import Optional, Text
+from dataclasses import dataclass
 
 
+@dataclass
 class Water:
-    def __init__(self):
-        self.name: Optional[Text] = None
-        self.version: Optional[float] = None
-        self.amount: Optional[float] = None
-        self.calcium: Optional[float] = None
-        self.bicarbonate: Optional[float] = None
-        self.sulfate: Optional[float] = None
-        self.chloride: Optional[float] = None
-        self.sodium: Optional[float] = None
-        self.magnesium: Optional[float] = None
-        self.ph: Optional[float] = None
-        self.notes: Optional[Text] = None
-        self.volume: Optional[float] = None
+    name: str | None = None
+    version: float | None = None
+    amount: float | None = None
+    calcium: float | None = None
+    bicarbonate: float | None = None
+    sulfate: float | None = None
+    chloride: float | None = None
+    sodium: float | None = None
+    magnesium: float | None = None
+    ph: float | None = None
+    notes: str | None = None
+    volume: float | None = None
