@@ -1,4 +1,3 @@
-
 from pybeerxml.utils import cast_to_bool, gravity_to_plato, to_lower
 
 
