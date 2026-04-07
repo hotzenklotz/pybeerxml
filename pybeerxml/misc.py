@@ -8,6 +8,7 @@ class Misc:
 
     Attributes:
         name: Ingredient name.
+        version: BeerXML misc record version.
         type: Category — ``"Spice"``, ``"Fining"``, ``"Water Agent"``,
             ``"Herb"``, ``"Flavor"``, or ``"Other"``.
         amount: Quantity — weight in kg or volume in litres depending on
@@ -21,6 +22,7 @@ class Misc:
 
     def __init__(self):
         self.name: str | None = None
+        self.version: int | None = None
         self.type: str | None = None
         self.amount: float | None = None
         self._amount_is_weight: bool | None = False

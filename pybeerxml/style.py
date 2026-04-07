@@ -11,6 +11,11 @@ class Style:
     Attributes:
         name: Style name (e.g. ``"American IPA"``).
         category: Style category (e.g. ``"India Pale Ale"``).
+        version: BeerXML style record version.
+        category_number: Style category identifier from the style guide.
+        style_letter: Style subcategory letter or identifier.
+        style_guide: Style guide name (e.g. ``"BJCP"``).
+        type: Beverage family (e.g. ``"Ale"``, ``"Lager"``, ``"Mead"``).
         og_min: Minimum original gravity.
         og_max: Maximum original gravity.
         fg_min: Minimum final gravity.
@@ -28,6 +33,11 @@ class Style:
 
     name: str | None = None
     category: str | None = None
+    version: int | None = None
+    category_number: str | None = None
+    style_letter: str | None = None
+    style_guide: str | None = None
+    type: str | None = None
     og_min: float | None = None
     og_max: float | None = None
     fg_min: float | None = None

@@ -21,7 +21,7 @@ class Water:
     """
 
     name: str | None = None
-    version: float | None = None
+    version: int | None = None
     amount: float | None = None
     calcium: float | None = None
     bicarbonate: float | None = None

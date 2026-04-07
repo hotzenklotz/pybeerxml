@@ -57,7 +57,7 @@ class Recipe:
 
     def __init__(self):
         self.name: str | None = None
-        self.version: float | None = None
+        self.version: int | None = None
         self.type: str | None = None
         self.brewer: str | None = None
         self.asst_brewer: str | None = None

@@ -26,7 +26,7 @@ class Equipment:
     """
 
     name: str | None = None
-    version: str | None = None
+    version: int | None = None
     boil_size: float | None = None
     batch_size: float | None = None
     tun_volume: float | None = None

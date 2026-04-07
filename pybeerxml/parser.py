@@ -20,6 +20,8 @@ from pybeerxml.yeast import Yeast
 logger = logging.getLogger(__name__)
 
 BeerXMLObject = Recipe | Mash | Yeast | Fermentable | Hop | Misc | MashStep | Style | Water | Equipment
+INTEGER_FIELDS = {"version", "fermentation_stages", "times_cultured", "max_reuse"}
+TEXT_FIELDS = {"category_number"}
 
 
 class Parser:
@@ -62,13 +64,24 @@ class Parser:
         attribute = to_lower(node.tag)
         attribute = "_yield" if attribute == "yield" else attribute
 
-        value: str | float | None = node.text or None
+        value: str | float | int | None = node.text or None
 
         if value is not None:
-            try:
-                value = float(value)
-            except ValueError:
+            if attribute in TEXT_FIELDS:
                 pass
+            elif attribute in INTEGER_FIELDS:
+                try:
+                    value = int(value)
+                except ValueError:
+                    try:
+                        value = int(float(value))
+                    except ValueError:
+                        pass
+            else:
+                try:
+                    value = float(value)
+                except ValueError:
+                    pass
 
             try:
                 setattr(beerxml_object, attribute, value)
