@@ -1,15 +1,14 @@
-from dataclasses import dataclass, field
-from typing import Any
+from pydantic_xml import element
 
-from pybeerxml.utils import cast_to_bool
+from pybeerxml.xml_model import BeerBool, BeerFloat, BeerInt, BeerXmlModel
 
 
-@dataclass
-class Equipment:
+class Equipment(BeerXmlModel, tag="EQUIPMENT"):
     """Brewing equipment profile from a BeerXML ``<EQUIPMENT>`` element.
 
     Attributes:
         name: Equipment set name.
+        version: BeerXML equipment profile version.
         boil_size: Pre-boil kettle volume in litres.
         batch_size: Target post-boil batch volume in litres.
         tun_volume: Mash tun capacity in litres.
@@ -25,28 +24,19 @@ class Equipment:
         notes: Free-text notes.
     """
 
-    name: str | None = None
-    version: int | None = None
-    boil_size: float | None = None
-    batch_size: float | None = None
-    tun_volume: float | None = None
-    tun_weight: float | None = None
-    tun_specific_heat: float | None = None
-    top_up_water: float | None = None
-    trub_chiller_loss: float | None = None
-    evap_rate: float | None = None
-    boil_time: float | None = None
-    lauter_deadspace: float | None = None
-    top_up_kettle: float | None = None
-    hop_utilization: float | None = None
-    notes: str | None = None
-    _calc_boil_volume: bool | None = field(default=None, init=False, repr=False)
-
-    @property
-    def calc_boil_volume(self) -> bool | None:
-        """Whether the pre-boil volume should be calculated from equipment parameters."""
-        return self._calc_boil_volume
-
-    @calc_boil_volume.setter
-    def calc_boil_volume(self, value: Any) -> None:
-        self._calc_boil_volume = cast_to_bool(value)
+    name: str | None = element(tag="NAME", default=None)
+    version: BeerInt | None = element(tag="VERSION", default=None)
+    boil_size: BeerFloat | None = element(tag="BOIL_SIZE", default=None)
+    batch_size: BeerFloat | None = element(tag="BATCH_SIZE", default=None)
+    tun_volume: BeerFloat | None = element(tag="TUN_VOLUME", default=None)
+    tun_weight: BeerFloat | None = element(tag="TUN_WEIGHT", default=None)
+    tun_specific_heat: BeerFloat | None = element(tag="TUN_SPECIFIC_HEAT", default=None)
+    top_up_water: BeerFloat | None = element(tag="TOP_UP_WATER", default=None)
+    trub_chiller_loss: BeerFloat | None = element(tag="TRUB_CHILLER_LOSS", default=None)
+    evap_rate: BeerFloat | None = element(tag="EVAP_RATE", default=None)
+    boil_time: BeerFloat | None = element(tag="BOIL_TIME", default=None)
+    calc_boil_volume: BeerBool | None = element(tag="CALC_BOIL_VOLUME", default=None)
+    lauter_deadspace: BeerFloat | None = element(tag="LAUTER_DEADSPACE", default=None)
+    top_up_kettle: BeerFloat | None = element(tag="TOP_UP_KETTLE", default=None)
+    hop_utilization: BeerFloat | None = element(tag="HOP_UTILIZATION", default=None)
+    notes: str | None = element(tag="NOTES", default=None)

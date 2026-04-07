@@ -1,9 +1,9 @@
-from typing import Any
+from pydantic_xml import element
 
-from pybeerxml.utils import cast_to_bool
+from pybeerxml.xml_model import BeerBool, BeerFloat, BeerInt, BeerXmlModel
 
 
-class Misc:
+class Misc(BeerXmlModel, tag="MISC"):
     """A miscellaneous ingredient — finings, spices, water agents, etc.
 
     Attributes:
@@ -20,22 +20,13 @@ class Misc:
         notes: Free-text notes.
     """
 
-    def __init__(self):
-        self.name: str | None = None
-        self.version: int | None = None
-        self.type: str | None = None
-        self.amount: float | None = None
-        self._amount_is_weight: bool | None = False
-        self.use: str | None = None
-        self.use_for: str | None = None
-        self.time: float | None = None
-        self.notes: str | None = None
+    name: str | None = element(tag="NAME", default=None)
+    version: BeerInt | None = element(tag="VERSION", default=None)
+    type: str | None = element(tag="TYPE", default=None)
+    amount: BeerFloat | None = element(tag="AMOUNT", default=None)
+    amount_is_weight: BeerBool | None = element(tag="AMOUNT_IS_WEIGHT", default=False)
+    use: str | None = element(tag="USE", default=None)
+    use_for: str | None = element(tag="USE_FOR", default=None)
+    time: BeerFloat | None = element(tag="TIME", default=None)
+    notes: str | None = element(tag="NOTES", default=None)
 
-    @property
-    def amount_is_weight(self) -> bool | None:
-        """``True`` if ``amount`` is measured by weight (kg), ``False`` if by volume (L)."""
-        return self._amount_is_weight
-
-    @amount_is_weight.setter
-    def amount_is_weight(self, value: Any):
-        self._amount_is_weight = cast_to_bool(value)

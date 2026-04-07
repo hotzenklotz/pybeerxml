@@ -298,37 +298,6 @@ def assert_coffee_stout_recipe(recipes):
     assert recipe.yeasts[0].max_reuse == 0
     assert not recipe.yeasts[0].add_to_secondary
 
-
-def test_node_to_object():
-    "test XML node parsing to Python object"
-
-    node = Element("hop")
-    SubElement(node, "name").text = "Simcoe"
-    SubElement(node, "alpha").text = 13
-    SubElement(node, "amount").text = 0.5
-    SubElement(node, "use").text = "boil"
-    SubElement(node, "time").text = 30
-
-    test_hop = Hop()
-
-    recipe_parser = Parser()
-    recipe_parser.nodes_to_object(node, test_hop)
-
-    assert test_hop.name == "Simcoe"
-    assert test_hop.alpha == 13
-    assert test_hop.amount == 0.5
-    assert test_hop.use == "boil"
-    assert test_hop.time == 30
-
-
-def test_to_lower():
-
-    assert to_lower("MASH") == "mash"
-    assert to_lower("") == ""
-    assert to_lower(10) == ""
-    assert to_lower(None) == ""
-
-
 def test_parse_empty_recipe():
     xml = "<RECIPES><RECIPE><NAME>Empty</NAME></RECIPE></RECIPES>"
     recipes = Parser().parse_from_string(xml)

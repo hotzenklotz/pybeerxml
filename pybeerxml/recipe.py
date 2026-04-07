@@ -1,5 +1,7 @@
 import logging
-from typing import Any
+from xml.etree.ElementTree import Element
+
+from pydantic_xml import element, wrapped
 
 from pybeerxml.equipment import Equipment
 from pybeerxml.fermentable import Fermentable
@@ -7,14 +9,15 @@ from pybeerxml.hop import Hop
 from pybeerxml.mash import Mash
 from pybeerxml.misc import Misc
 from pybeerxml.style import Style
-from pybeerxml.utils import cast_to_bool, gravity_to_plato
+from pybeerxml.utils import gravity_to_plato
 from pybeerxml.water import Water
+from pybeerxml.xml_model import BeerBool, BeerFloat, BeerInt, BeerXmlModel, FloatOrStr
 from pybeerxml.yeast import Yeast
 
 logger = logging.getLogger(__name__)
 
 
-class Recipe:
+class Recipe(BeerXmlModel, tag="RECIPE"):
     """A complete beer recipe parsed from a BeerXML document.
 
     Scalar fields (``name``, ``batch_size``, etc.) are populated directly from
@@ -31,6 +34,7 @@ class Recipe:
 
     Attributes:
         name: Recipe name.
+        version: BeerXML recipe record version.
         brewer: Brewer's name.
         type: Recipe type, e.g. ``"All Grain"`` or ``"Extract"``.
         batch_size: Target batch volume in litres.
@@ -55,61 +59,98 @@ class Recipe:
         Simcoe IPA 1.0756 64.3
     """
 
-    def __init__(self):
-        self.name: str | None = None
-        self.version: int | None = None
-        self.type: str | None = None
-        self.brewer: str | None = None
-        self.asst_brewer: str | None = None
-        self.batch_size: float | None = None
-        self.boil_time: float | None = None
-        self.boil_size: float | None = None
-        self.efficiency: float | None = None
-        self.notes: str | None = None
-        self.taste_notes: str | None = None
-        self.taste_rating: float | None = None
-        self.fermentation_stages: int | None = None
-        self.primary_age: float | None = None
-        self.primary_temp: float | None = None
-        self.secondary_age: float | None = None
-        self.secondary_temp: float | None = None
-        self.tertiary_age: float | None = None
-        self.tertiary_temp: float | None = None
-        self.carbonation: float | None = None
-        self.carbonation_temp: float | None = None
-        self.age: float | None = None
-        self.age_temp: float | None = None
-        self.date: str | None = None
-        self._forced_carbonation: bool | None = None
-        self.priming_sugar_name: str | None = None
-        self.priming_sugar_equiv: float | None = None
-        self.keg_priming_factor: float | None = None
+    name: str | None = element(tag="NAME", default=None)
+    version: BeerInt | None = element(tag="VERSION", default=None)
+    type: str | None = element(tag="TYPE", default=None)
+    brewer: str | None = element(tag="BREWER", default=None)
+    asst_brewer: str | None = element(tag="ASST_BREWER", default=None)
+    batch_size: BeerFloat | None = element(tag="BATCH_SIZE", default=None)
+    boil_time: BeerFloat | None = element(tag="BOIL_TIME", default=None)
+    boil_size: BeerFloat | None = element(tag="BOIL_SIZE", default=None)
+    efficiency: BeerFloat | None = element(tag="EFFICIENCY", default=None)
+    notes: str | None = element(tag="NOTES", default=None)
+    taste_notes: str | None = element(tag="TASTE_NOTES", default=None)
+    taste_rating: BeerFloat | None = element(tag="TASTE_RATING", default=None)
+    fermentation_stages: BeerInt | None = element(tag="FERMENTATION_STAGES", default=None)
+    primary_age: BeerFloat | None = element(tag="PRIMARY_AGE", default=None)
+    primary_temp: BeerFloat | None = element(tag="PRIMARY_TEMP", default=None)
+    secondary_age: BeerFloat | None = element(tag="SECONDARY_AGE", default=None)
+    secondary_temp: BeerFloat | None = element(tag="SECONDARY_TEMP", default=None)
+    tertiary_age: BeerFloat | None = element(tag="TERTIARY_AGE", default=None)
+    tertiary_temp: BeerFloat | None = element(tag="TERTIARY_TEMP", default=None)
+    carbonation: BeerFloat | None = element(tag="CARBONATION", default=None)
+    carbonation_temp: BeerFloat | None = element(tag="CARBONATION_TEMP", default=None)
+    age: BeerFloat | None = element(tag="AGE", default=None)
+    age_temp: BeerFloat | None = element(tag="AGE_TEMP", default=None)
+    date: str | None = element(tag="DATE", default=None)
+    priming_sugar_name: str | None = element(tag="PRIMING_SUGAR_NAME", default=None)
+    priming_sugar_equiv: BeerFloat | None = element(tag="PRIMING_SUGAR_EQUIV", default=None)
+    keg_priming_factor: BeerFloat | None = element(tag="KEG_PRIMING_FACTOR", default=None)
+    est_og: BeerFloat | None = element(tag="EST_OG", default=None)
+    est_fg: BeerFloat | None = element(tag="EST_FG", default=None)
+    est_color: FloatOrStr | None = element(tag="EST_COLOR", default=None)
+    ibu_method: str | None = element(tag="IBU_METHOD", default=None)
+    est_abv: BeerFloat | None = element(tag="EST_ABV", default=None)
+    actual_efficiency: BeerFloat | None = element(tag="ACTUAL_EFFICIENCY", default=None)
+    calories: str | None = element(tag="CALORIES", default=None)
+    carbonation_used: str | None = element(tag="CARBONATION_USED", default=None)
 
-        # Recipe extension fields
-        self.est_og: float | None = None
-        self.est_fg: float | None = None
-        self.est_color: float | None = None
-        self.ibu_method: str | None = None
-        self.est_abv: float | None = None
-        self.actual_efficiency: float | None = None
-        self.calories: str | None = None
-        self.carbonation_used: str | None = None
+    og_value: BeerFloat | None = element(tag="OG", default=None)
+    fg_value: BeerFloat | None = element(tag="FG", default=None)
+    ibu_value: BeerFloat | None = element(tag="IBU", default=None)
+    abv_value: BeerFloat | None = element(tag="ABV", default=None)
+    color_value: BeerFloat | None = element(tag="COLOR", default=None)
+    forced_carbonation: BeerBool | None = element(tag="FORCED_CARBONATION", default=None)
 
-        # Values from the recipe, which are calculated as a fallback
-        self._abv: float | None = None
-        self._og: float | None = None
-        self._fg: float | None = None
-        self._ibu: float | None = None
-        self._color: float | None = None
+    style: Style | None = element(tag="STYLE", default=None)
+    hops: list[Hop] = wrapped("HOPS", element(tag="HOP", default_factory=list))
+    yeasts: list[Yeast] = wrapped("YEASTS", element(tag="YEAST", default_factory=list))
+    fermentables: list[Fermentable] = wrapped("FERMENTABLES", element(tag="FERMENTABLE", default_factory=list))
+    miscs: list[Misc] = wrapped("MISCS", element(tag="MISC", default_factory=list))
+    mash: Mash | None = element(tag="MASH", default=None)
+    waters: list[Water] = wrapped("WATERS", element(tag="WATER", default_factory=list))
+    equipment: Equipment | None = element(tag="EQUIPMENT", default=None)
 
-        self.style: Style | None = None
-        self.hops: list[Hop] = []
-        self.yeasts: list[Yeast] = []
-        self.fermentables: list[Fermentable] = []
-        self.miscs: list[Misc] = []
-        self.mash: Mash | None = None
-        self.waters: list[Water] = []
-        self.equipment: Equipment | None = None
+
+    @property
+    def _abv(self) -> float | None:
+        return self.abv_value
+
+    @_abv.setter
+    def _abv(self, value: float | int | str | None) -> None:
+        self.abv_value = value
+
+    @property
+    def _og(self) -> float | None:
+        return self.og_value
+
+    @_og.setter
+    def _og(self, value: float | int | str | None) -> None:
+        self.og_value = value
+
+    @property
+    def _fg(self) -> float | None:
+        return self.fg_value
+
+    @_fg.setter
+    def _fg(self, value: float | int | str | None) -> None:
+        self.fg_value = value
+
+    @property
+    def _ibu(self) -> float | None:
+        return self.ibu_value
+
+    @_ibu.setter
+    def _ibu(self, value: float | int | str | None) -> None:
+        self.ibu_value = value
+
+    @property
+    def _color(self) -> float | None:
+        return self.color_value
+
+    @_color.setter
+    def _color(self, value: float | int | str | None) -> None:
+        self.color_value = value
 
     @property
     def abv(self):
@@ -118,14 +159,14 @@ class Recipe:
         Returns the value stored in the XML when available, otherwise falls
         back to `abv_calculated`.
         """
-        if self._abv is not None:
-            return self._abv
+        if self.abv_value is not None:
+            return self.abv_value
         logger.debug("The value for ABV has been calculated from OG and FG")
         return self.abv_calculated
 
     @abv.setter
     def abv(self, value):
-        self._abv = value
+        self.abv_value = value
 
     @property
     def abv_calculated(self):
@@ -179,14 +220,14 @@ class Recipe:
         Returns the value stored in the XML when available, otherwise falls
         back to `ibu_calculated`.
         """
-        if self._ibu is not None:
-            return self._ibu
+        if self.ibu_value is not None:
+            return self.ibu_value
         logger.debug("The value for IBU has been calculated from the hop bill using Tinseth's formula")
         return self.ibu_calculated
 
     @ibu.setter
     def ibu(self, value):
-        self._ibu = value
+        self.ibu_value = value
 
     @property
     def ibu_calculated(self):
@@ -215,14 +256,14 @@ class Recipe:
         Returns the value stored in the XML when available, otherwise falls
         back to `og_calculated`.
         """
-        if self._og is not None:
-            return self._og
+        if self.og_value is not None:
+            return self.og_value
         logger.debug("The value for OG has been calculated from the mashing steps")
         return self.og_calculated
 
     @og.setter
     def og(self, value):
-        self._og = value
+        self.og_value = value
 
     @property
     def og_calculated(self):
@@ -266,14 +307,14 @@ class Recipe:
         Returns the value stored in the XML when available, otherwise falls
         back to `fg_calculated`.
         """
-        if self._fg is not None:
-            return self._fg
+        if self.fg_value is not None:
+            return self.fg_value
         logger.debug("The value for FG has been calculated from OG and yeast")
         return self.fg_calculated
 
     @fg.setter
     def fg(self, value):
-        self._fg = value
+        self.fg_value = value
 
     @property
     def fg_calculated(self):
@@ -301,14 +342,14 @@ class Recipe:
         Returns the value stored in the XML when available, otherwise falls
         back to `color_calculated`.
         """
-        if self._color is not None:
-            return self._color
+        if self.color_value is not None:
+            return self.color_value
         logger.debug("The value for color has been calculated from fermentables using the Morey Equation")
         return self.color_calculated
 
     @color.setter
     def color(self, value):
-        self._color = value
+        self.color_value = value
 
     @property
     def color_calculated(self):
@@ -329,11 +370,20 @@ class Recipe:
     def color_calculated(self, value):
         pass
 
-    @property
-    def forced_carbonation(self):
-        """Whether the beer is force-carbonated (``True``) or priming-sugar carbonated (``False``)."""
-        return self._forced_carbonation
+    def to_xml_element(self) -> Element:
+        """Serialize this recipe as a BeerXML ``<RECIPE>`` element."""
+        from pybeerxml.serializer import recipe_to_xml_element
 
-    @forced_carbonation.setter
-    def forced_carbonation(self, value: Any):
-        self._forced_carbonation = cast_to_bool(value)
+        return recipe_to_xml_element(self)
+
+    def to_xml_string(self, encoding: str = "utf-8", xml_declaration: bool = True) -> str:
+        """Serialize this recipe as a complete BeerXML document string."""
+        from pybeerxml.serializer import serialize
+
+        return serialize([self], encoding=encoding, xml_declaration=xml_declaration)
+
+    def write_xml(self, path: str, encoding: str = "utf-8") -> None:
+        """Write this recipe as a complete BeerXML document to disk."""
+        from pybeerxml.serializer import write
+
+        write([self], path=path, encoding=encoding)

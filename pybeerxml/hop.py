@@ -1,7 +1,11 @@
 import math
 
+from pydantic_xml import element
 
-class Hop:
+from pybeerxml.xml_model import BeerFloat, BeerInt, BeerXmlModel
+
+
+class Hop(BeerXmlModel, tag="HOP"):
     """A hop addition in a beer recipe.
 
     Attributes:
@@ -17,24 +21,23 @@ class Hop:
         notes: Free-text notes.
     """
 
-    def __init__(self):
-        self.name: str | None = None
-        self.alpha: float | None = None
-        self.amount: float | None = None
-        self.use: str | None = None
-        self.form: str | None = None
-        self.notes: str | None = None
-        self.time: float | None = None
-        self.version: int | None = None
-        self.type: str | None = None
-        self.beta: float | None = None
-        self.hsi: float | None = None
-        self.origin: str | None = None
-        self.substitutes: str | None = None
-        self.humulene: float | None = None
-        self.caryophyllene: float | None = None
-        self.cohumulone: float | None = None
-        self.myrcene: float | None = None
+    name: str | None = element(tag="NAME", default=None)
+    alpha: BeerFloat | None = element(tag="ALPHA", default=None)
+    amount: BeerFloat | None = element(tag="AMOUNT", default=None)
+    use: str | None = element(tag="USE", default=None)
+    form: str | None = element(tag="FORM", default=None)
+    notes: str | None = element(tag="NOTES", default=None)
+    time: BeerFloat | None = element(tag="TIME", default=None)
+    version: BeerInt | None = element(tag="VERSION", default=None)
+    type: str | None = element(tag="TYPE", default=None)
+    beta: BeerFloat | None = element(tag="BETA", default=None)
+    hsi: BeerFloat | None = element(tag="HSI", default=None)
+    origin: str | None = element(tag="ORIGIN", default=None)
+    substitutes: str | None = element(tag="SUBSTITUTES", default=None)
+    humulene: BeerFloat | None = element(tag="HUMULENE", default=None)
+    caryophyllene: BeerFloat | None = element(tag="CARYOPHYLLENE", default=None)
+    cohumulone: BeerFloat | None = element(tag="COHUMULONE", default=None)
+    myrcene: BeerFloat | None = element(tag="MYRCENE", default=None)
 
     def utilization_factor(self) -> float:
         """Utilization multiplier for hop form.

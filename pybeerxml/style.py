@@ -1,8 +1,9 @@
-from dataclasses import dataclass
+from pydantic_xml import element
+
+from pybeerxml.xml_model import BeerFloat, BeerInt, BeerXmlModel
 
 
-@dataclass
-class Style:
+class Style(BeerXmlModel, tag="STYLE"):
     """Beer style guidelines from a BeerXML ``<STYLE>`` element.
 
     All ``_min`` / ``_max`` pairs define the acceptable range for that
@@ -31,23 +32,23 @@ class Style:
         notes: Free-text style notes.
     """
 
-    name: str | None = None
-    category: str | None = None
-    version: int | None = None
-    category_number: str | None = None
-    style_letter: str | None = None
-    style_guide: str | None = None
-    type: str | None = None
-    og_min: float | None = None
-    og_max: float | None = None
-    fg_min: float | None = None
-    fg_max: float | None = None
-    ibu_min: float | None = None
-    ibu_max: float | None = None
-    color_min: float | None = None
-    color_max: float | None = None
-    abv_min: float | None = None
-    abv_max: float | None = None
-    carb_min: float | None = None
-    carb_max: float | None = None
-    notes: str | None = None
+    name: str | None = element(tag="NAME", default=None)
+    category: str | None = element(tag="CATEGORY", default=None)
+    version: BeerInt | None = element(tag="VERSION", default=None)
+    category_number: str | None = element(tag="CATEGORY_NUMBER", default=None)
+    style_letter: str | None = element(tag="STYLE_LETTER", default=None)
+    style_guide: str | None = element(tag="STYLE_GUIDE", default=None)
+    type: str | None = element(tag="TYPE", default=None)
+    og_min: BeerFloat | None = element(tag="OG_MIN", default=None)
+    og_max: BeerFloat | None = element(tag="OG_MAX", default=None)
+    fg_min: BeerFloat | None = element(tag="FG_MIN", default=None)
+    fg_max: BeerFloat | None = element(tag="FG_MAX", default=None)
+    ibu_min: BeerFloat | None = element(tag="IBU_MIN", default=None)
+    ibu_max: BeerFloat | None = element(tag="IBU_MAX", default=None)
+    color_min: BeerFloat | None = element(tag="COLOR_MIN", default=None)
+    color_max: BeerFloat | None = element(tag="COLOR_MAX", default=None)
+    abv_min: BeerFloat | None = element(tag="ABV_MIN", default=None)
+    abv_max: BeerFloat | None = element(tag="ABV_MAX", default=None)
+    carb_min: BeerFloat | None = element(tag="CARB_MIN", default=None)
+    carb_max: BeerFloat | None = element(tag="CARB_MAX", default=None)
+    notes: str | None = element(tag="NOTES", default=None)
