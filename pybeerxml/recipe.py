@@ -11,7 +11,7 @@ from pybeerxml.misc import Misc
 from pybeerxml.style import Style
 from pybeerxml.utils import gravity_to_plato
 from pybeerxml.water import Water
-from pybeerxml.xml_model import BeerBool, BeerFloat, BeerInt, BeerXmlModel, FloatOrStr
+from pybeerxml.xml_model import BeerBool, BeerFloat, BeerInt, BeerXmlModel, FloatOrStr, coerce_float
 from pybeerxml.yeast import Yeast
 
 logger = logging.getLogger(__name__)
@@ -117,7 +117,7 @@ class Recipe(BeerXmlModel, tag="RECIPE"):
 
     @_abv.setter
     def _abv(self, value: float | int | str | None) -> None:
-        self.abv_value = value
+        self.abv_value = coerce_float(value)
 
     @property
     def _og(self) -> float | None:
@@ -125,7 +125,7 @@ class Recipe(BeerXmlModel, tag="RECIPE"):
 
     @_og.setter
     def _og(self, value: float | int | str | None) -> None:
-        self.og_value = value
+        self.og_value = coerce_float(value)
 
     @property
     def _fg(self) -> float | None:
@@ -133,7 +133,7 @@ class Recipe(BeerXmlModel, tag="RECIPE"):
 
     @_fg.setter
     def _fg(self, value: float | int | str | None) -> None:
-        self.fg_value = value
+        self.fg_value = coerce_float(value)
 
     @property
     def _ibu(self) -> float | None:
@@ -141,7 +141,7 @@ class Recipe(BeerXmlModel, tag="RECIPE"):
 
     @_ibu.setter
     def _ibu(self, value: float | int | str | None) -> None:
-        self.ibu_value = value
+        self.ibu_value = coerce_float(value)
 
     @property
     def _color(self) -> float | None:
@@ -149,7 +149,7 @@ class Recipe(BeerXmlModel, tag="RECIPE"):
 
     @_color.setter
     def _color(self, value: float | int | str | None) -> None:
-        self.color_value = value
+        self.color_value = coerce_float(value)
 
     @property
     def abv(self):

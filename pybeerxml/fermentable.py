@@ -3,7 +3,7 @@ import re
 
 from pydantic_xml import element
 
-from pybeerxml.xml_model import BeerBool, BeerFloat, BeerInt, BeerXmlModel
+from pybeerxml.xml_model import BeerBool, BeerFloat, BeerInt, BeerXmlModel, coerce_float
 
 logger = logging.getLogger(__name__)
 
@@ -61,23 +61,7 @@ class Fermentable(BeerXmlModel, tag="FERMENTABLE"):
 
     @_yield.setter
     def _yield(self, value: float | int | str | None) -> None:
-        self.yield_pct = value
-
-    @property
-    def _add_after_boil(self) -> bool | None:
-        return self.add_after_boil
-
-    @_add_after_boil.setter
-    def _add_after_boil(self, value: bool | str | int | float | None) -> None:
-        self.add_after_boil = value
-
-    @property
-    def _recommend_mash(self) -> bool | None:
-        return self.recommend_mash
-
-    @_recommend_mash.setter
-    def _recommend_mash(self, value: bool | str | int | float | None) -> None:
-        self.recommend_mash = value
+        self.yield_pct = coerce_float(value)
 
     @property
     def ppg(self) -> float | None:
