@@ -111,7 +111,6 @@ class Recipe(BeerXmlModel, tag="RECIPE"):
     waters: list[Water] = wrapped("WATERS", element(tag="WATER", default_factory=list))
     equipment: Equipment | None = element(tag="EQUIPMENT", default=None)
 
-
     @property
     def _abv(self) -> float | None:
         return self.abv_value

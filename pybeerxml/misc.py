@@ -29,4 +29,3 @@ class Misc(BeerXmlModel, tag="MISC"):
     use_for: str | None = element(tag="USE_FOR", default=None)
     time: BeerFloat | None = element(tag="TIME", default=None)
     notes: str | None = element(tag="NOTES", default=None)
-

@@ -1,9 +1,6 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
-from xml.etree import ElementTree
-from xml.etree.ElementTree import Element
 
 from pybeerxml.document import RecipesDocument
 from pybeerxml.equipment import Equipment
@@ -14,7 +11,6 @@ from pybeerxml.mash_step import MashStep
 from pybeerxml.misc import Misc
 from pybeerxml.recipe import Recipe
 from pybeerxml.style import Style
-from pybeerxml.utils import to_lower
 from pybeerxml.water import Water
 from pybeerxml.yeast import Yeast
 
@@ -41,7 +37,6 @@ class Parser:
         ...     print(recipe.name, recipe.og)
     """
 
-    
     def parse_from_string(self, xml_string: str) -> list[Recipe]:
         """Parse BeerXML content from a string.
 
@@ -64,5 +59,3 @@ class Parser:
         """
         with open(xml_file, "rt") as file:
             return self.parse_from_string(file.read())
-
-    
