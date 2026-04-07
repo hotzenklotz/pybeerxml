@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
 from math import floor
-from xml.etree.ElementTree import Element, SubElement
 
 from pybeerxml.equipment import Equipment
-from pybeerxml.hop import Hop
 from pybeerxml.mash import Mash
 from pybeerxml.parser import Parser, Recipe
-from pybeerxml.utils import to_lower
 
 RECIPE_PATH = os.path.join(os.path.dirname(__file__), "Simcoe IPA.xml")
 RECIPE_PATH_2 = os.path.join(os.path.dirname(__file__), "Oatmeal Stout.xml")
@@ -297,6 +294,7 @@ def assert_coffee_stout_recipe(recipes):
     assert recipe.yeasts[0].times_cultured == 1
     assert recipe.yeasts[0].max_reuse == 0
     assert not recipe.yeasts[0].add_to_secondary
+
 
 def test_parse_empty_recipe():
     xml = "<RECIPES><RECIPE><NAME>Empty</NAME></RECIPE></RECIPES>"

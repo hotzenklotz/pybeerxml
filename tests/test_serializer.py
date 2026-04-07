@@ -403,6 +403,7 @@ def test_recipe_element_and_write_helpers(tmp_path):
     assert Parser().parse(str(single_path))[0].name == recipe.name
     assert len(Parser().parse(str(multiple_path))) == 2
 
+
 def test_serializer_class_writes_file(tmp_path):
     serializer = Serializer()
     recipes = [Parser().parse(RECIPE_PATH_1)[0]]
