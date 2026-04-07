@@ -51,6 +51,7 @@ class Serializer:
         root = document.to_xml_tree(skip_empty=True)
         for recipe_node in root.findall("RECIPE"):
             _ensure_required_recipe_sections(recipe_node)
+        ElementTree.indent(root, space="  ")
         xml = ElementTree.tostring(
             root,
             encoding=encoding if xml_declaration else "unicode",
