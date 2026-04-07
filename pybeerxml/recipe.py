@@ -372,18 +372,18 @@ class Recipe(BeerXmlModel, tag="RECIPE"):
 
     def to_xml_element(self) -> Element:
         """Serialize this recipe as a BeerXML ``<RECIPE>`` element."""
-        from pybeerxml.serializer import recipe_to_xml_element
+        from pybeerxml.serializer import Serializer
 
-        return recipe_to_xml_element(self)
+        return Serializer().recipe_to_xml_element(self)
 
     def to_xml_string(self, encoding: str = "utf-8", xml_declaration: bool = True) -> str:
         """Serialize this recipe as a complete BeerXML document string."""
-        from pybeerxml.serializer import serialize
+        from pybeerxml.serializer import Serializer
 
-        return serialize([self], encoding=encoding, xml_declaration=xml_declaration)
+        return Serializer().serialize([self], encoding=encoding, xml_declaration=xml_declaration)
 
     def write_xml(self, path: str, encoding: str = "utf-8") -> None:
         """Write this recipe as a complete BeerXML document to disk."""
-        from pybeerxml.serializer import write
+        from pybeerxml.serializer import Serializer
 
-        write([self], path=path, encoding=encoding)
+        Serializer().write([self], path=path, encoding=encoding)

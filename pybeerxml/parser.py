@@ -30,7 +30,8 @@ class Parser:
 
     A single BeerXML document may contain multiple `<RECIPE>` elements; all
     three parse methods always return a list. Unknown XML fields are logged at
-    ``ERROR`` level and silently ignored so that non-standard files do not raise.
+    ``ERROR`` level and silently ignored so that non-standard files do not
+    raise.
 
     Examples:
         >>> from pybeerxml import Parser
@@ -40,11 +41,28 @@ class Parser:
         ...     print(recipe.name, recipe.og)
     """
 
+    
     def parse_from_string(self, xml_string: str) -> list[Recipe]:
-        """Parse BeerXML content from a string."""
+        """Parse BeerXML content from a string.
+
+        Args:
+            xml_string: A valid BeerXML document as a string.
+
+        Returns:
+            A list of `Recipe` objects found in the document.
+        """
         return RecipesDocument.from_xml(xml_string).recipes
 
     def parse(self, xml_file: str) -> list[Recipe]:
-        """Parse a BeerXML file from disk."""
+        """Parse a BeerXML file from disk.
+
+        Args:
+            xml_file: Path to the `.beerxml` file.
+
+        Returns:
+            A list of `Recipe` objects found in the file.
+        """
         with open(xml_file, "rt") as file:
             return self.parse_from_string(file.read())
+
+    

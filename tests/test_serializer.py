@@ -1,7 +1,7 @@
 import os
 from xml.etree import ElementTree
 
-from pybeerxml import Parser, serialize, write
+from pybeerxml import Parser, Serializer
 from pybeerxml.fermentable import Fermentable
 from pybeerxml.hop import Hop
 from pybeerxml.misc import Misc
@@ -269,8 +269,9 @@ def test_roundtrip_coffee_stout_recipe():
 def test_serialize_multiple_recipes_in_one_document():
     parser = Parser()
     recipes = [parser.parse(RECIPE_PATH_1)[0], parser.parse(RECIPE_PATH_2)[0]]
+    serializer = Serializer()
 
-    xml = serialize(recipes)
+    xml = serializer.serialize(recipes)
     tree = ElementTree.fromstring(xml)
     roundtripped = parser.parse_from_string(xml)
 
@@ -390,16 +391,28 @@ def test_empty_optional_sections_are_omitted():
 
 def test_recipe_element_and_write_helpers(tmp_path):
     recipe = Parser().parse(RECIPE_PATH_1)[0]
+    serializer = Serializer()
     single_path = tmp_path / "single.xml"
     multiple_path = tmp_path / "multiple.xml"
 
     recipe_element = recipe.to_xml_element()
     recipe.write_xml(str(single_path))
-    write([recipe, Parser().parse(RECIPE_PATH_2)[0]], str(multiple_path))
+    serializer.write([recipe, Parser().parse(RECIPE_PATH_2)[0]], str(multiple_path))
 
     assert recipe_element.tag == "RECIPE"
     assert Parser().parse(str(single_path))[0].name == recipe.name
     assert len(Parser().parse(str(multiple_path))) == 2
+
+def test_serializer_class_writes_file(tmp_path):
+    serializer = Serializer()
+    recipes = [Parser().parse(RECIPE_PATH_1)[0]]
+    output_path = tmp_path / "serializer.xml"
+
+    xml = serializer.serialize(recipes)
+    serializer.write(recipes, str(output_path))
+
+    assert "<RECIPES>" in xml
+    assert Parser().parse(str(output_path))[0].name == recipes[0].name
 
 
 def test_parser_preserves_integer_version_fields():

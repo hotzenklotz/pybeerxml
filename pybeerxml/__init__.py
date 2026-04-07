@@ -1,5 +1,5 @@
 from pybeerxml.parser import Parser
 from pybeerxml.recipe import Recipe
-from pybeerxml.serializer import serialize, write
+from pybeerxml.serializer import Serializer
 
-__all__ = ["Parser", "Recipe", "serialize", "write"]
+__all__ = ["Parser", "Serializer", "Recipe"]
