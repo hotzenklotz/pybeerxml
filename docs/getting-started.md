@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-description: Install pybeerxml and parse your first BeerXML recipe file
+description: Install pybeerxml and parse or serialize your first BeerXML recipe file
 ---
 
 # Getting Started
@@ -45,6 +45,31 @@ xml = open("recipe.beerxml").read()
 
 parser = Parser()
 recipes = parser.parse_from_string(xml)
+```
+
+## Serializing recipes
+
+Use `Serializer` to write one or more `Recipe` objects back to BeerXML:
+
+```python
+from pybeerxml import Parser, Serializer
+
+parser = Parser()
+serializer = Serializer()
+
+recipes = parser.parse("/path/to/recipe.beerxml")
+
+xml = serializer.serialize(recipes)
+serializer.write(recipes, "/path/to/output.beerxml")
+```
+
+For single-recipe convenience, `Recipe` also exposes write helpers:
+
+```python
+recipe = recipes[0]
+
+xml = recipe.to_xml_string()
+recipe.write_xml("/path/to/single-recipe.beerxml")
 ```
 
 ## Calculated vs. stored values

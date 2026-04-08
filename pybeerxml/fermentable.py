@@ -1,9 +1,9 @@
 import logging
 import re
-from dataclasses import dataclass, field
-from typing import Any
 
-from pybeerxml.utils import cast_to_bool
+from pydantic_xml import element
+
+from pybeerxml.xml_model import BeerBool, BeerFloat, BeerInt, BeerXmlModel, coerce_float
 
 logger = logging.getLogger(__name__)
 
@@ -17,14 +17,14 @@ STEEP = re.compile(r"biscuit|black|cara|chocolate|crystal|munich|roast|special|t
 BOIL = re.compile(r"candi|candy|dme|dry|extract|honey|lme|liquid|sugar|syrup|turbinado", re.IGNORECASE)
 
 
-@dataclass
-class Fermentable:
+class Fermentable(BeerXmlModel, tag="FERMENTABLE"):
     """A fermentable ingredient — grain, extract, sugar, or adjunct.
 
     Attributes:
         name: Ingredient name.
         amount: Weight in kilograms.
         color: Colour contribution in degrees Lovibond (°L).
+        version: BeerXML fermentable record version.
         type: Ingredient type (e.g. ``"Grain"``, ``"Extract"``, ``"Sugar"``).
         origin: Country of origin.
         supplier: Supplier or maltster name.
@@ -37,33 +37,31 @@ class Fermentable:
         ibu_gal_per_lb: IBU contribution per gallon per pound (for adjuncts).
     """
 
-    name: str | None = None
-    amount: float | None = None
-    color: float | None = None
-    version: int | None = None
-    type: str | None = None
-    origin: str | None = None
-    supplier: str | None = None
-    notes: str | None = None
-    coarse_fine_diff: float | None = None
-    moisture: float | None = None
-    diastatic_power: float | None = None
-    protein: float | None = None
-    max_in_batch: float | None = None
-    ibu_gal_per_lb: float | None = None
-    # "yield" is a Python keyword, so the parser maps it to _yield via setattr
-    _yield: float | None = field(default=None, init=False, repr=False)
-    _add_after_boil: bool | None = field(default=None, init=False, repr=False)
-    _recommend_mash: bool | None = field(default=None, init=False, repr=False)
+    name: str | None = element(tag="NAME", default=None)
+    amount: BeerFloat | None = element(tag="AMOUNT", default=None)
+    color: BeerFloat | None = element(tag="COLOR", default=None)
+    version: BeerInt | None = element(tag="VERSION", default=None)
+    type: str | None = element(tag="TYPE", default=None)
+    origin: str | None = element(tag="ORIGIN", default=None)
+    supplier: str | None = element(tag="SUPPLIER", default=None)
+    notes: str | None = element(tag="NOTES", default=None)
+    coarse_fine_diff: BeerFloat | None = element(tag="COARSE_FINE_DIFF", default=None)
+    moisture: BeerFloat | None = element(tag="MOISTURE", default=None)
+    diastatic_power: BeerFloat | None = element(tag="DIASTATIC_POWER", default=None)
+    protein: BeerFloat | None = element(tag="PROTEIN", default=None)
+    max_in_batch: BeerFloat | None = element(tag="MAX_IN_BATCH", default=None)
+    ibu_gal_per_lb: BeerFloat | None = element(tag="IBU_GAL_PER_LB", default=None)
+    yield_pct: BeerFloat | None = element(tag="YIELD", default=None)
+    add_after_boil: BeerBool | None = element(tag="ADD_AFTER_BOIL", default=False)
+    recommend_mash: BeerBool | None = element(tag="RECOMMEND_MASH", default=None)
 
     @property
-    def add_after_boil(self) -> bool:
-        """Whether this fermentable is added after the boil (e.g. honey in secondary)."""
-        return bool(self._add_after_boil)
+    def _yield(self) -> float | None:
+        return self.yield_pct
 
-    @add_after_boil.setter
-    def add_after_boil(self, value: Any) -> None:
-        self._add_after_boil = cast_to_bool(value)
+    @_yield.setter
+    def _yield(self, value: float | int | str | None) -> None:
+        self.yield_pct = coerce_float(value)
 
     @property
     def ppg(self) -> float | None:
@@ -71,8 +69,8 @@ class Fermentable:
 
         Returns ``None`` when ``YIELD`` is not set.
         """
-        if self._yield is not None:
-            return 0.46214 * self._yield
+        if self.yield_pct is not None:
+            return 0.46214 * self.yield_pct
         logger.error("Property 'ppg' could not be calculated because property 'yield' is missing. Default to 'None'")
         return None
 
@@ -123,12 +121,3 @@ class Fermentable:
         weight_lb = self.amount * 2.20462
         volume_gallons = liters * 0.264172
         return self.ppg * weight_lb / volume_gallons
-
-    @property
-    def recommend_mash(self) -> bool | None:
-        """Whether mashing is recommended for this fermentable."""
-        return self._recommend_mash
-
-    @recommend_mash.setter
-    def recommend_mash(self, value: Any) -> None:
-        self._recommend_mash = cast_to_bool(value)

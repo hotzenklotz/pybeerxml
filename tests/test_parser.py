@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
 from math import floor
-from xml.etree.ElementTree import Element, SubElement
 
 from pybeerxml.equipment import Equipment
-from pybeerxml.hop import Hop
 from pybeerxml.mash import Mash
 from pybeerxml.parser import Parser, Recipe
-from pybeerxml.utils import to_lower
 
 RECIPE_PATH = os.path.join(os.path.dirname(__file__), "Simcoe IPA.xml")
 RECIPE_PATH_2 = os.path.join(os.path.dirname(__file__), "Oatmeal Stout.xml")
@@ -297,36 +294,6 @@ def assert_coffee_stout_recipe(recipes):
     assert recipe.yeasts[0].times_cultured == 1
     assert recipe.yeasts[0].max_reuse == 0
     assert not recipe.yeasts[0].add_to_secondary
-
-
-def test_node_to_object():
-    "test XML node parsing to Python object"
-
-    node = Element("hop")
-    SubElement(node, "name").text = "Simcoe"
-    SubElement(node, "alpha").text = 13
-    SubElement(node, "amount").text = 0.5
-    SubElement(node, "use").text = "boil"
-    SubElement(node, "time").text = 30
-
-    test_hop = Hop()
-
-    recipe_parser = Parser()
-    recipe_parser.nodes_to_object(node, test_hop)
-
-    assert test_hop.name == "Simcoe"
-    assert test_hop.alpha == 13
-    assert test_hop.amount == 0.5
-    assert test_hop.use == "boil"
-    assert test_hop.time == 30
-
-
-def test_to_lower():
-
-    assert to_lower("MASH") == "mash"
-    assert to_lower("") == ""
-    assert to_lower(10) == ""
-    assert to_lower(None) == ""
 
 
 def test_parse_empty_recipe():

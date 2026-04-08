@@ -1,6 +1,6 @@
 ---
 title: pybeerxml
-description: A BeerXML parser for Python
+description: A BeerXML parser and serializer for Python
 ---
 
 # pybeerxml
@@ -9,11 +9,12 @@ description: A BeerXML parser for Python
 [![Build Status](https://img.shields.io/github/actions/workflow/status/hotzenklotz/pybeerxml/test_lint.yaml?branch=master&style=flat-square)](https://github.com/hotzenklotz/pybeerxml/actions/workflows/test_lint.yaml)
 [![Docs](https://img.shields.io/badge/docs-pybeerxml.onrender.com-blue?style=flat-square)](https://pybeerxml.onrender.com/)
 
-**pybeerxml** is a Python library for parsing [BeerXML](http://www.beerxml.com/) recipe files. It reads all recipes from a `.beerxml` file and returns structured `Recipe` objects — including ingredients, style metadata, and automatically calculated values for OG, FG, ABV, IBU, and colour.
+**pybeerxml** is a Python library for parsing and serializing [BeerXML](http://www.beerxml.com/) recipe files. It reads `.beerxml` documents into structured `Recipe` objects and can write those objects back into valid BeerXML.
 
 ## Features
 
 - Parse BeerXML files or XML strings
+- Serialize one or more recipes back to BeerXML
 - Access hops, fermentables, yeasts, miscs, mash steps, equipment, and style
 - Automatic calculation of OG, FG, ABV, IBU, and colour when not provided in the XML
 - Supports both Tinseth and Rager IBU formulas
@@ -22,9 +23,10 @@ description: A BeerXML parser for Python
 ## Quick Example
 
 ```python
-from pybeerxml import Parser
+from pybeerxml import Parser, Serializer
 
 parser = Parser()
+serializer = Serializer()
 recipes = parser.parse("/path/to/recipe.beerxml")
 
 for recipe in recipes:
@@ -38,6 +40,9 @@ for recipe in recipes:
 
     for fermentable in recipe.fermentables:
         print(fermentable.name, fermentable.amount)
+
+xml = serializer.serialize(recipes)
+serializer.write(recipes, "/path/to/output.beerxml")
 ```
 
 ## Installation

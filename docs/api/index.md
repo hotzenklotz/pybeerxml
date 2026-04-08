@@ -5,13 +5,17 @@ description: Full API reference for pybeerxml
 
 # API Reference
 
-pybeerxml exposes one entry point — the `Parser` class — which returns `Recipe` objects. Each `Recipe` holds typed ingredient and metadata objects.
+pybeerxml exposes two main entry points:
+
+- `Parser` reads BeerXML into `Recipe` objects
+- `Serializer` writes `Recipe` objects back to BeerXML
 
 ## Class overview
 
 | Class | Description |
 |-------|-------------|
 | [`Parser`](parser.md) | Reads BeerXML files or strings and returns `Recipe` objects |
+| [`Serializer`](serializer.md) | Writes one or more `Recipe` objects to BeerXML |
 | [`Recipe`](recipe.md) | A complete beer recipe with calculated properties |
 | [`Fermentable`](fermentable.md) | A grain, extract, sugar, or adjunct |
 | [`Hop`](hop.md) | A hop addition with bitterness calculation |
@@ -25,7 +29,7 @@ pybeerxml exposes one entry point — the `Parser` class — which returns `Reci
 ## Import paths
 
 ```python
-from pybeerxml import Parser          # main entry point
+from pybeerxml import Parser, Serializer
 from pybeerxml.recipe import Recipe
 from pybeerxml.fermentable import Fermentable
 from pybeerxml.hop import Hop
