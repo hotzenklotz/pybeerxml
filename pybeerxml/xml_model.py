@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Annotated, Any, ClassVar
+from typing import Annotated
 
 from pydantic import BeforeValidator, ConfigDict, PlainSerializer
 from pydantic_xml import BaseXmlModel
@@ -76,26 +76,12 @@ FloatOrStr = Annotated[
 
 
 class BeerXmlModel(BaseXmlModel, search_mode=SearchMode.UNORDERED):
-    """Base XML model with BeerXML-friendly parsing and assignment behavior."""
+    """Base XML model with BeerXML-friendly scalar parsing.
+
+    Model-specific compatibility aliases such as ``_yield`` or ``_og`` are
+    implemented on the individual model classes where they are needed. Keeping
+    those shims local avoids a global ``__setattr__``/``__getattr__`` hook that
+    would otherwise interfere with normal descriptor and property behavior.
+    """
 
     model_config = ConfigDict(extra="ignore", validate_assignment=True)
-    _compat_field_aliases: ClassVar[dict[str, str]] = {
-        "_yield": "yield_pct",
-        "_og": "og_value",
-        "_fg": "fg_value",
-        "_ibu": "ibu_value",
-        "_abv": "abv_value",
-        "_color": "color_value",
-    }
-
-    def __getattr__(self, item: str) -> Any:
-        alias = self._compat_field_aliases.get(item)
-        if alias is not None:
-            return super().__getattribute__(alias)
-        raise AttributeError(f"{type(self).__name__!r} object has no attribute {item!r}")
-
-    def __setattr__(self, key: str, value: Any) -> None:
-        alias = self._compat_field_aliases.get(key)
-        if alias is not None:
-            return super().__setattr__(alias, value)
-        return super().__setattr__(key, value)
