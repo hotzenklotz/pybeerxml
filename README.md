@@ -1,6 +1,6 @@
 # pybeerxml
 
-A simple BeerXML parser for Python
+A simple BeerXML parser and serializer for Python
 
 [![PyPi Version](https://img.shields.io/pypi/v/pybeerxml.svg?style=flat-square)](https://pypi.python.org/pypi?:action=display&name=pybeerxml)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/hotzenklotz/pybeerxml/test_lint.yaml?branch=master&style=flat-square)](https://github.com/hotzenklotz/pybeerxml/actions/workflows/test_lint.yaml)
@@ -10,7 +10,8 @@ A simple BeerXML parser for Python
 
 Parses all recipes within a BeerXML file and returns `Recipe` objects containing all ingredients,
 style information and metadata. OG, FG, ABV and IBU are calculated from the ingredient list. (your
-milage may vary)
+milage may vary). Recipes can also be serialized back to BeerXML. All models are built on
+[pydantic](https://docs.pydantic.dev/) and [pydantic-xml](https://pydantic-xml.readthedocs.io/).
 
 ## Installation
 
@@ -54,6 +55,43 @@ for recipe in recipes:
 
     for misc in recipe.miscs:
         print(misc.name)
+```
+
+## Serialization
+
+Write recipes back to BeerXML with the `Serializer` class. Only values stored in the XML-backed
+fields are written — calculated properties (`og_calculated`, `og_plato`, etc.) are never serialized.
+The stored values for OG, FG, IBU, ABV and color live in the trailing-underscore fields `og_`,
+`fg_`, `ibu_`, `abv_` and `color_`.
+
+```
+from pybeerxml import Parser, Serializer
+
+parser = Parser()
+recipes = parser.parse("/tmp/SimcoeIPA.beerxml")
+
+serializer = Serializer()
+
+# write to a file
+serializer.serialize(recipes, "/tmp/SimcoeIPA-copy.beerxml")
+
+# or to a string
+xml_string = serializer.serialize_to_string(recipes)
+```
+
+Since all models are pydantic models, you can also build recipes programmatically:
+
+```
+from pybeerxml import Serializer
+from pybeerxml.recipe import Recipe
+from pybeerxml.hop import Hop
+
+recipe = Recipe(name="My IPA", batch_size=20.0)
+recipe.hops.append(Hop(name="Simcoe", alpha=13.0, amount=0.05, use="boil", time=60))
+
+print(recipe.og_calculated)
+
+xml_string = Serializer().serialize_to_string(recipe)
 ```
 
 ## Testing

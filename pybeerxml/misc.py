@@ -1,9 +1,9 @@
-from typing import Any
+from pydantic_xml import element
 
-from pybeerxml.utils import cast_to_bool
+from pybeerxml.base import BeerXmlModel, LenientFloat
 
 
-class Misc:
+class Misc(BeerXmlModel, tag="MISC"):
     """A miscellaneous ingredient — finings, spices, water agents, etc.
 
     Attributes:
@@ -13,6 +13,8 @@ class Misc:
             ``"Herb"``, ``"Flavor"``, or ``"Other"``.
         amount: Quantity — weight in kg or volume in litres depending on
             ``amount_is_weight``.
+        amount_is_weight: ``True`` if ``amount`` is measured by weight (kg),
+            ``False`` if by volume (L).
         use: When the ingredient is added — ``"Boil"``, ``"Mash"``,
             ``"Primary"``, ``"Secondary"``, or ``"Bottling"``.
         use_for: Description of the ingredient's purpose.
@@ -20,22 +22,12 @@ class Misc:
         notes: Free-text notes.
     """
 
-    def __init__(self):
-        self.name: str | None = None
-        self.version: int | None = None
-        self.type: str | None = None
-        self.amount: float | None = None
-        self._amount_is_weight: bool | None = False
-        self.use: str | None = None
-        self.use_for: str | None = None
-        self.time: float | None = None
-        self.notes: str | None = None
-
-    @property
-    def amount_is_weight(self) -> bool | None:
-        """``True`` if ``amount`` is measured by weight (kg), ``False`` if by volume (L)."""
-        return self._amount_is_weight
-
-    @amount_is_weight.setter
-    def amount_is_weight(self, value: Any):
-        self._amount_is_weight = cast_to_bool(value)
+    name: str | None = element(tag="NAME", default=None)
+    version: int | None = element(tag="VERSION", default=None)
+    type: str | None = element(tag="TYPE", default=None)
+    amount: LenientFloat = element(tag="AMOUNT", default=None)
+    amount_is_weight: bool | None = element(tag="AMOUNT_IS_WEIGHT", default=False)
+    use: str | None = element(tag="USE", default=None)
+    use_for: str | None = element(tag="USE_FOR", default=None)
+    time: LenientFloat = element(tag="TIME", default=None)
+    notes: str | None = element(tag="NOTES", default=None)
