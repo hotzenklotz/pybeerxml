@@ -1,4 +1,5 @@
 import logging
+from xml.etree.ElementTree import Element
 
 from pydantic_xml import element, wrapped
 
@@ -355,6 +356,24 @@ class Recipe(BeerXmlModel, tag="RECIPE"):
                 # 8.3454 is conversion factor from kg/L to lb/gal
                 mcu += fermentable.amount * fermentable.color * 8.3454 / self.batch_size
         return 1.4922 * (mcu**0.6859)
+
+    def to_xml_element(self) -> Element:
+        """Serialize this recipe as a BeerXML ``<RECIPE>`` element."""
+        from pybeerxml.serializer import Serializer
+
+        return Serializer().recipe_to_xml_element(self)
+
+    def to_xml_string(self, encoding: str = "utf-8", xml_declaration: bool = True) -> str:
+        """Serialize this recipe as a complete BeerXML document string."""
+        from pybeerxml.serializer import Serializer
+
+        return Serializer().serialize([self], encoding=encoding, xml_declaration=xml_declaration)
+
+    def write_xml(self, path: str, encoding: str = "utf-8") -> None:
+        """Write this recipe as a complete BeerXML document to disk."""
+        from pybeerxml.serializer import Serializer
+
+        Serializer().write([self], path=path, encoding=encoding)
 
 
 class Recipes(BeerXmlModel, tag="RECIPES"):

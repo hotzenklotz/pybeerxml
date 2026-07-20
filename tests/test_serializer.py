@@ -42,8 +42,8 @@ def build_recipe():
     return recipe
 
 
-def test_serialize_to_string_structure():
-    xml = Serializer().serialize_to_string(build_recipe())
+def test_serialize_structure():
+    xml = Serializer().serialize([build_recipe()])
 
     assert xml.startswith("<?xml")
     assert "<RECIPES>" in xml
@@ -55,14 +55,14 @@ def test_serialize_to_string_structure():
 
 
 def test_serialize_stored_og():
-    xml = Serializer().serialize_to_string(build_recipe())
+    xml = Serializer().serialize([build_recipe()])
     assert "<OG>1.065</OG>" in xml
 
 
 def test_serialize_omits_unset_fields():
     recipe = Recipe()
     recipe.name = "Minimal"
-    xml = Serializer().serialize_to_string(recipe)
+    xml = Serializer().serialize([recipe])
 
     # no stored OG -> no OG element
     assert "<OG>" not in xml
@@ -71,38 +71,60 @@ def test_serialize_omits_unset_fields():
     # calculated values are never serialized
     assert "CALCULATED" not in xml
     assert "PLATO" not in xml
+    # BeerXML recipe record-set containers are required even when empty.
+    assert "<HOPS />" in xml or "<HOPS/>" in xml
+    assert "<FERMENTABLES />" in xml or "<FERMENTABLES/>" in xml
+    assert "<MISCS />" in xml or "<MISCS/>" in xml
+    assert "<YEASTS />" in xml or "<YEASTS/>" in xml
+    assert "<WATERS />" in xml or "<WATERS/>" in xml
 
 
 def test_serialize_booleans_uppercase():
-    xml = Serializer().serialize_to_string(build_recipe())
+    xml = Serializer().serialize([build_recipe()])
     assert "<FORCED_CARBONATION>TRUE</FORCED_CARBONATION>" in xml
     assert "<RECOMMEND_MASH>TRUE</RECOMMEND_MASH>" in xml
     assert "<AMOUNT_IS_WEIGHT>TRUE</AMOUNT_IS_WEIGHT>" in xml
 
 
 def test_serialize_yield_field():
-    xml = Serializer().serialize_to_string(build_recipe())
+    xml = Serializer().serialize([build_recipe()])
     assert "<YIELD>80.0</YIELD>" in xml
 
 
-def test_serialize_accepts_single_recipe():
-    xml = Serializer().serialize_to_string(build_recipe())
+def test_serialize_multiple_recipes():
+    xml = Serializer().serialize([build_recipe(), build_recipe()])
+    assert xml.count("<RECIPE>") == 2
+
+
+def test_recipe_to_xml_string_serializes_single_recipe():
+    xml = build_recipe().to_xml_string()
     assert xml.count("<RECIPE>") == 1
 
 
-def test_serialize_to_file(tmp_path):
+def test_write_to_file(tmp_path):
     path = tmp_path / "out.beerxml"
-    Serializer().serialize(build_recipe(), path)
+    Serializer().write([build_recipe()], path)
 
     recipes = Parser().parse(str(path))
     assert len(recipes) == 1
     assert recipes[0].name == "Test IPA"
 
 
+def test_recipe_serialization_helpers(tmp_path):
+    recipe = Parser().parse(RECIPE_PATH)[0]
+    path = tmp_path / "recipe.beerxml"
+
+    element = recipe.to_xml_element()
+    recipe.write_xml(str(path))
+
+    assert element.tag == "RECIPE"
+    assert Parser().parse(str(path))[0].name == recipe.name
+
+
 def test_round_trip_from_fixture():
     original = Parser().parse(RECIPE_PATH_3)[0]
 
-    xml = Serializer().serialize_to_string([original])
+    xml = Serializer().serialize([original])
     restored = Parser().parse_from_string(xml)[0]
 
     assert restored.name == original.name
@@ -145,7 +167,7 @@ def test_round_trip_from_fixture():
 def test_round_trip_preserves_calculated_values():
     original = Parser().parse(RECIPE_PATH)[0]
 
-    xml = Serializer().serialize_to_string([original])
+    xml = Serializer().serialize([original])
     restored = Parser().parse_from_string(xml)[0]
 
     assert round(restored.og_calculated, 4) == round(original.og_calculated, 4)
@@ -161,7 +183,7 @@ def test_compat_aliases_round_trip():
     assert recipe.og_ == 1.05
     assert recipe.og == 1.05
 
-    xml = Serializer().serialize_to_string(recipe)
+    xml = Serializer().serialize([recipe])
     assert "<OG>1.05</OG>" in xml
 
     restored = Parser().parse_from_string(xml)[0]

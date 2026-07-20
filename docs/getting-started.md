@@ -88,11 +88,11 @@ recipes = parser.parse("/path/to/recipe.beerxml")
 
 serializer = Serializer()
 
-# Write to a file
-serializer.serialize(recipes, "/path/to/copy.beerxml")
+# Serialize to a string
+xml_string = serializer.serialize(recipes)
 
-# Or to a string
-xml_string = serializer.serialize_to_string(recipes)
+# Or write to a file
+serializer.write(recipes, "/path/to/copy.beerxml")
 ```
 
 Since all models are pydantic models, recipes can be built programmatically and serialized:
@@ -107,7 +107,7 @@ recipe.hops.append(Hop(name="Simcoe", alpha=13.0, amount=0.05, use="boil", time=
 
 print(recipe.og_calculated)   # calculated from the ingredient list
 
-xml_string = Serializer().serialize_to_string(recipe)
+xml_string = recipe.to_xml_string()
 ```
 
 Fields left as `None` are omitted from the output, and boolean fields are emitted as `TRUE` / `FALSE` per the BeerXML spec.

@@ -1,48 +1,77 @@
 from __future__ import annotations
 
-import os
-import xml.dom.minidom
+from pathlib import Path
+from xml.etree import ElementTree
+from xml.etree.ElementTree import Element
 
 from pybeerxml.recipe import Recipe, Recipes
 
+REQUIRED_RECIPE_SECTIONS = ("HOPS", "FERMENTABLES", "MISCS", "YEASTS", "WATERS")
+
 
 class Serializer:
-    """Writes `Recipe` objects to BeerXML files or strings.
+    """Serialize `Recipe` objects into BeerXML.
 
-    Only values stored in the XML-backed fields are serialized — calculated
-    properties (``og_calculated``, ``og_plato``, etc.) are never written.
-    Fields that are ``None`` are omitted from the output, and boolean fields
-    are emitted as ``TRUE`` / ``FALSE`` per the BeerXML spec.
+    The API mirrors `Parser` on the write side:
 
-    Examples:
-        >>> from pybeerxml import Parser, Serializer
-        >>> recipes = Parser().parse("recipe.beerxml")
-        >>> Serializer().serialize(recipes, "copy.beerxml")
+    - `serialize()` returns a complete BeerXML document string
+    - `write()` writes a complete BeerXML document to disk
+    - `recipe_to_xml_element()` returns a single `<RECIPE>` element
+
+    BeerXML requires recipe record-set containers such as `HOPS` and
+    `FERMENTABLES`, so those sections are emitted even when empty.
     """
 
-    def serialize_to_string(self, recipes: Recipe | list[Recipe]) -> str:
-        """Serialize recipes to a BeerXML document string.
+    def recipe_to_xml_element(self, recipe: Recipe) -> Element:
+        """Serialize a single recipe as a BeerXML `<RECIPE>` element.
 
         Args:
-            recipes: A single `Recipe` or a list of `Recipe` objects.
+            recipe: The recipe to serialize.
 
         Returns:
-            A pretty-printed BeerXML document as a string, including the XML
-            declaration.
+            A single `<RECIPE>` XML element.
         """
-        if isinstance(recipes, Recipe):
-            recipes = [recipes]
-        document = Recipes(recipes=recipes)
-        raw_xml = document.to_xml(exclude_none=True)
-        return xml.dom.minidom.parseString(raw_xml).toprettyxml(indent="  ")
+        element = recipe.to_xml_tree(skip_empty=True)
+        _ensure_required_recipe_sections(element)
+        return element
 
-    def serialize(self, recipes: Recipe | list[Recipe], xml_file: str | os.PathLike) -> None:
-        """Serialize recipes to a BeerXML file on disk.
+    def serialize(self, recipes: list[Recipe], encoding: str = "utf-8", xml_declaration: bool = True) -> str:
+        """Serialize recipes into a complete BeerXML document string.
 
         Args:
-            recipes: A single `Recipe` or a list of `Recipe` objects.
-            xml_file: Destination path, e.g. ``"recipe.beerxml"``. Existing
-                files are overwritten.
+            recipes: Recipes to include in the document.
+            encoding: XML encoding to use for output.
+            xml_declaration: Whether to include the XML declaration.
+
+        Returns:
+            A BeerXML document as a string.
         """
-        with open(xml_file, "w", encoding="utf-8") as file:
-            file.write(self.serialize_to_string(recipes))
+        document = Recipes(recipes=recipes)
+        root = document.to_xml_tree(skip_empty=True)
+        for recipe_node in root.findall("RECIPE"):
+            _ensure_required_recipe_sections(recipe_node)
+        ElementTree.indent(root, space="  ")
+        xml = ElementTree.tostring(
+            root,
+            encoding=encoding if xml_declaration else "unicode",
+            xml_declaration=xml_declaration,
+        )
+        return xml if isinstance(xml, str) else xml.decode(encoding)
+
+    def write(self, recipes: list[Recipe], path: str | Path, encoding: str = "utf-8") -> None:
+        """Write recipes to a BeerXML file.
+
+        Args:
+            recipes: Recipes to serialize.
+            path: Destination file path.
+            encoding: XML encoding to use for output.
+        """
+        xml = self.serialize(recipes, encoding=encoding, xml_declaration=True)
+        Path(path).write_text(xml, encoding=encoding)
+
+
+def _ensure_required_recipe_sections(recipe_element: Element) -> None:
+    """Ensure BeerXML-required recipe container tags are present."""
+    for tag in REQUIRED_RECIPE_SECTIONS:
+        if recipe_element.find(tag) is None:
+            recipe_element.append(Element(tag))

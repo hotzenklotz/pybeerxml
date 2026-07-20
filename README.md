@@ -72,11 +72,11 @@ recipes = parser.parse("/tmp/SimcoeIPA.beerxml")
 
 serializer = Serializer()
 
-# write to a file
-serializer.serialize(recipes, "/tmp/SimcoeIPA-copy.beerxml")
+# serialize to a string
+xml_string = serializer.serialize(recipes)
 
-# or to a string
-xml_string = serializer.serialize_to_string(recipes)
+# or write to a file
+serializer.write(recipes, "/tmp/SimcoeIPA-copy.beerxml")
 ```
 
 Since all models are pydantic models, you can also build recipes programmatically:
@@ -91,7 +91,7 @@ recipe.hops.append(Hop(name="Simcoe", alpha=13.0, amount=0.05, use="boil", time=
 
 print(recipe.og_calculated)
 
-xml_string = Serializer().serialize_to_string(recipe)
+xml_string = recipe.to_xml_string()
 ```
 
 ## Testing
