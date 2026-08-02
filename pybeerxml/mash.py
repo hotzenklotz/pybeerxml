@@ -1,43 +1,34 @@
-from dataclasses import dataclass, field
-from typing import Any
+from pydantic_xml import element, wrapped
 
+from pybeerxml.base import BeerXmlModel, LenientFloat
 from pybeerxml.mash_step import MashStep
-from pybeerxml.utils import cast_to_bool
 
 
-@dataclass
-class Mash:
+class Mash(BeerXmlModel, tag="MASH"):
     """A mash profile, including temperature steps.
 
     Attributes:
         name: Profile name.
-        grain_temp: Initial grain temperature in °C.
+        grain_temp: Initial grain temperature in °C. Non-numeric XML values
+            (e.g. ``"unknown"``) are kept as strings.
         sparge_temp: Sparge water temperature in °C.
         ph: Target mash pH.
         notes: Free-text notes.
         tun_temp: Mash tun temperature in °C.
         tun_weight: Mash tun weight in kg.
         tun_specific_heat: Specific heat of the mash tun material in Cal/(g·°C).
+        equip_adjust: Whether mash temperatures are adjusted for equipment heat capacity.
         steps: Ordered list of mash temperature steps.
     """
 
-    name: str | None = None
-    version: int | None = None
-    grain_temp: float | None = None
-    sparge_temp: float | None = None
-    ph: float | None = None
-    notes: str | None = None
-    tun_temp: float | None = None
-    tun_weight: float | None = None
-    tun_specific_heat: float | None = None
-    steps: list[MashStep] = field(default_factory=list)
-    _equip_adjust: bool | None = field(default=None, init=False, repr=False)
-
-    @property
-    def equip_adjust(self) -> bool | None:
-        """Whether mash temperatures are adjusted for equipment heat capacity."""
-        return self._equip_adjust
-
-    @equip_adjust.setter
-    def equip_adjust(self, value: Any) -> None:
-        self._equip_adjust = cast_to_bool(value)
+    name: str | None = element(tag="NAME", default=None)
+    version: int | None = element(tag="VERSION", default=None)
+    grain_temp: LenientFloat = element(tag="GRAIN_TEMP", default=None)
+    sparge_temp: LenientFloat = element(tag="SPARGE_TEMP", default=None)
+    ph: LenientFloat = element(tag="PH", default=None)
+    notes: str | None = element(tag="NOTES", default=None)
+    tun_temp: LenientFloat = element(tag="TUN_TEMP", default=None)
+    tun_weight: LenientFloat = element(tag="TUN_WEIGHT", default=None)
+    tun_specific_heat: LenientFloat = element(tag="TUN_SPECIFIC_HEAT", default=None)
+    equip_adjust: bool | None = element(tag="EQUIP_ADJUST", default=None)
+    steps: list[MashStep] = wrapped("MASH_STEPS", element(tag="MASH_STEP"), default_factory=list)

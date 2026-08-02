@@ -1,11 +1,9 @@
-from dataclasses import dataclass, field
-from typing import Any
+from pydantic_xml import element
 
-from pybeerxml.utils import cast_to_bool
+from pybeerxml.base import BeerXmlModel, LenientFloat, LenientInt
 
 
-@dataclass
-class Yeast:
+class Yeast(BeerXmlModel, tag="YEAST"):
     """A yeast strain used in a recipe.
 
     Attributes:
@@ -14,49 +12,34 @@ class Yeast:
         form: Physical form — ``"Liquid"``, ``"Dry"``, ``"Slant"``, or ``"Culture"``.
         attenuation: Apparent attenuation percentage.
         laboratory: Producing laboratory (e.g. ``"Wyeast Labs"``).
-        product_id: Laboratory product identifier.
+        product_id: Laboratory product identifier. Numeric values are stored
+            as ``int``; alphanumeric identifiers (e.g. ``"WLP001"``) stay strings.
         flocculation: Flocculation level — ``"Low"``, ``"Medium"``, ``"High"``, or ``"Very High"``.
         amount: Volume (litres) or weight (kg) of yeast used.
+        amount_is_weight: ``True`` if ``amount`` is measured by weight (kg), ``False`` if by volume (L).
+        add_to_secondary: ``True`` if this yeast is pitched at the secondary fermentation stage.
         min_temperature: Minimum recommended fermentation temperature in °C.
         max_temperature: Maximum recommended fermentation temperature in °C.
         best_for: Beer styles best suited to this strain.
         notes: Free-text notes.
     """
 
-    name: str | None = None
-    version: int | None = None
-    type: str | None = None
-    form: str | None = None
-    attenuation: float | None = None
-    notes: str | None = None
-    laboratory: str | None = None
-    product_id: str | None = None
-    flocculation: str | None = None
-    amount: float | None = None
-    min_temperature: float | None = None
-    max_temperature: float | None = None
-    best_for: str | None = None
-    times_cultured: int | None = None
-    max_reuse: int | None = None
-    inventory: str | None = None
-    culture_date: str | None = None
-    _amount_is_weight: bool | None = field(default=None, init=False, repr=False)
-    _add_to_secondary: bool | None = field(default=None, init=False, repr=False)
-
-    @property
-    def amount_is_weight(self) -> bool | None:
-        """``True`` if ``amount`` is measured by weight (kg), ``False`` if by volume (L)."""
-        return self._amount_is_weight
-
-    @amount_is_weight.setter
-    def amount_is_weight(self, value: Any) -> None:
-        self._amount_is_weight = cast_to_bool(value)
-
-    @property
-    def add_to_secondary(self) -> bool | None:
-        """``True`` if this yeast is pitched at the secondary fermentation stage."""
-        return self._add_to_secondary
-
-    @add_to_secondary.setter
-    def add_to_secondary(self, value: Any) -> None:
-        self._add_to_secondary = cast_to_bool(value)
+    name: str | None = element(tag="NAME", default=None)
+    version: int | None = element(tag="VERSION", default=None)
+    type: str | None = element(tag="TYPE", default=None)
+    form: str | None = element(tag="FORM", default=None)
+    attenuation: float | None = element(tag="ATTENUATION", default=None)
+    notes: str | None = element(tag="NOTES", default=None)
+    laboratory: str | None = element(tag="LABORATORY", default=None)
+    product_id: LenientInt = element(tag="PRODUCT_ID", default=None)
+    flocculation: str | None = element(tag="FLOCCULATION", default=None)
+    amount: LenientFloat = element(tag="AMOUNT", default=None)
+    min_temperature: LenientFloat = element(tag="MIN_TEMPERATURE", default=None)
+    max_temperature: LenientFloat = element(tag="MAX_TEMPERATURE", default=None)
+    best_for: str | None = element(tag="BEST_FOR", default=None)
+    times_cultured: int | None = element(tag="TIMES_CULTURED", default=None)
+    max_reuse: int | None = element(tag="MAX_REUSE", default=None)
+    inventory: str | None = element(tag="INVENTORY", default=None)
+    culture_date: str | None = element(tag="CULTURE_DATE", default=None)
+    amount_is_weight: bool | None = element(tag="AMOUNT_IS_WEIGHT", default=None)
+    add_to_secondary: bool | None = element(tag="ADD_TO_SECONDARY", default=None)

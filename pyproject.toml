@@ -1,12 +1,16 @@
 [project]
 name = "pybeerxml"
-version = "2.2.0"
+version = "3.0.0"
 description = "A BeerXML implementation for Python"
 authors = [{ name = "Tom Herold", email = "heroldtom@gmail.com" }]
 license = { text = "MIT" }
 readme = "README.md"
 keywords = ["pybeerxml", "beerxml"]
 requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.0",
+    "pydantic-xml>=2.0",
+]
 
 [project.urls]
 Repository = "https://github.com/hotzenklotz/pybeerxml/"
