@@ -1,8 +1,9 @@
-from dataclasses import dataclass
+from pydantic_xml import element
+
+from pybeerxml.base import BeerXmlModel, LenientFloat
 
 
-@dataclass
-class Water:
+class Water(BeerXmlModel, tag="WATER"):
     """Water chemistry profile from a BeerXML ``<WATER>`` element.
 
     All ion concentrations are in parts per million (ppm / mg/L).
@@ -20,15 +21,15 @@ class Water:
         notes: Free-text notes.
     """
 
-    name: str | None = None
-    version: int | None = None
-    amount: float | None = None
-    calcium: float | None = None
-    bicarbonate: float | None = None
-    sulfate: float | None = None
-    chloride: float | None = None
-    sodium: float | None = None
-    magnesium: float | None = None
-    ph: float | None = None
-    notes: str | None = None
-    volume: float | None = None
+    name: str | None = element(tag="NAME", default=None)
+    version: int | None = element(tag="VERSION", default=None)
+    amount: LenientFloat = element(tag="AMOUNT", default=None)
+    calcium: LenientFloat = element(tag="CALCIUM", default=None)
+    bicarbonate: LenientFloat = element(tag="BICARBONATE", default=None)
+    sulfate: LenientFloat = element(tag="SULFATE", default=None)
+    chloride: LenientFloat = element(tag="CHLORIDE", default=None)
+    sodium: LenientFloat = element(tag="SODIUM", default=None)
+    magnesium: LenientFloat = element(tag="MAGNESIUM", default=None)
+    ph: LenientFloat = element(tag="PH", default=None)
+    notes: str | None = element(tag="NOTES", default=None)
+    volume: LenientFloat = element(tag="VOLUME", default=None)

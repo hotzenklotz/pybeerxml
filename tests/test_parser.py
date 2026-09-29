@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
 from math import floor
+from xml.etree import ElementTree
 from xml.etree.ElementTree import Element, SubElement
+
+import pytest
 
 from pybeerxml.equipment import Equipment
 from pybeerxml.hop import Hop
@@ -12,6 +15,22 @@ from pybeerxml.utils import to_lower
 RECIPE_PATH = os.path.join(os.path.dirname(__file__), "Simcoe IPA.xml")
 RECIPE_PATH_2 = os.path.join(os.path.dirname(__file__), "Oatmeal Stout.xml")
 RECIPE_PATH_3 = os.path.join(os.path.dirname(__file__), "CoffeeStout.xml")
+
+
+@pytest.mark.parametrize("encoding", ["utf-8", "iso-8859-1", "utf-16"])
+def test_parse_decoded_string_with_encoding_declaration(encoding):
+    xml = f'<?xml version="1.0" encoding="{encoding}"?><RECIPES><RECIPE><NAME>Märzen</NAME></RECIPE></RECIPES>'
+
+    assert Parser().parse_from_string(xml)[0].name == "Märzen"
+
+
+@pytest.mark.parametrize("encoding", ["utf-8", "iso-8859-1", "utf-16"])
+def test_parse_file_honors_xml_encoding(tmp_path, encoding):
+    xml = f'<?xml version="1.0" encoding="{encoding}"?><RECIPES><RECIPE><NAME>Märzen</NAME></RECIPE></RECIPES>'
+    path = tmp_path / "recipe.beerxml"
+    path.write_bytes(xml.encode(encoding))
+
+    assert Parser().parse(str(path))[0].name == "Märzen"
 
 
 def test_parse_recipe_1_from_file():
@@ -299,20 +318,17 @@ def assert_coffee_stout_recipe(recipes):
     assert not recipe.yeasts[0].add_to_secondary
 
 
-def test_node_to_object():
-    "test XML node parsing to Python object"
+def test_hop_from_xml_element():
+    "test XML element parsing to a model"
 
-    node = Element("hop")
-    SubElement(node, "name").text = "Simcoe"
-    SubElement(node, "alpha").text = 13
-    SubElement(node, "amount").text = 0.5
-    SubElement(node, "use").text = "boil"
-    SubElement(node, "time").text = 30
+    node = Element("HOP")
+    SubElement(node, "NAME").text = "Simcoe"
+    SubElement(node, "ALPHA").text = "13"
+    SubElement(node, "AMOUNT").text = "0.5"
+    SubElement(node, "USE").text = "boil"
+    SubElement(node, "TIME").text = "30"
 
-    test_hop = Hop()
-
-    recipe_parser = Parser()
-    recipe_parser.nodes_to_object(node, test_hop)
+    test_hop = Hop.from_xml(ElementTree.tostring(node, encoding="unicode"))
 
     assert test_hop.name == "Simcoe"
     assert test_hop.alpha == 13

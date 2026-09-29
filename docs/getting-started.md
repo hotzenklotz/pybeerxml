@@ -53,17 +53,20 @@ BeerXML files may or may not include pre-calculated values for OG, FG, IBU, ABV,
 
 | Property | Stored value | Calculated fallback |
 |----------|-------------|---------------------|
-| `recipe.og` | From XML if present | `recipe.og_calculated` |
-| `recipe.fg` | From XML if present | `recipe.fg_calculated` |
-| `recipe.ibu` | From XML if present | `recipe.ibu_calculated` |
-| `recipe.abv` | From XML if present | `recipe.abv_calculated` |
-| `recipe.color` | From XML if present | `recipe.color_calculated` |
+| `recipe.og` | `recipe.og_` (from XML if present) | `recipe.og_calculated` |
+| `recipe.fg` | `recipe.fg_` (from XML if present) | `recipe.fg_calculated` |
+| `recipe.ibu` | `recipe.ibu_` (from XML if present) | `recipe.ibu_calculated` |
+| `recipe.abv` | `recipe.abv_` (from XML if present) | `recipe.abv_calculated` |
+| `recipe.color` | `recipe.color_` (from XML if present) | `recipe.color_calculated` |
 
-The plain properties (`recipe.og`, `recipe.ibu`, etc.) return the stored XML value when available, and automatically fall back to the calculated value otherwise. The `_calculated` variants always compute from ingredients regardless.
+The plain properties (`recipe.og`, `recipe.ibu`, etc.) return the stored XML value when available, and automatically fall back to the calculated value otherwise. The `_calculated` variants always compute from ingredients regardless. The trailing-underscore fields (`og_`, `fg_`, `ibu_`, `abv_`, `color_`) hold exactly the value stored in the XML — or `None` when the XML did not provide one — and are the only variants written back during serialization.
 
 ```python
 # Uses stored OG from XML, or calculates from fermentables if missing
 print(recipe.og)
+
+# The stored OG from the XML (None if absent)
+print(recipe.og_)
 
 # Always calculated from the fermentable bill
 print(recipe.og_calculated)
@@ -72,6 +75,42 @@ print(recipe.og_calculated)
 print(recipe.og_plato)
 print(recipe.og_calculated_plato)
 ```
+
+## Serializing recipes
+
+The `Serializer` class writes recipes back to BeerXML. Only stored values are serialized — calculated properties are never written to the XML.
+
+```python
+from pybeerxml import Parser, Serializer
+
+parser = Parser()
+recipes = parser.parse("/path/to/recipe.beerxml")
+
+serializer = Serializer()
+
+# Serialize to a string
+xml_string = serializer.serialize(recipes)
+
+# Or write to a file
+serializer.write(recipes, "/path/to/copy.beerxml")
+```
+
+Since all models are pydantic models, recipes can be built programmatically and serialized:
+
+```python
+from pybeerxml import Serializer
+from pybeerxml.recipe import Recipe
+from pybeerxml.hop import Hop
+
+recipe = Recipe(name="My IPA", batch_size=20.0)
+recipe.hops.append(Hop(name="Simcoe", alpha=13.0, amount=0.05, use="boil", time=60))
+
+print(recipe.og_calculated)   # calculated from the ingredient list
+
+xml_string = recipe.to_xml_string()
+```
+
+Fields left as `None` are omitted from the output, and boolean fields are emitted as `TRUE` / `FALSE` per the BeerXML spec.
 
 ## Working with ingredients
 

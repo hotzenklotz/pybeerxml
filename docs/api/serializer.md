@@ -1,0 +1,3 @@
+# Serializer
+
+::: pybeerxml.serializer.Serializer

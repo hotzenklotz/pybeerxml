@@ -1,7 +1,7 @@
 [project]
 site_name = "pybeerxml"
 site_url = "https://pybeerxml.onrender.com/"
-site_description = "A BeerXML parser for Python"
+site_description = "A BeerXML parser and serializer for Python"
 site_author = "Tom Herold"
 copyright = "Copyright 2026 Tom Herold"
 docs_dir = "docs"
@@ -30,6 +30,7 @@ Home = "index.md"
 "API Reference" = [
   { Overview = "api/index.md" },
   { Parser = "api/parser.md" },
+  { Serializer = "api/serializer.md" },
   { Recipe = "api/recipe.md" },
   { Fermentable = "api/fermentable.md" },
   { Hop = "api/hop.md" },

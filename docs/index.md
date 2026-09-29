@@ -1,6 +1,6 @@
 ---
 title: pybeerxml
-description: A BeerXML parser for Python
+description: A BeerXML parser and serializer for Python
 ---
 
 # pybeerxml
@@ -9,11 +9,13 @@ description: A BeerXML parser for Python
 [![Build Status](https://img.shields.io/github/actions/workflow/status/hotzenklotz/pybeerxml/test_lint.yaml?branch=master&style=flat-square)](https://github.com/hotzenklotz/pybeerxml/actions/workflows/test_lint.yaml)
 [![Docs](https://img.shields.io/badge/docs-pybeerxml.onrender.com-blue?style=flat-square)](https://pybeerxml.onrender.com/)
 
-**pybeerxml** is a Python library for parsing [BeerXML](http://www.beerxml.com/) recipe files. It reads all recipes from a `.beerxml` file and returns structured `Recipe` objects — including ingredients, style metadata, and automatically calculated values for OG, FG, ABV, IBU, and colour.
+**pybeerxml** is a Python library for parsing and serializing [BeerXML](http://www.beerxml.com/) recipe files. It reads all recipes from a `.beerxml` file and returns structured `Recipe` objects — including ingredients, style metadata, and automatically calculated values for OG, FG, ABV, IBU, and colour. All models are [pydantic](https://docs.pydantic.dev/) models with XML support via [pydantic-xml](https://pydantic-xml.readthedocs.io/), so recipes can be validated, modified, and written back to BeerXML.
 
 ## Features
 
 - Parse BeerXML files or XML strings
+- Serialize recipes back to BeerXML
+- Typed, validated models powered by pydantic and pydantic-xml
 - Access hops, fermentables, yeasts, miscs, mash steps, equipment, and style
 - Automatic calculation of OG, FG, ABV, IBU, and colour when not provided in the XML
 - Supports both Tinseth and Rager IBU formulas

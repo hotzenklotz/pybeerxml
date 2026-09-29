@@ -1,4 +1,9 @@
-class MashStep:
+from pydantic_xml import element
+
+from pybeerxml.base import BeerXmlModel, LenientFloat
+
+
+class MashStep(BeerXmlModel, tag="MASH_STEP"):
     """A single temperature step within a mash profile.
 
     Attributes:
@@ -11,15 +16,14 @@ class MashStep:
         decoction_amt: Volume of mash removed for decoction (decoction steps only).
     """
 
-    def __init__(self):
-        self.name: str | None = None
-        self.type: str | None = None
-        self.infuse_amount: float | None = None
-        self.step_temp: float | None = None
-        self.end_temp: float | None = None
-        self.step_time: float | None = None
-        self.decoction_amt: str | None = None
-        self.version: int | None = None
+    name: str | None = element(tag="NAME", default=None)
+    type: str | None = element(tag="TYPE", default=None)
+    infuse_amount: LenientFloat = element(tag="INFUSE_AMOUNT", default=None)
+    step_temp: LenientFloat = element(tag="STEP_TEMP", default=None)
+    end_temp: LenientFloat = element(tag="END_TEMP", default=None)
+    step_time: LenientFloat = element(tag="STEP_TIME", default=None)
+    decoction_amt: str | None = element(tag="DECOCTION_AMT", default=None)
+    version: int | None = element(tag="VERSION", default=None)
 
     @property
     def water_ratio(self):
