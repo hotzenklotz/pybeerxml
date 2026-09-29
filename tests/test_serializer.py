@@ -1,4 +1,5 @@
 import os
+from xml.etree import ElementTree
 
 from pybeerxml import Parser, Serializer
 from pybeerxml.fermentable import Fermentable
@@ -8,6 +9,21 @@ from pybeerxml.yeast import Yeast
 
 RECIPE_PATH = os.path.join(os.path.dirname(__file__), "Simcoe IPA.xml")
 RECIPE_PATH_3 = os.path.join(os.path.dirname(__file__), "CoffeeStout.xml")
+
+
+def test_minimal_recipe_serialization_uses_standard_library_elements():
+    recipe = Recipe(name="Märzen")
+    serializer = Serializer()
+    element = serializer.recipe_to_xml_element(recipe)
+
+    assert isinstance(element, ElementTree.Element)
+    for tag in ("HOPS", "FERMENTABLES", "MISCS", "YEASTS", "WATERS"):
+        section = element.find(tag)
+        assert isinstance(section, ElementTree.Element)
+        assert len(section) == 0
+
+    xml = serializer.serialize([recipe])
+    assert Parser().parse_from_string(xml)[0].name == "Märzen"
 
 
 def build_recipe():

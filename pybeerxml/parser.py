@@ -39,7 +39,10 @@ class Parser:
             pydantic_core._pydantic_core.ValidationError: If ``xml_string`` is
                 not valid XML or does not match the BeerXML schema.
         """
-        return Recipes.from_xml(xml_string).recipes
+        # Parse decoded text before re-encoding so an existing XML encoding
+        # declaration cannot conflict with UTF-8 or be rejected by lxml.
+        root = ElementTree.fromstring(xml_string)
+        return Recipes.from_xml(ElementTree.tostring(root, encoding="utf-8")).recipes
 
     def parse(self, xml_file: str) -> list[Recipe]:
         """Parse a BeerXML file from disk.
@@ -55,8 +58,9 @@ class Parser:
             pydantic_core._pydantic_core.ValidationError: If the file is not
                 valid XML or does not match the BeerXML schema.
         """
-        with open(xml_file, "rt") as file:
-            return self.parse_from_string(file.read())
+        # Let the XML backend honor the file's encoding declaration and BOM.
+        with open(xml_file, "rb") as file:
+            return Recipes.from_xml(file.read()).recipes
 
     def parse_tree(self, tree: ElementTree.ElementTree[Any]) -> list[Recipe]:
         """Parse an already-constructed ``ElementTree``.

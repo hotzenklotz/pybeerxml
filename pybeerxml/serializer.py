@@ -31,7 +31,8 @@ class Serializer:
         Returns:
             A single `<RECIPE>` XML element.
         """
-        element = recipe.to_xml_tree(skip_empty=True)
+        # Normalize the optional lxml backend to the public ElementTree type.
+        element = ElementTree.fromstring(recipe.to_xml(skip_empty=True, encoding="utf-8"))
         _ensure_required_recipe_sections(element)
         return element
 
@@ -47,7 +48,7 @@ class Serializer:
             A BeerXML document as a string.
         """
         document = Recipes(recipes=recipes)
-        root = document.to_xml_tree(skip_empty=True)
+        root = ElementTree.fromstring(document.to_xml(skip_empty=True, encoding="utf-8"))
         for recipe_node in root.findall("RECIPE"):
             _ensure_required_recipe_sections(recipe_node)
         ElementTree.indent(root, space="  ")
